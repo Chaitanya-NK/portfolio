@@ -8,7 +8,7 @@ export function SiteNav({ name, links, cta }: { name: string; links: L[]; cta?: 
   return (
     <div className="sticky top-3 z-40 mx-auto mt-3 w-[min(1120px,92%)]">
       <div className="flex items-center justify-between rounded-full border border-[#23232F] bg-[#12121A]/85 py-2 pl-5 pr-2 backdrop-blur-md">
-        <a href="#" className="font-[family-name:var(--font-display)] text-lg font-bold">
+        <a href="#" className="max-w-[45%] truncate font-[family-name:var(--font-display)] text-lg font-bold">
           {name}<span className="text-[var(--accent)]">.</span>
         </a>
         <nav className="hidden gap-7 text-sm text-[#9A9AAE] lg:flex">
@@ -16,10 +16,10 @@ export function SiteNav({ name, links, cta }: { name: string; links: L[]; cta?: 
         </nav>
         <div className="flex items-center gap-2">
           {cta && (
-            <a href={cta.href} className="rounded-full bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[#0A0A0F]">{cta.label}</a>
+            <a href={cta.href} className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-4 text-sm font-semibold text-[#0A0A0F]">{cta.label}</a>
           )}
           <button aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#23232F] text-[#9A9AAE] lg:hidden">
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#23232F] text-[#9A9AAE] lg:hidden">
             {open ? "✕" : "☰"}
           </button>
         </div>

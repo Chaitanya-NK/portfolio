@@ -16,7 +16,7 @@ const items = [
   { label: "Blog posts", href: "/admin/blog" },
   { label: "Media library", href: "/admin/media" },
   { label: "Inbox", href: "/admin/inbox" },
-  { label: "Settings" },
+  { label: "Settings", href: "/admin/settings" },
 ];
 
 export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {

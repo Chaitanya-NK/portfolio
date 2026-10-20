@@ -11,7 +11,7 @@ async function LoginError({
 }) {
   const { error } = await searchParams;
   if (!error) return null;
-  return <p className="text-sm text-red-500">Invalid email or password.</p>;
+  return <p className="text-sm text-red-500">{error === "limit" ? "Too many attempts. Try again in a few minutes." : "Invalid email or password."}</p>;
 }
 
 export default function LoginPage({

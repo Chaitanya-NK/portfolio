@@ -17,6 +17,11 @@ export default async function Home() {
   const data = await getSiteData();
   const { profile: p, sections } = data;
   const accent = p.theme?.accent || "#C6F432";
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org", "@type": "Person",
+    name: p.full_name, jobTitle: p.headline, description: p.bio, image: p.avatar_url, email: p.email,
+    sameAs: (p.socials ?? []).map((x: any) => x.url).filter((u: string) => /^https?:/.test(u)),
+  }).replace(/</g, "\\u003c");
 
   const navLinks = sections
     .filter((s) => !["hero", "contact"].includes(s.type))
@@ -30,7 +35,8 @@ export default async function Home() {
   return (
     <div style={{ ["--accent" as string]: accent }} className="relative">
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-160px] h-[420px] w-[min(900px,100%)] -translate-x-1/2 bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_14%,transparent),transparent)]" />
-      <SiteNav name={p.full_name || "Portfolio"} links={navLinks} cta={cta} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+      <SiteNav name={p.theme?.site_name || p.full_name || "Portfolio"} links={navLinks} cta={cta} />
       {sections.map((s, i) => {
         const n = String(i + 1).padStart(2, "0");
         if (s.type === "hero") return <Hero key={s.id} p={p} hasProjects={sections.some((x) => x.type === "projects") && data.projects.length > 0} />;

@@ -5,7 +5,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${display.variable} ${mono.variable} min-h-screen overflow-x-clip bg-[#0A0A0F] text-[#F2F2F5]`}>
+    <div className={`${display.variable} ${mono.variable} min-h-screen overflow-x-clip bg-[#0A0A0F] text-[#F2F2F5] [color-scheme:dark]`}>
       {children}
     </div>
   );

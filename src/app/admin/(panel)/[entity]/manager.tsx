@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,7 +35,7 @@ function initValues(cfg: EntityConfig, item: Row | null): Values {
     else if (f.type === "lines") v[f.key] = Array.isArray(raw) ? raw.join("\n") : "";
     else if (f.type === "metrics") v[f.key] = Array.isArray(raw) ? raw : [];
     else if (f.type === "switch") v[f.key] = item ? Boolean(raw) : f.key === "published";
-    else if (f.type === "datetime") v[f.key] = raw ? String(raw).slice(0, 16) : "";
+    else if (f.type === "datetime") v[f.key] = raw ? format(new Date(raw), "yyyy-MM-dd'T'HH:mm") : "";
     else if (f.type === "select") v[f.key] = raw != null ? String(raw) : f.default ?? "";
     else v[f.key] = raw ?? "";
   }
@@ -117,7 +118,9 @@ function ItemSheet({ entity, cfg, item, onClose, onSaved }: {
           onSubmit={async (e) => {
             e.preventDefault();
             setBusy(true);
-            const r = await saveItem(entity, item?.id ?? null, values);
+            const payload: Values = { ...values };
+            for (const f of cfg.fields) if (f.type === "datetime") payload[f.key] = values[f.key] ? new Date(values[f.key]).toISOString() : "";
+            const r = await saveItem(entity, item?.id ?? null, payload);
             setBusy(false);
             if (!r.ok || !r.row) return toast.error(r.error ?? "Failed to save");
             toast.success("Saved");

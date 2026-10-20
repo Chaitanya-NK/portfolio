@@ -58,3 +58,30 @@ export async function getPost(slug: string) {
     .or(`publish_at.is.null,publish_at.lte.${now}`).maybeSingle();
   return (data ?? null) as Row | null;
 }
+
+export async function getAllPosts() {
+  "use cache";
+  cacheTag("site");
+  cacheLife("minutes");
+  const sb = createPublicClient();
+  const now = new Date().toISOString();
+  const { data } = await sb
+    .from("posts")
+    .select("id,slug,title,excerpt,cover_url,tags,reading_minutes,published_at,updated_at")
+    .eq("status", "published")
+    .or(`publish_at.is.null,publish_at.lte.${now}`)
+    .order("published_at", { ascending: false });
+  return (data ?? []) as Row[];
+}
+
+export async function getProject(slug: string) {
+  "use cache";
+  cacheTag("site");
+  cacheLife("minutes");
+  const sb = createPublicClient();
+  const now = new Date().toISOString();
+  const { data } = await sb
+    .from("projects").select("*").eq("slug", slug).eq("published", true)
+    .or(`publish_at.is.null,publish_at.lte.${now}`).maybeSingle();
+  return (data ?? null) as Row | null;
+}

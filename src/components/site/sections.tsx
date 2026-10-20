@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import type { Row, SiteData } from "@/lib/site/data";
 import { ContactForm } from "./contact-form";
+import { Reveal } from "./reveal";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
@@ -19,7 +20,7 @@ export function Shell({ s, n, children }: { s: Row; n: string; children: React.R
         </span>
         <h2 className={`${D} text-3xl font-bold leading-tight tracking-tight sm:text-5xl`}>{s.subtitle || s.title}</h2>
       </header>
-      {children}
+      <Reveal>{children}</Reveal>
     </section>
   );
 }
@@ -29,7 +30,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
   const socials: Row[] = p.socials ?? [];
   return (
     <section id="hero" className="mx-auto grid w-[min(1120px,92%)] items-end gap-10 pt-16 sm:pt-24 lg:grid-cols-[1.5fr_1fr] lg:gap-12">
-      <div className="flex flex-col gap-6">
+      <div className="fade-up flex flex-col gap-6">
         {p.availability && (
           <span className="flex w-fit items-center gap-2.5 rounded-full border border-[#23232F] bg-[#12121A] px-4 py-2 text-sm">
             <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />{p.availability}
@@ -44,7 +45,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
           {p.resume_url && <a href={p.resume_url} target="_blank" rel="noreferrer" className="rounded-full border border-[#23232F] px-6 py-3.5">Download resume</a>}
         </div>
       </div>
-      <div className={`${card} flex flex-col gap-5`}>
+      <div className={`${card} fade-up d2 flex flex-col gap-5`}>
         {p.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className="aspect-[4/3] w-full rounded-xl object-cover" />
@@ -177,14 +178,14 @@ export function Projects({ items }: { items: Row[] }) {
   return (
     <div className={grid("md:grid-cols-2 lg:grid-cols-3")}>
       {items.map((p) => (
-        <article key={p.id} className={`${card} flex flex-col overflow-hidden !p-0 ${p.featured ? "lg:col-span-2" : ""}`}>
+        <article key={p.id} className={`${card} relative flex flex-col overflow-hidden !p-0 ${p.featured ? "lg:col-span-2" : ""}`}>
           <div className={`flex items-center justify-center overflow-hidden border-b border-[#23232F] bg-[#1B1B26] ${p.featured ? "h-56 sm:h-72" : "h-44"}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {p.cover_url ? <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" loading="lazy" /> : <span className={`text-sm ${muted}`}>No cover</span>}
           </div>
           <div className="flex flex-1 flex-col gap-2.5 p-5 sm:p-6">
             <span className={`${M} text-xs uppercase tracking-widest ${muted}`}>{[p.role, p.year].filter(Boolean).join(" · ")}</span>
-            <h3 className={`${D} text-xl font-bold sm:text-2xl`}>{p.title}</h3>
+            <h3 className={`${D} text-xl font-bold sm:text-2xl`}><a href={`/projects/${p.slug}`} className="after:absolute after:inset-0">{p.title}</a></h3>
             {p.summary && <p className={muted}>{p.summary}</p>}
             {p.metrics?.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-x-6 gap-y-2">
@@ -196,8 +197,8 @@ export function Projects({ items }: { items: Row[] }) {
             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
               <div className="flex flex-wrap gap-2">{p.tags?.slice(0, 4).map((t: string) => <span key={t} className={chip}>{t}</span>)}</div>
               <div className="flex gap-4 text-sm font-medium">
-                {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" className="hover:text-[var(--accent)]">Live ↗</a>}
-                {p.repo_url && <a href={p.repo_url} target="_blank" rel="noreferrer" className="hover:text-[var(--accent)]">Code ↗</a>}
+                {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" className="relative z-10 hover:text-[var(--accent)]">Live ↗</a>}
+                {p.repo_url && <a href={p.repo_url} target="_blank" rel="noreferrer" className="relative z-10 hover:text-[var(--accent)]">Code ↗</a>}
               </div>
             </div>
           </div>
@@ -295,7 +296,7 @@ export function Contact({ p }: { p: Row }) {
 export function Footer({ p, year }: { p: Row; year: number }) {
   return (
     <footer className={`mx-auto mt-24 w-[min(1120px,92%)] border-t border-[#23232F] py-8 text-center text-sm ${muted}`}>
-      © {year} {p.full_name}
+      {p.theme?.footer_text || `© ${year} ${p.full_name ?? ""}`}
     </footer>
   );
 }
@@ -310,7 +311,7 @@ export function renderSection(s: Row, d: SiteData, n: string) {
       case "achievements": return d.achievements.length ? <Achievements items={d.achievements} /> : null;
       case "projects": return d.projects.length ? <Projects items={d.projects} /> : null;
       case "testimonials": return d.testimonials.length ? <Testimonials items={d.testimonials} /> : null;
-      case "blog": return <Blog posts={d.posts} />;
+      case "blog": return <><Blog posts={d.posts} /><a href="/blog" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[var(--accent)]">View all posts →</a></>;
       case "contact": return <Contact p={d.profile} />;
       case "custom": return d.itemsBySection[s.id]?.length ? <Custom items={d.itemsBySection[s.id]} /> : null;
       default: return null;
