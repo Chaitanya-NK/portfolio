@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { cleanHtml } from "@/lib/sanitize";
 
@@ -14,7 +14,7 @@ const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "post";
 
 function refresh(slug?: string) {
-  revalidatePath("/");
+  revalidatePath("/"); updateTag("site");
   revalidatePath("/blog");
   if (slug) revalidatePath(`/blog/${slug}`);
   revalidatePath("/admin/blog");

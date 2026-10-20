@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 
 export type FormState = { ok: boolean; message: string } | null;
@@ -47,6 +47,6 @@ export async function updateProfile(_prev: FormState, fd: FormData): Promise<For
     })
     .eq("id", 1);
   if (error) return { ok: false, message: error.message };
-  revalidatePath("/");
+  revalidatePath("/"); updateTag("site");
   return { ok: true, message: "Profile saved" };
 }

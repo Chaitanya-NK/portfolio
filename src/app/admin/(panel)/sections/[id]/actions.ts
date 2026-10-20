@@ -1,9 +1,9 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 
 type R = { ok: boolean; error?: string; row?: Record<string, any> };
-const refresh = (sid: string) => { revalidatePath("/"); revalidatePath(`/admin/sections/${sid}`); };
+const refresh = (sid: string) => { revalidatePath("/"); updateTag("site"); revalidatePath(`/admin/sections/${sid}`); };
 
 export async function saveSectionItem(sid: string, id: string | null, v: Record<string, any>): Promise<R> {
   const supabase = await requireAdmin();

@@ -1,11 +1,11 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 
 type R = { ok: boolean; error?: string };
 const done = (error?: { message: string } | null): R => {
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/");
+  revalidatePath("/"); updateTag("site");
   revalidatePath("/admin/sections");
   return { ok: true };
 };

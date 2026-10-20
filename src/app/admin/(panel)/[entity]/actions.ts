@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { CONTENT, type Field } from "@/lib/content-config";
 
@@ -41,7 +41,7 @@ const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "item";
 
 function refresh(entity: string) {
-  revalidatePath("/");
+  revalidatePath("/"); updateTag("site");
   revalidatePath(`/admin/${entity}`);
 }
 
