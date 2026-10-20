@@ -9,6 +9,7 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Link from "next/link";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -49,6 +50,9 @@ function Row({ s, onChange, onRemove }: {
           report(await setVisible(s.id, v), v ? "Section shown" : "Section hidden");
         }}
       />
+      {s.type === "custom" && (
+        <Link href={`/admin/sections/${s.id}`} className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-50">Items</Link>
+      )}
       {s.type === "custom" && (
         <Button variant="ghost" size="sm" onClick={async () => { onRemove(s.id); report(await deleteSection(s.id), "Deleted"); }}>Delete</Button>
       )}

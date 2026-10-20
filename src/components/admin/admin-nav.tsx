@@ -8,7 +8,7 @@ const items = [
   { label: "Section builder", href: "/admin/sections" },
   { label: "Tools", href: "/admin/tools" }, { label: "Skills", href: "/admin/skills" }, { label: "Experience", href: "/admin/experience" },
   { label: "Education", href: "/admin/education" }, { label: "Achievements", href: "/admin/achievements" }, { label: "Projects", href: "/admin/projects" },
-  { label: "Testimonials", href: "/admin/testimonials" }, { label: "Media library" }, { label: "Inbox" },
+  { label: "Testimonials", href: "/admin/testimonials" }, { label: "Media library", href: "/admin/media" }, { label: "Inbox", href: "/admin/inbox" },
   { label: "Settings" },
 ];
 
