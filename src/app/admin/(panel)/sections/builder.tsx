@@ -50,10 +50,10 @@ function Row({ s, onChange, onRemove }: {
           report(await setVisible(s.id, v), v ? "Section shown" : "Section hidden");
         }}
       />
-      {s.type === "custom" && (
-        <Link href={`/admin/sections/${s.id}`} className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-50">Items</Link>
+      {(s.type === "custom" || s.type === "blog") && (
+        <Link href={s.type === "blog" ? "/admin/blog" : `/admin/sections/${s.id}`} className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-50">{s.type === "blog" ? "Posts" : "Items"}</Link>
       )}
-      {s.type === "custom" && (
+      {(s.type === "custom" || s.type === "blog") && (
         <Button variant="ghost" size="sm" onClick={async () => { onRemove(s.id); report(await deleteSection(s.id), "Deleted"); }}>Delete</Button>
       )}
     </div>
@@ -102,6 +102,7 @@ export function SectionBuilder({ initial }: { initial: Section[] }) {
       >
         <Input placeholder="New custom section name (e.g. Blog, Services)" value={name} onChange={(e) => setName(e.target.value)} />
         <Button type="submit" disabled={pending}>+ Add custom section</Button>
+        <Button type="button" variant="outline" disabled={pending} onClick={() => { const n = name.trim() || "Blog"; start(async () => { const r = await addSection(n, "blog"); report(r, "Blog section added"); if (r.ok) { setName(""); window.location.reload(); } }); }}>+ Add blog section</Button>
       </form>
     </div>
   );

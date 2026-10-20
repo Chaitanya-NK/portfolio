@@ -27,7 +27,7 @@ export function Inbox({ initial }: { initial: M[] }) {
               <div className="truncate text-sm text-neutral-500">{m.body}</div>
             </div>
             {!m.is_read && <Badge>New</Badge>}
-            <span className="text-xs text-neutral-500">{format(new Date(m.created_at), "dd MMM, HH:mm")}</span>
+            <span suppressHydrationWarning className="text-xs text-neutral-500">{format(new Date(m.created_at), "dd MMM, HH:mm")}</span>
           </button>
           {open === m.id && (
             <div className="border-t p-4">

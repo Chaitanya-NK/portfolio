@@ -31,7 +31,7 @@ export async function renameSection(id: string, title: string, subtitle: string)
   return done(error);
 }
 
-export async function addSection(title: string): Promise<R> {
+export async function addSection(title: string, type: "custom" | "blog" = "custom"): Promise<R> {
   const supabase = await requireAdmin();
   const { data: last } = await supabase
     .from("sections").select("sort_order").order("sort_order", { ascending: false }).limit(1);
@@ -39,13 +39,13 @@ export async function addSection(title: string): Promise<R> {
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "section";
   const { error } = await supabase.from("sections").insert({
     key: `${slug}-${Math.random().toString(36).slice(2, 6)}`,
-    type: "custom", title: title.trim(), sort_order: next,
+    type, title: title.trim(), sort_order: next,
   });
   return done(error);
 }
 
 export async function deleteSection(id: string): Promise<R> {
   const supabase = await requireAdmin();
-  const { error } = await supabase.from("sections").delete().eq("id", id).eq("type", "custom");
+  const { error } = await supabase.from("sections").delete().eq("id", id).in("type", ["custom", "blog"]);
   return done(error);
 }

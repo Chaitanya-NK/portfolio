@@ -8,7 +8,7 @@ const items = [
   { label: "Section builder", href: "/admin/sections" },
   { label: "Tools", href: "/admin/tools" }, { label: "Skills", href: "/admin/skills" }, { label: "Experience", href: "/admin/experience" },
   { label: "Education", href: "/admin/education" }, { label: "Achievements", href: "/admin/achievements" }, { label: "Projects", href: "/admin/projects" },
-  { label: "Testimonials", href: "/admin/testimonials" }, { label: "Media library", href: "/admin/media" }, { label: "Inbox", href: "/admin/inbox" },
+  { label: "Testimonials", href: "/admin/testimonials" }, { label: "Blog posts", href: "/admin/blog" }, { label: "Media library", href: "/admin/media" }, { label: "Inbox", href: "/admin/inbox" },
   { label: "Settings" },
 ];
 
@@ -23,7 +23,7 @@ export function AdminNav() {
               {i.label}<span className="text-[10px] uppercase">soon</span>
             </span>
           );
-        const active = path === i.href;
+        const active = i.href === "/admin" ? path === i.href : path.startsWith(i.href);
         return (
           <Link
             key={i.label}
