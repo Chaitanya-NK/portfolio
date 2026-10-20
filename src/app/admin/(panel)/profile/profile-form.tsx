@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUpload } from "@/components/admin/file-upload";
+import { StatsEditor, SocialsEditor } from "@/components/admin/list-editors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type P = Record<string, any>;
-const pairs = (arr: any[] | null, a: string, b: string) =>
-  (arr ?? []).map((x) => `${x[a]} | ${x[b]}`).join("\n");
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <label className="flex flex-col gap-1 text-sm font-medium">{label}{children}</label>;
@@ -36,12 +35,17 @@ export function ProfileForm({ p }: { p: P }) {
       <Card>
         <CardHeader><CardTitle>Stats and links</CardTitle></CardHeader>
         <CardContent className="grid gap-4">
-          <Field label="Hero stats (one per line: Label | Value)">
-            <Textarea name="stats" rows={3} defaultValue={pairs(p.stats, "label", "value")} />
-          </Field>
-          <Field label="Social links (one per line: Label | URL)">
-            <Textarea name="socials" rows={3} defaultValue={pairs(p.socials, "label", "url")} />
-          </Field>
+          <div className="flex flex-col gap-2 text-sm font-medium">
+            Hero stats
+            <StatsEditor name="stats" initial={p.stats ?? []} />
+          </div>
+          <div className="flex flex-col gap-2 text-sm font-medium">
+            Social links
+            <SocialsEditor
+              name="socials"
+              initial={(p.socials ?? []).map((x: any) => ({ platform: x.platform ?? x.label ?? "Other", url: (x.url ?? "").replace(/^mailto:/, "") }))}
+            />
+          </div>
         </CardContent>
       </Card>
       <Card>
