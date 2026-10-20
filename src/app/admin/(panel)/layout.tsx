@@ -4,6 +4,7 @@ import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "../actions";
 import { Button } from "@/components/ui/button";
+import { AdminNav } from "@/components/admin/admin-nav";
 
 async function Guard({ children }: { children: React.ReactNode }) {
   await connection();
@@ -17,18 +18,19 @@ async function Guard({ children }: { children: React.ReactNode }) {
 
 export default function PanelLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen">
-      <header className="flex items-center justify-between border-b px-6 py-3">
-        <strong>Admin</strong>
-        <form action={logout}>
-          <Button variant="outline" size="sm">Sign out</Button>
+    <div className="flex min-h-screen bg-neutral-100 text-neutral-900">
+      <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col gap-6 bg-[#14161A] p-4">
+        <strong className="px-3 pt-2 text-white">Admin · Portfolio</strong>
+        <AdminNav />
+        <form action={logout} className="mt-auto">
+          <Button variant="outline" size="sm" className="w-full">Sign out</Button>
         </form>
-      </header>
-      <div className="p-6">
+      </aside>
+      <main className="min-w-0 flex-1 p-8">
         <Suspense fallback={<p className="text-sm">Loading…</p>}>
           <Guard>{children}</Guard>
         </Suspense>
-      </div>
+      </main>
     </div>
   );
 }
