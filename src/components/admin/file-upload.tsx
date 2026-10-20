@@ -43,7 +43,7 @@ export function FileUpload({ name, label, folder, accept, defaultValue, maxMB = 
     <div className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
       {label}
       {name && <input type="hidden" name={name} value={url} />}
-      <div className="flex items-center gap-4 rounded-xl border border-dashed p-4">
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-dashed p-4 sm:gap-4">
         {url && isImage(url) && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={url} alt="" className="h-20 w-20 rounded-lg object-cover" />

@@ -164,3 +164,6 @@
 .hljs-number,.hljs-literal{color:#79c0ff}
 .hljs-title,.hljs-function{color:#d2a8ff}
 .hljs-built_in,.hljs-type{color:#ffa657}
+
+.rich .tableWrapper{overflow-x:auto}
+.rich table{min-width:480px}

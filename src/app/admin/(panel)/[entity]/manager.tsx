@@ -146,17 +146,19 @@ function SortableRow({ entity, cfg, item, onEdit, onDelete, onToggle }: {
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-3 rounded-xl border bg-white p-3 ${isDragging ? "z-10 shadow-lg" : ""} ${item.published ? "" : "opacity-60"}`}
+      className={`flex flex-wrap items-center gap-2 rounded-xl border bg-white p-3 sm:gap-3 ${isDragging ? "z-10 shadow-lg" : ""} ${item.published ? "" : "opacity-60"}`}
     >
-      <button aria-label="Drag to reorder" className="cursor-grab px-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
-      <div className="min-w-0 flex-1">
+      <button aria-label="Drag to reorder" className="cursor-grab touch-none px-3 py-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
+      <div className="min-w-0 flex-1 basis-40">
         <div className="truncate font-medium">{item[cfg.primary] ?? "(untitled)"}</div>
         {sub && <div className="truncate text-sm text-neutral-500">{sub}</div>}
       </div>
-      {!item.published && <Badge variant="secondary">Draft</Badge>}
-      <Switch checked={Boolean(item.published)} onCheckedChange={(c: boolean) => onToggle(c)} aria-label="Published" />
-      <Button variant="outline" size="sm" onClick={onEdit}>Edit</Button>
-      <Button variant="ghost" size="sm" onClick={onDelete}>Delete</Button>
+      <div className="ml-auto flex items-center gap-2">
+        {!item.published && <Badge variant="secondary">Draft</Badge>}
+        <Switch checked={Boolean(item.published)} onCheckedChange={(c: boolean) => onToggle(c)} aria-label="Published" />
+        <Button variant="outline" size="sm" onClick={onEdit}>Edit</Button>
+        <Button variant="ghost" size="sm" onClick={onDelete}>Delete</Button>
+      </div>
     </div>
   );
 }

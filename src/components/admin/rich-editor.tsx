@@ -53,7 +53,7 @@ function Btn({ label, active, disabled, onClick, children }: {
     <button
       type="button" title={label} aria-label={label} aria-pressed={active} disabled={disabled}
       onMouseDown={(e) => e.preventDefault()} onClick={onClick}
-      className={`inline-flex h-8 min-w-8 items-center justify-center rounded-md px-2 text-sm transition-colors hover:bg-neutral-100 disabled:opacity-40 ${active ? "bg-indigo-100 text-indigo-700" : "text-neutral-700"}`}
+      className={`inline-flex h-8 min-w-8 shrink-0 items-center justify-center rounded-md px-2 text-sm transition-colors hover:bg-neutral-100 disabled:opacity-40 ${active ? "bg-indigo-100 text-indigo-700" : "text-neutral-700"}`}
     >
       {children}
     </button>
@@ -104,7 +104,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
     ],
     content: (initialJSON as object) ?? initialHTML ?? "",
     editorProps: {
-      attributes: { class: "rich min-h-[460px] px-6 py-5 outline-none" },
+      attributes: { class: "rich min-h-[460px] px-4 py-4 outline-none sm:px-6 sm:py-5" },
       handlePaste: (_v, event) => {
         const files = Array.from(event.clipboardData?.files ?? []).filter((f) => f.type.startsWith("image/"));
         if (!files.length) return false;
@@ -148,8 +148,8 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-white">
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b bg-white p-2">
+    <div className="rounded-xl border bg-white">
+      <div className="sticky top-14 z-10 flex flex-nowrap items-center gap-0.5 overflow-x-auto rounded-t-xl border-b bg-white p-2 lg:top-0 md:flex-wrap md:overflow-visible">
         <Btn label="Undo" disabled={!editor.can().undo()} onClick={() => chain().undo().run()}><Undo2 className={ic} /></Btn>
         <Btn label="Redo" disabled={!editor.can().redo()} onClick={() => chain().redo().run()}><Redo2 className={ic} /></Btn>
         <Sep />
@@ -159,7 +159,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
           if (s === "p") chain().setParagraph().run();
           else chain().setHeading({ level: Number(s) as 1 | 2 | 3 | 4 }).run();
         }}>
-          <SelectTrigger className="h-8 w-32" aria-label="Text style"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="h-8 w-32 shrink-0" aria-label="Text style"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="p">Paragraph</SelectItem>
             <SelectItem value="1">Heading 1</SelectItem>
@@ -178,7 +178,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
           <PopoverTrigger
             aria-label="Highlight"
             onMouseDown={(e) => e.preventDefault()}
-            className={`inline-flex h-8 min-w-8 items-center justify-center rounded-md px-2 hover:bg-neutral-100 ${editor.isActive("highlight") ? "bg-indigo-100 text-indigo-700" : "text-neutral-700"}`}
+            className={`inline-flex h-8 min-w-8 shrink-0 items-center justify-center rounded-md px-2 hover:bg-neutral-100 ${editor.isActive("highlight") ? "bg-indigo-100 text-indigo-700" : "text-neutral-700"}`}
           >
             <Highlighter className={ic} />
           </PopoverTrigger>
@@ -216,9 +216,9 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
       </div>
 
       {editor.isActive("image") && (
-        <div className="flex items-center gap-2 border-b bg-neutral-50 px-3 py-2 text-sm">
+        <div className="flex flex-wrap items-center gap-2 border-b bg-neutral-50 px-3 py-2 text-sm">
           <span className="font-medium">Image alt text</span>
-          <Input className="h-8 max-w-md bg-white" placeholder="Describe the image for accessibility and SEO"
+          <Input className="h-8 min-w-0 flex-1 basis-48 bg-white sm:max-w-md" placeholder="Describe the image for accessibility and SEO"
             value={editor.getAttributes("image").alt ?? ""}
             onChange={(e) => editor.chain().updateAttributes("image", { alt: e.target.value }).run()} />
           <Button type="button" variant="ghost" size="sm" onClick={() => chain().deleteSelection().run()}>Remove image</Button>

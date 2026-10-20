@@ -23,10 +23,10 @@ export function StatsEditor({ name, initial }: { name: string; initial: Stat[] }
     <div className="flex flex-col gap-2">
       <input type="hidden" name={name} value={JSON.stringify(rows)} />
       {rows.map((r, i) => (
-        <div key={i} className="flex gap-2">
-          <Input className="w-32" placeholder="Value (e.g. 5+)" value={r.value} onChange={(e) => set(i, "value", e.target.value)} aria-label="Stat value" />
+        <div key={i} className="flex flex-col gap-2 rounded-lg border p-2 sm:flex-row sm:border-0 sm:p-0">
+          <Input className="sm:w-32" placeholder="Value (e.g. 5+)" value={r.value} onChange={(e) => set(i, "value", e.target.value)} aria-label="Stat value" />
           <Input className="flex-1" placeholder="Label (e.g. Years of experience)" value={r.label} onChange={(e) => set(i, "label", e.target.value)} aria-label="Stat label" />
-          <Button type="button" variant="ghost" size="sm" onClick={() => setRows((r) => r.filter((_, j) => j !== i))}>Remove</Button>
+          <Button type="button" variant="ghost" size="sm" className="self-end sm:self-auto" onClick={() => setRows((r) => r.filter((_, j) => j !== i))}>Remove</Button>
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" className="w-fit" onClick={() => setRows((r) => [...r, { label: "", value: "" }])}>
@@ -44,9 +44,9 @@ export function SocialsEditor({ name, initial }: { name: string; initial: Social
     <div className="flex flex-col gap-2">
       <input type="hidden" name={name} value={JSON.stringify(rows)} />
       {rows.map((r, i) => (
-        <div key={i} className="flex gap-2">
+        <div key={i} className="flex flex-col gap-2 rounded-lg border p-2 sm:flex-row sm:border-0 sm:p-0">
           <Select value={r.platform} onValueChange={(v) => v && set(i, "platform", String(v))}>
-            <SelectTrigger className="w-44" aria-label="Platform">
+            <SelectTrigger className="w-full sm:w-44" aria-label="Platform">
               <SelectValue placeholder="Platform" />
             </SelectTrigger>
             <SelectContent>
@@ -56,7 +56,7 @@ export function SocialsEditor({ name, initial }: { name: string; initial: Social
             </SelectContent>
           </Select>
           <Input className="flex-1" placeholder={r.platform === "Email" ? "you@example.com" : "https://..."} value={r.url} onChange={(e) => set(i, "url", e.target.value)} aria-label="URL" />
-          <Button type="button" variant="ghost" size="sm" onClick={() => setRows((r) => r.filter((_, j) => j !== i))}>Remove</Button>
+          <Button type="button" variant="ghost" size="sm" className="self-end sm:self-auto" onClick={() => setRows((r) => r.filter((_, j) => j !== i))}>Remove</Button>
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" className="w-fit" onClick={() => setRows((r) => [...r, { platform: "GitHub", url: "" }])}>

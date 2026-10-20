@@ -91,7 +91,7 @@ export function PostForm({ post }: { post: Post | null }) {
 
   return (
     <div className="max-w-6xl">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <Link href="/admin/blog" className="text-sm text-indigo-600 underline">← All posts</Link>
         <div className="flex items-center gap-3">
           {dirty && <span className="text-xs text-amber-600">Unsaved changes</span>}
@@ -101,7 +101,7 @@ export function PostForm({ post }: { post: Post | null }) {
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="flex min-w-0 flex-col gap-4">
           <Input
-            className="h-auto border-0 bg-transparent px-0 text-3xl font-bold shadow-none focus-visible:ring-0"
+            className="h-auto border-0 bg-transparent px-0 text-2xl font-bold sm:text-3xl shadow-none focus-visible:ring-0"
             placeholder="Post title" aria-label="Post title" value={title}
             onChange={(e) => { setTitle(e.target.value); if (!slugTouched) setSlug(slugify(e.target.value)); setDirty(true); }}
           />
@@ -126,6 +126,7 @@ export function PostForm({ post }: { post: Post | null }) {
               <span className="text-xs font-normal text-neutral-500">Published posts with a future date stay hidden until then.</span>
             </div>
             <p className="text-xs text-neutral-500">{words} words · {Math.max(1, Math.ceil(words / 200))} min read</p>
+            <Button className="lg:hidden" onClick={save} disabled={busy}>{busy ? "Saving…" : "Save"}</Button>
           </Box>
           <Box t="Cover image">
             <FileUpload label="" folder="blog-covers" accept="image/*" defaultValue={cover} onChange={(u) => { setCover(u); setDirty(true); }} />

@@ -27,8 +27,8 @@ export function PostsList({ initial }: { initial: P[] }) {
       {posts.map((p) => {
         const scheduled = p.status === "published" && p.publish_at && new Date(p.publish_at) > new Date();
         return (
-          <div key={p.id} className="flex items-center gap-3 rounded-xl border bg-white p-4">
-            <div className="min-w-0 flex-1">
+          <div key={p.id} className="flex flex-wrap items-center gap-2 rounded-xl border bg-white p-4 sm:gap-3">
+            <div className="min-w-0 flex-1 basis-56">
               <Link href={`/admin/blog/${p.id}`} className="block truncate font-medium hover:underline">{p.title}</Link>
               <div className="truncate text-sm text-neutral-500" suppressHydrationWarning>
                 Updated {format(new Date(p.updated_at), "dd MMM yyyy, HH:mm")} · {p.reading_minutes} min read

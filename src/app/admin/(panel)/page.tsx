@@ -39,7 +39,7 @@ async function Stats() {
       </div>
       <div className={card}>
         <h2 className="mb-3 font-semibold">Content</h2>
-        <div className="grid gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {TABLES.map(([, label, href], i) => (
             <Link key={label} href={href} className="rounded-lg border p-3 hover:bg-neutral-50">
               <div className="text-sm text-neutral-500">{label}</div><div className="text-2xl font-semibold">{totals[i]}</div>

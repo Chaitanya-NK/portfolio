@@ -59,16 +59,18 @@ function Row({ item, onEdit, onDelete, onToggle }: { item: Item; onEdit: () => v
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
   return (
     <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-3 rounded-xl border bg-white p-3 ${isDragging ? "z-10 shadow-lg" : ""} ${item.published ? "" : "opacity-60"}`}>
-      <button aria-label="Drag to reorder" className="cursor-grab px-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
-      <div className="min-w-0 flex-1">
+      className={`flex flex-wrap items-center gap-2 rounded-xl border bg-white p-3 sm:gap-3 ${isDragging ? "z-10 shadow-lg" : ""} ${item.published ? "" : "opacity-60"}`}>
+      <button aria-label="Drag to reorder" className="cursor-grab touch-none px-3 py-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
+      <div className="min-w-0 flex-1 basis-40">
         <div className="truncate font-medium">{item.data.title}</div>
         <div className="truncate text-sm text-neutral-500">{[item.data.subtitle, item.data.date_label].filter(Boolean).join(" · ")}</div>
       </div>
-      {!item.published && <Badge variant="secondary">Draft</Badge>}
-      <Switch checked={item.published} onCheckedChange={onToggle} aria-label="Published" />
-      <Button variant="outline" size="sm" onClick={onEdit}>Edit</Button>
-      <Button variant="ghost" size="sm" onClick={onDelete}>Delete</Button>
+      <div className="ml-auto flex items-center gap-2">
+        {!item.published && <Badge variant="secondary">Draft</Badge>}
+        <Switch checked={item.published} onCheckedChange={onToggle} aria-label="Published" />
+        <Button variant="outline" size="sm" onClick={onEdit}>Edit</Button>
+        <Button variant="ghost" size="sm" onClick={onDelete}>Delete</Button>
+      </div>
     </div>
   );
 }

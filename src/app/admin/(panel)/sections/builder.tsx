@@ -1,5 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import {
   DndContext, closestCenter, PointerSensor, KeyboardSensor,
   useSensor, useSensors, type DragEndEvent,
@@ -9,7 +10,6 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ function Row({ s, onChange, onRemove }: {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: s.id });
   const [title, setTitle] = useState(s.title);
   const [sub, setSub] = useState(s.subtitle ?? "");
+  const editable = s.type === "custom" || s.type === "blog";
   const save = async () => {
     if (title === s.title && sub === (s.subtitle ?? "")) return;
     onChange({ ...s, title, subtitle: sub || null });
@@ -36,26 +37,33 @@ function Row({ s, onChange, onRemove }: {
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-3 rounded-xl border bg-white p-3 ${isDragging ? "z-10 shadow-lg" : ""} ${s.visible ? "" : "opacity-60"}`}
+      className={`flex flex-wrap items-center gap-2 rounded-xl border bg-white p-3 sm:flex-nowrap sm:gap-3 ${isDragging ? "z-10 shadow-lg" : ""} ${s.visible ? "" : "opacity-60"}`}
     >
-      <button aria-label="Drag to reorder" className="cursor-grab px-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
-      <Input className="max-w-48 font-medium" value={title} onChange={(e) => setTitle(e.target.value)} onBlur={save} aria-label="Section title" />
-      <Input className="flex-1" placeholder="Subtitle / heading text" value={sub} onChange={(e) => setSub(e.target.value)} onBlur={save} aria-label="Section subtitle" />
-      <Badge variant={s.type === "custom" ? "default" : "secondary"}>{s.type}</Badge>
-      <Switch
-        checked={s.visible}
-        aria-label="Visible"
-        onCheckedChange={async (v: boolean) => {
-          onChange({ ...s, visible: v });
-          report(await setVisible(s.id, v), v ? "Section shown" : "Section hidden");
-        }}
-      />
-      {(s.type === "custom" || s.type === "blog") && (
-        <Link href={s.type === "blog" ? "/admin/blog" : `/admin/sections/${s.id}`} className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-50">{s.type === "blog" ? "Posts" : "Items"}</Link>
-      )}
-      {(s.type === "custom" || s.type === "blog") && (
-        <Button variant="ghost" size="sm" onClick={async () => { onRemove(s.id); report(await deleteSection(s.id), "Deleted"); }}>Delete</Button>
-      )}
+      <button aria-label="Drag to reorder" className="cursor-grab touch-none px-3 py-2 text-lg text-neutral-400" {...attributes} {...listeners}>⋮⋮</button>
+      <Input className="min-w-0 flex-1 basis-32 font-medium sm:max-w-48 sm:flex-none" value={title} onChange={(e) => setTitle(e.target.value)} onBlur={save} aria-label="Section title" />
+      <div className="ml-auto flex flex-wrap items-center justify-end gap-2 sm:order-last sm:ml-0">
+        <Badge variant={editable ? "default" : "secondary"}>{s.type}</Badge>
+        <Switch
+          checked={s.visible}
+          aria-label="Visible"
+          onCheckedChange={async (v: boolean) => {
+            onChange({ ...s, visible: v });
+            report(await setVisible(s.id, v), v ? "Section shown" : "Section hidden");
+          }}
+        />
+        {editable && (
+          <Link
+            href={s.type === "blog" ? "/admin/blog" : `/admin/sections/${s.id}`}
+            className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-50"
+          >
+            {s.type === "blog" ? "Posts" : "Items"}
+          </Link>
+        )}
+        {editable && (
+          <Button variant="ghost" size="sm" onClick={async () => { onRemove(s.id); report(await deleteSection(s.id), "Deleted"); }}>Delete</Button>
+        )}
+      </div>
+      <Input className="order-last w-full sm:order-none sm:w-auto sm:flex-1" placeholder="Subtitle / heading text" value={sub} onChange={(e) => setSub(e.target.value)} onBlur={save} aria-label="Section subtitle" />
     </div>
   );
 }
@@ -77,6 +85,15 @@ export function SectionBuilder({ initial }: { initial: Section[] }) {
     start(async () => report(await reorderSections(next.map((i) => i.id)), "Order saved"));
   };
 
+  const add = (type: "custom" | "blog") =>
+    start(async () => {
+      const n = name.trim() || (type === "blog" ? "Blog" : "");
+      if (!n) return;
+      const r = await addSection(n, type);
+      report(r, "Section added");
+      if (r.ok) { setName(""); window.location.reload(); }
+    });
+
   return (
     <div className="flex max-w-4xl flex-col gap-3">
       <DndContext id="sections-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -89,20 +106,14 @@ export function SectionBuilder({ initial }: { initial: Section[] }) {
         </SortableContext>
       </DndContext>
       <form
-        className="mt-4 flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!name.trim()) return;
-          start(async () => {
-            const r = await addSection(name);
-            report(r, "Section added");
-            if (r.ok) { setName(""); window.location.reload(); }
-          });
-        }}
+        className="mt-4 flex flex-col gap-2 sm:flex-row"
+        onSubmit={(e) => { e.preventDefault(); add("custom"); }}
       >
-        <Input placeholder="New custom section name (e.g. Blog, Services)" value={name} onChange={(e) => setName(e.target.value)} />
-        <Button type="submit" disabled={pending}>+ Add custom section</Button>
-        <Button type="button" variant="outline" disabled={pending} onClick={() => { const n = name.trim() || "Blog"; start(async () => { const r = await addSection(n, "blog"); report(r, "Blog section added"); if (r.ok) { setName(""); window.location.reload(); } }); }}>+ Add blog section</Button>
+        <Input placeholder="New section name (e.g. Services, Blog)" value={name} onChange={(e) => setName(e.target.value)} />
+        <div className="flex gap-2">
+          <Button type="submit" disabled={pending} className="flex-1 sm:flex-none">+ Custom section</Button>
+          <Button type="button" variant="outline" disabled={pending} className="flex-1 sm:flex-none" onClick={() => add("blog")}>+ Blog section</Button>
+        </div>
       </form>
     </div>
   );
