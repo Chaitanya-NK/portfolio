@@ -6,9 +6,9 @@ const items = [
   { label: "Dashboard", href: "/admin" },
   { label: "Profile & SEO", href: "/admin/profile" },
   { label: "Section builder", href: "/admin/sections" },
-  { label: "Tools" }, { label: "Skills" }, { label: "Experience" },
-  { label: "Education" }, { label: "Achievements" }, { label: "Projects" },
-  { label: "Testimonials" }, { label: "Media library" }, { label: "Inbox" },
+  { label: "Tools", href: "/admin/tools" }, { label: "Skills", href: "/admin/skills" }, { label: "Experience", href: "/admin/experience" },
+  { label: "Education", href: "/admin/education" }, { label: "Achievements", href: "/admin/achievements" }, { label: "Projects", href: "/admin/projects" },
+  { label: "Testimonials", href: "/admin/testimonials" }, { label: "Media library" }, { label: "Inbox" },
   { label: "Settings" },
 ];
 
