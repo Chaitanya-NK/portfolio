@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 
 export const PLATFORMS = [
   "LinkedIn", "GitHub", "X / Twitter", "Instagram", "Reddit", "YouTube", "Facebook",
@@ -11,9 +14,6 @@ export const PLATFORMS = [
 
 type Stat = { label: string; value: string };
 type Social = { platform: string; url: string };
-
-const selectCls =
-  "h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 export function StatsEditor({ name, initial }: { name: string; initial: Stat[] }) {
   const [rows, setRows] = useState<Stat[]>(initial.length ? initial : [{ label: "", value: "" }]);
@@ -45,9 +45,16 @@ export function SocialsEditor({ name, initial }: { name: string; initial: Social
       <input type="hidden" name={name} value={JSON.stringify(rows)} />
       {rows.map((r, i) => (
         <div key={i} className="flex gap-2">
-          <select className={`${selectCls} w-44`} value={r.platform} onChange={(e) => set(i, "platform", e.target.value)} aria-label="Platform">
-            {PLATFORMS.map((p) => <option key={p}>{p}</option>)}
-          </select>
+          <Select value={r.platform} onValueChange={(v) => v && set(i, "platform", String(v))}>
+            <SelectTrigger className="w-44" aria-label="Platform">
+              <SelectValue placeholder="Platform" />
+            </SelectTrigger>
+            <SelectContent>
+              {PLATFORMS.map((p) => (
+                <SelectItem key={p} value={p}>{p}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Input className="flex-1" placeholder={r.platform === "Email" ? "you@example.com" : "https://..."} value={r.url} onChange={(e) => set(i, "url", e.target.value)} aria-label="URL" />
           <Button type="button" variant="ghost" size="sm" onClick={() => setRows((r) => r.filter((_, j) => j !== i))}>Remove</Button>
         </div>
