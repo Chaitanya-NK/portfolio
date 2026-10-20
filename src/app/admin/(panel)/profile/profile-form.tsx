@@ -4,6 +4,7 @@ import { updateProfile, type FormState } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { FileUpload } from "@/components/admin/file-upload";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type P = Record<string, any>;
@@ -28,8 +29,8 @@ export function ProfileForm({ p }: { p: P }) {
           <Field label="Email"><Input name="email" defaultValue={p.email ?? ""} /></Field>
           <Field label="Phone"><Input name="phone" defaultValue={p.phone ?? ""} /></Field>
           <Field label="Location"><Input name="location" defaultValue={p.location ?? ""} /></Field>
-          <Field label="Resume URL"><Input name="resume_url" defaultValue={p.resume_url ?? ""} /></Field>
-          <div className="sm:col-span-2"><Field label="Photo URL (media library comes later)"><Input name="avatar_url" defaultValue={p.avatar_url ?? ""} /></Field></div>
+          <FileUpload name="resume_url" label="Resume (PDF, max 10 MB)" folder="resume" accept="application/pdf" maxMB={10} defaultValue={p.resume_url} />
+          <FileUpload name="avatar_url" label="Profile photo (max 5 MB)" folder="profile" accept="image/*" defaultValue={p.avatar_url} />
         </CardContent>
       </Card>
       <Card>
