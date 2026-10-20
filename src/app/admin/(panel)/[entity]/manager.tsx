@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { FileUpload } from "@/components/admin/file-upload";
+import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
 import type { EntityConfig, Field } from "@/lib/content-config";
 import { saveItem, deleteItem, togglePublished, reorderItems } from "./actions";
 
@@ -58,6 +59,14 @@ function MetricsEditor({ value, onChange }: { value: { value: string; label: str
 }
 
 function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) {
+  if (f.type === "date" || f.type === "datetime")
+    return (
+      <div className="flex flex-col gap-1 text-sm font-medium">
+        {f.label}
+        {f.type === "date" ? <DatePicker value={v} onChange={set} /> : <DateTimePicker value={v} onChange={set} />}
+        {f.help && <span className="text-xs font-normal text-neutral-500">{f.help}</span>}
+      </div>
+    );
   if (f.type === "image")
     return <FileUpload label={f.label} folder={f.folder ?? "misc"} accept="image/*" defaultValue={v} onChange={set} />;
   if (f.type === "switch")
