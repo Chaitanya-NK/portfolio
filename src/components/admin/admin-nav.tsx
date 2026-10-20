@@ -16,6 +16,9 @@ const items = [
   { label: "Blog posts", href: "/admin/blog" },
   { label: "Media library", href: "/admin/media" },
   { label: "Inbox", href: "/admin/inbox" },
+  { label: "Analytics", href: "/admin/analytics" },
+  { label: "Audit log", href: "/admin/audit" },
+  { label: "Security", href: "/admin/security" },
   { label: "Settings", href: "/admin/settings" },
 ];
 

@@ -25,9 +25,10 @@ async function Stats() {
     ...TABLES.map(([t]) => count(t)),
   ]);
   const { data: profile } = await supabase.from("profile").select("full_name, headline, avatar_url, resume_url").eq("id", 1).single();
+  const { data: mf } = await supabase.auth.mfa.listFactors();
   const checks = [
     ["Name", profile?.full_name], ["Headline", profile?.headline],
-    ["Photo", profile?.avatar_url], ["Resume", profile?.resume_url],
+    ["Photo", profile?.avatar_url], ["Resume", profile?.resume_url], ["Two-factor login", mf?.totp?.length],
   ];
   const card = "rounded-xl border bg-white p-5";
   return (
