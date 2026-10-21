@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import type { Row, SiteData } from "@/lib/site/data";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
+import { SocialLinks } from "./social-icon";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
@@ -62,13 +63,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
             ))}
           </div>
         )}
-        {socials.length > 0 && (
-          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            {socials.map((x, i) => (
-              <a key={i} href={x.url} target="_blank" rel="noreferrer" className={`${muted} underline-offset-4 hover:text-white hover:underline`}>{x.platform ?? x.label}</a>
-            ))}
-          </div>
-        )}
+        {socials.length > 0 && <SocialLinks socials={socials} />}
       </div>
     </section>
   );
@@ -324,11 +319,7 @@ export function Contact({ p }: { p: Row }) {
           {p.phone && <a href={`tel:${p.phone}`} className="hover:text-white">{p.phone}</a>}
           {p.location && <span>{p.location}</span>}
         </div>
-        {socials.length > 0 && (
-          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            {socials.map((x, i) => <a key={i} href={x.url} target="_blank" rel="noreferrer" className={`${muted} hover:text-white`}>{x.platform ?? x.label}</a>)}
-          </div>
-        )}
+        {socials.length > 0 && <SocialLinks socials={socials} />}
       </div>
       <ContactForm />
     </div>

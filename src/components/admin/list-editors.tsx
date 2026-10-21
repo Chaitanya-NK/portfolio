@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SocialIcon } from "@/components/site/social-icon";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -51,7 +52,7 @@ export function SocialsEditor({ name, initial }: { name: string; initial: Social
             </SelectTrigger>
             <SelectContent>
               {PLATFORMS.map((p) => (
-                <SelectItem key={p} value={p}>{p}</SelectItem>
+                <SelectItem key={p} value={p}><span className="flex items-center gap-2"><SocialIcon platform={p} className="h-4 w-4 shrink-0" />{p}</span></SelectItem>
               ))}
             </SelectContent>
           </Select>
