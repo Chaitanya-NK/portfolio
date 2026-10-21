@@ -29,14 +29,14 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
   const stats: Row[] = p.stats ?? [];
   const socials: Row[] = p.socials ?? [];
   return (
-    <section id="hero" className="mx-auto grid w-[min(92%,70rem)] items-end gap-10 pt-16 sm:pt-24 lg:grid-cols-[1.5fr_1fr] lg:gap-12">
+    <section id="hero" className="mx-auto grid w-[min(92%,70rem)] items-center gap-10 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
       <div className="fade-up flex flex-col gap-6">
         {p.availability && (
           <span className="flex w-fit items-center gap-2.5 rounded-full border border-[#23232F] bg-[#12121A] px-4 py-2 text-sm">
             <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />{p.availability}
           </span>
         )}
-        <h1 className={`${D} text-[clamp(2.4rem,7.5vw,5.5rem)] font-bold leading-[0.98] tracking-tight`}>
+        <h1 className={`${D} text-balance text-[clamp(2.25rem,4.4vw,3.75rem)] font-bold leading-[1.04] tracking-tight`}>
           {p.headline || p.full_name || "Add your headline in the admin"}
         </h1>
         {p.bio && <p className={`max-w-xl text-base leading-relaxed sm:text-lg ${muted}`}>{p.bio}</p>}
@@ -45,12 +45,12 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
           {p.resume_url && <a href={p.resume_url} target="_blank" rel="noreferrer" className="rounded-full border border-[#23232F] px-6 py-3.5">Download resume</a>}
         </div>
       </div>
-      <div className={`${card} fade-up d2 flex flex-col gap-5`}>
+      <div className={`${card} fade-up d2 flex w-full max-w-md flex-col gap-5 justify-self-center lg:justify-self-end`}>
         {p.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className="aspect-[4/3] w-full rounded-xl object-cover" />
+          <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className="aspect-[4/5] w-full rounded-xl object-cover object-top ring-1 ring-white/10" />
         ) : (
-          <div className={`flex aspect-[4/3] items-center justify-center rounded-xl bg-[#1B1B26] text-5xl font-bold ${muted}`}>{(p.full_name ?? "?").slice(0, 1)}</div>
+          <div className={`flex aspect-[4/5] items-center justify-center rounded-xl bg-[#1B1B26] text-5xl font-bold ${muted}`}>{(p.full_name ?? "?").slice(0, 1)}</div>
         )}
         {stats.length > 0 && (
           <div className="grid grid-cols-3 gap-3">
