@@ -36,6 +36,7 @@ function initValues(cfg: EntityConfig, item: Row | null): Values {
     if (f.type === "tags") v[f.key] = Array.isArray(raw) ? raw.join(", ") : "";
     else if (f.type === "lines") v[f.key] = Array.isArray(raw) ? raw.join("\n") : "";
     else if (f.type === "metrics") v[f.key] = Array.isArray(raw) ? raw : [];
+    else if (f.type === "roles") v[f.key] = rolesInit(item);
     else if (f.type === "switch") v[f.key] = item ? Boolean(raw) : f.key === "published";
     else if (f.type === "datetime") v[f.key] = raw ? format(new Date(raw), "yyyy-MM-dd'T'HH:mm") : "";
     else if (f.type === "select") v[f.key] = raw != null ? String(raw) : f.default ?? "";
@@ -61,6 +62,75 @@ function MetricsEditor({ value, onChange }: { value: { value: string; label: str
   );
 }
 
+
+type RoleDraft = { title: string; start_date: string; end_date: string; is_current: boolean; summary: string; bullets: string };
+const blankRole = (): RoleDraft => ({ title: "", start_date: "", end_date: "", is_current: false, summary: "", bullets: "" });
+
+function rolesInit(item: Row | null): RoleDraft[] {
+  const toDraft = (r: Row): RoleDraft => ({
+    title: r.title ?? "", start_date: r.start_date ?? "", end_date: r.end_date ?? "",
+    is_current: Boolean(r.is_current), summary: r.summary ?? "",
+    bullets: Array.isArray(r.bullets) ? r.bullets.join("\n") : "",
+  });
+  if (Array.isArray(item?.roles) && item!.roles.length) return item!.roles.map(toDraft);
+  if (item?.role) return [toDraft({ title: item.role, start_date: item.start_date, end_date: item.end_date, is_current: item.is_current, summary: item.summary, bullets: item.bullets })];
+  return [blankRole()];
+}
+
+function RolesEditor({ value, onChange }: { value: RoleDraft[]; onChange: (v: RoleDraft[]) => void }) {
+  const set = (i: number, p: Partial<RoleDraft>) =>
+    onChange(value.map((r, j) => (j === i ? { ...r, ...p } : p.is_current ? { ...r, is_current: false } : r)));
+  const move = (i: number, d: number) => {
+    const k = i + d;
+    if (k < 0 || k >= value.length) return;
+    const n = [...value];
+    [n[i], n[k]] = [n[k], n[i]];
+    onChange(n);
+  };
+  return (
+    <div className="flex flex-col gap-3">
+      {value.map((r, i) => (
+        <div key={i} className="flex flex-col gap-3 rounded-xl border bg-neutral-50 p-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-sm font-semibold">Role {i + 1}{i === 0 ? " (newest)" : ""}</span>
+            <div className="flex gap-1">
+              <Button type="button" variant="ghost" size="sm" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move up">↑</Button>
+              <Button type="button" variant="ghost" size="sm" disabled={i === value.length - 1} onClick={() => move(i, 1)} aria-label="Move down">↓</Button>
+              <Button type="button" variant="ghost" size="sm" disabled={value.length === 1} onClick={() => onChange(value.filter((_, j) => j !== i))}>Remove</Button>
+            </div>
+          </div>
+          <label className="flex flex-col gap-1 text-sm font-medium">Job title
+            <Input value={r.title} onChange={(e) => set(i, { title: e.target.value })} placeholder="e.g. Senior Software Engineer" />
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-1 text-sm font-medium">Start date
+              <DatePicker value={r.start_date} onChange={(v) => set(i, { start_date: v })} />
+            </div>
+            <div className="flex flex-col gap-1 text-sm font-medium">End date
+              {r.is_current
+                ? <div className="flex h-9 items-center rounded-md border bg-white px-3 text-sm font-normal text-neutral-500">Present</div>
+                : <DatePicker value={r.end_date} onChange={(v) => set(i, { end_date: v })} />}
+            </div>
+          </div>
+          <div className="flex items-center justify-between rounded-lg border bg-white p-3 text-sm font-medium">
+            I currently work in this role
+            <Switch checked={r.is_current} onCheckedChange={(c: boolean) => set(i, { is_current: c, end_date: c ? "" : r.end_date })} aria-label="Current role" />
+          </div>
+          <label className="flex flex-col gap-1 text-sm font-medium">Summary (optional)
+            <Textarea rows={2} value={r.summary} onChange={(e) => set(i, { summary: e.target.value })} />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">Highlights (one per line)
+            <Textarea rows={3} value={r.bullets} onChange={(e) => set(i, { bullets: e.target.value })} />
+          </label>
+        </div>
+      ))}
+      <Button type="button" variant="outline" size="sm" className="w-fit" onClick={() => onChange([blankRole(), ...value])}>
+        + Add promotion or new role
+      </Button>
+    </div>
+  );
+}
+
 function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) {
   if (f.type === "date" || f.type === "datetime")
     return (
@@ -68,6 +138,13 @@ function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) 
         {f.label}
         {f.type === "date" ? <DatePicker value={v} onChange={set} /> : <DateTimePicker value={v} onChange={set} />}
         {f.help && <span className="text-xs font-normal text-neutral-500">{f.help}</span>}
+      </div>
+    );
+  if (f.type === "roles")
+    return (
+      <div className="flex flex-col gap-2 text-sm font-medium">
+        {f.label}
+        <RolesEditor value={v} onChange={set} />
       </div>
     );
   if (f.type === "image")

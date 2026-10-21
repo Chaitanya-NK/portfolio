@@ -1,5 +1,6 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/public";
+import { toPublicExperience } from "@/lib/roles";
 
 export type Row = Record<string, any>;
 
@@ -35,7 +36,7 @@ export async function getSiteData() {
     sections: (sections.data ?? []) as Row[],
     tools: (tools.data ?? []) as Row[],
     skills: (skills.data ?? []) as Row[],
-    experiences: (experiences.data ?? []) as Row[],
+    experiences: ((experiences.data ?? []) as Row[]).map(toPublicExperience),
     education: (education.data ?? []) as Row[],
     achievements: (achievements.data ?? []) as Row[],
     projects: (projects.data ?? []) as Row[],

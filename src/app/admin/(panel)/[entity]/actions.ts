@@ -2,6 +2,7 @@
 import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { CONTENT, type Field } from "@/lib/content-config";
+import { normalizeRoles, deriveFromRoles, type Role } from "@/lib/roles";
 
 type R = { ok: boolean; error?: string; row?: Record<string, any> };
 
@@ -26,6 +27,7 @@ function coerce(f: Field, v: unknown): unknown {
       return String(v ?? "").trim() || null;
     }
     case "switch": return Boolean(v);
+    case "roles": return normalizeRoles(v);
     case "tags": return list(v, ",");
     case "lines": return list(v, "\n");
     case "metrics":
@@ -55,7 +57,11 @@ export async function saveItem(entity: string, id: string | null, values: Record
     if (f.required && (val === null || val === "")) return { ok: false, error: `${f.label} is required` };
     row[f.key] = val;
   }
-  if (entity === "experience" && row.is_current) row.end_date = null;
+  if (entity === "experience") {
+    const roles = (row.roles as Role[]) ?? [];
+    if (!roles.length) return { ok: false, error: "Add at least one role with a title" };
+    Object.assign(row, deriveFromRoles(roles));
+  }
 
   if (id) {
     const { data, error } = await supabase.from(cfg.table).update(row).eq("id", id).select().single();

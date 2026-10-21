@@ -118,29 +118,71 @@ export function Skills({ items }: { items: Row[] }) {
 }
 
 export function Experience({ items }: { items: Row[] }) {
+  const range = (r: Row) =>
+    `${fmt(r.start_date)}${r.start_date || r.end_date || r.is_current ? " – " : ""}${r.is_current ? "Present" : fmt(r.end_date)}`;
   return (
     <div className="flex flex-col gap-4">
-      {items.map((e) => (
-        <div key={e.id} className={`${card} flex gap-4 sm:gap-5`}>
+      {items.map((e) => {
+        const roles: Row[] = e.roles ?? [];
+        const multi = roles.length > 1;
+        const first: Row = roles[0] ?? {};
+        const logo = (
           <span className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#23232F] bg-[#1B1B26]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {e.logo_url ? <img src={e.logo_url} alt="" className="h-full w-full object-contain p-1.5" /> : <span className={`${D} font-bold ${muted}`}>{e.company.slice(0, 1)}</span>}
           </span>
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
-              <h3 className={`${D} text-xl font-bold sm:text-2xl`}>{e.role} · {e.company}</h3>
-              <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>
-                {fmt(e.start_date)}{(e.start_date || e.end_date || e.is_current) && " – "}{e.is_current ? "Present" : fmt(e.end_date)}
-              </span>
+        );
+        const tech = e.tech?.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">{e.tech.map((t: string) => <span key={t} className={chip}>{t}</span>)}</div>
+        );
+
+        if (!multi) {
+          return (
+            <div key={e.id} className={`${card} flex gap-4 sm:gap-5`}>
+              {logo}
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
+                  <h3 className={`${D} text-xl font-bold sm:text-2xl`}>{first.title ?? e.role} · {e.company}</h3>
+                  <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>{range(first)}</span>
+                </div>
+                {first.summary && <p className={`mt-2 ${muted}`}>{first.summary}</p>}
+                {first.bullets?.length > 0 && (
+                  <ul className={`mt-2 list-disc space-y-1 pl-5 text-sm ${muted}`}>{first.bullets.map((b: string, i: number) => <li key={i}>{b}</li>)}</ul>
+                )}
+                {tech}
+              </div>
             </div>
-            {e.summary && <p className={`mt-2 ${muted}`}>{e.summary}</p>}
-            {e.bullets?.length > 0 && (
-              <ul className={`mt-2 list-disc space-y-1 pl-5 text-sm ${muted}`}>{e.bullets.map((b: string, i: number) => <li key={i}>{b}</li>)}</ul>
-            )}
-            {e.tech?.length > 0 && <div className="mt-3 flex flex-wrap gap-2">{e.tech.map((t: string) => <span key={t} className={chip}>{t}</span>)}</div>}
+          );
+        }
+
+        return (
+          <div key={e.id} className={`${card} flex gap-4 sm:gap-5`}>
+            {logo}
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+                <h3 className={`${D} text-xl font-bold sm:text-2xl`}>{e.company}</h3>
+                {e.tenure && <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>{e.tenure} total</span>}
+              </div>
+              <ol className="relative ml-1 mt-5 flex flex-col gap-6 border-l border-[#23232F] pl-6">
+                {roles.map((r, i) => (
+                  <li key={i} className="relative">
+                    <span aria-hidden className={`absolute -left-[1.9rem] top-1.5 h-3 w-3 rounded-full border-2 border-[#12121A] ${r.is_current ? "bg-[var(--accent)]" : "bg-[#3a3a4d]"}`} />
+                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
+                      <h4 className={`${D} text-lg font-semibold`}>{r.title}</h4>
+                      <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>{range(r)}</span>
+                    </div>
+                    {r.summary && <p className={`mt-1.5 ${muted}`}>{r.summary}</p>}
+                    {r.bullets?.length > 0 && (
+                      <ul className={`mt-2 list-disc space-y-1 pl-5 text-sm ${muted}`}>{r.bullets.map((b: string, j: number) => <li key={j}>{b}</li>)}</ul>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              {tech}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

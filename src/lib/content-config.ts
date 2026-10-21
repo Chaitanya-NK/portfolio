@@ -1,6 +1,6 @@
 export type FieldType =
   | "text" | "textarea" | "number" | "date" | "datetime"
-  | "image" | "tags" | "lines" | "switch" | "select" | "metrics";
+  | "image" | "tags" | "lines" | "switch" | "select" | "metrics" | "roles";
 
 export type Field = {
   key: string;
@@ -46,16 +46,11 @@ export const CONTENT: Record<string, EntityConfig> = {
     ],
   },
   experience: {
-    table: "experiences", title: "Experience", singular: "role", primary: "role", secondary: ["company"],
+    table: "experiences", title: "Experience", singular: "company", primary: "company", secondary: ["role"],
     fields: [
-      { key: "role", label: "Role", type: "text", required: true },
       { key: "company", label: "Company", type: "text", required: true },
       { key: "logo_url", label: "Company logo", type: "image", folder: "companies" },
-      { key: "start_date", label: "Start date", type: "date" },
-      { key: "end_date", label: "End date", type: "date" },
-      { key: "is_current", label: "I currently work here", type: "switch" },
-      { key: "summary", label: "Summary", type: "textarea" },
-      { key: "bullets", label: "Impact bullets (one per line)", type: "lines" },
+      { key: "roles", label: "Roles at this company (add one per promotion)", type: "roles" },
       { key: "tech", label: "Tech used (comma separated)", type: "tags" },
       published,
     ],
