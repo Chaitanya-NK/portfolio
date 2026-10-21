@@ -9,10 +9,11 @@ async function Loader() {
   const { data } = await supabase.from("messages").select("*").order("created_at", { ascending: false });
   return <Inbox initial={data ?? []} />;
 }
+
 export default function Page() {
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">Inbox</h1>
+      <h1 className="mb-4 text-2xl font-semibold">Inbox</h1>
       <Suspense fallback={<p>Loading…</p>}><Loader /></Suspense>
     </div>
   );
