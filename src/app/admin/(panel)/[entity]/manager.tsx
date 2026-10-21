@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { FileUpload } from "@/components/admin/file-upload";
+import { BulkTools } from "@/components/admin/bulk-tools";
 import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
 import type { EntityConfig, Field } from "@/lib/content-config";
 import { saveItem, deleteItem, togglePublished, reorderItems } from "./actions";
@@ -186,7 +187,8 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
 
   return (
     <div className="flex max-w-none flex-col gap-3">
-      <div className="flex justify-end">
+      <div className="flex flex-wrap justify-end gap-2">
+        {entity === "tools" && <BulkTools existing={items.map((i) => i.name)} />}
         <Button onClick={() => setEditing({ item: null })}>+ Add {cfg.singular}</Button>
       </div>
       {items.length === 0 && (
