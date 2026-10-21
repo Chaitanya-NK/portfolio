@@ -10,7 +10,7 @@ async function Content() {
   const [posts, { profile }] = await Promise.all([getAllPosts(), getSiteData()]);
   return (
     <div style={{ ["--accent" as string]: profile.theme?.accent || "#C6F432" }}>
-      <main className="mx-auto w-[min(1120px,92%)] py-10 sm:py-16">
+      <main className="mx-auto w-[min(92%,70rem)] py-10 sm:py-16">
         <Link href="/" className="text-sm text-[#9A9AAE] hover:text-white">← {profile.full_name || "Back to portfolio"}</Link>
         <h1 className="mb-8 mt-6 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight sm:text-6xl">Blog</h1>
         <BlogIndex posts={posts} />

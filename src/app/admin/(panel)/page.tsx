@@ -32,7 +32,7 @@ async function Stats() {
   ];
   const card = "rounded-xl border bg-white p-5";
   return (
-    <div className="flex max-w-5xl flex-col gap-6">
+    <div className="flex max-w-none flex-col gap-6">
       <div className="grid gap-4 sm:grid-cols-3">
         <Link href="/admin/inbox" className={card}><div className="text-sm text-neutral-500">Unread messages</div><div className="text-3xl font-semibold">{unread}</div></Link>
         <Link href="/admin/projects" className={card}><div className="text-sm text-neutral-500">Draft projects</div><div className="text-3xl font-semibold">{drafts}</div></Link>
@@ -40,7 +40,7 @@ async function Stats() {
       </div>
       <div className={card}>
         <h2 className="mb-3 font-semibold">Content</h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 2xl:grid-cols-7">
           {TABLES.map(([, label, href], i) => (
             <Link key={label} href={href} className="rounded-lg border p-3 hover:bg-neutral-50">
               <div className="text-sm text-neutral-500">{label}</div><div className="text-2xl font-semibold">{totals[i]}</div>

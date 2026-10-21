@@ -22,7 +22,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
   const D = "font-[family-name:var(--font-display)]";
   return (
     <div style={{ ["--accent" as string]: profile.theme?.accent || "#C6F432" }}>
-      <article className="mx-auto w-[min(860px,92%)] py-10 sm:py-16">
+      <article className="mx-auto w-[min(92%,54rem)] py-10 sm:py-16">
         <Link href="/#projects" className="text-sm text-[#9A9AAE] hover:text-white">← All projects</Link>
         <p className="mt-6 font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-[var(--accent)]">
           {[p.role, p.year].filter(Boolean).join(" · ")}

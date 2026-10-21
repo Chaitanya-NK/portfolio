@@ -27,7 +27,7 @@ export function AuditLog({ logs }: { logs: L[] }) {
     (!q || `${l.meta?.label ?? ""} ${l.meta?.email ?? ""} ${l.action} ${l.entity ?? ""}`.toLowerCase().includes(q.toLowerCase()))
   );
   return (
-    <div className="flex max-w-5xl flex-col gap-4">
+    <div className="flex max-w-none flex-col gap-4">
       <div className="flex flex-col gap-2 sm:flex-row">
         <Input placeholder="Search activity…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search" className="sm:max-w-xs" />
         <Select value={entity} onValueChange={(v) => v != null && setEntity(String(v))}>

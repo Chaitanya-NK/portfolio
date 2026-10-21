@@ -22,7 +22,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
   if (!post) notFound();
   return (
     <div style={{ ["--accent" as string]: profile.theme?.accent || "#C6F432" }}>
-      <article className="mx-auto w-[min(760px,92%)] py-12 sm:py-20">
+      <article className="mx-auto w-[min(92%,47.5rem)] py-12 sm:py-20">
         <Link href="/" className="text-sm text-[#9A9AAE] hover:text-white">← {profile.full_name || "Back to portfolio"}</Link>
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-bold leading-tight tracking-tight sm:text-5xl">{post.title}</h1>
         <p className="mt-3 text-sm text-[#9A9AAE]">

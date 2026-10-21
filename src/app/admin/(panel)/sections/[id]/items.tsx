@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy, useSortable, arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -87,18 +87,18 @@ export function ItemsManager({ sid, initial }: { sid: string; initial: Item[] })
     r.ok ? toast.success("Order saved") : toast.error(r.error ?? "Failed");
   };
   return (
-    <div className="flex max-w-4xl flex-col gap-3">
+    <div className="flex max-w-none flex-col gap-3">
       <div className="flex justify-end"><Button onClick={() => setEditing({ item: null })}>+ Add item</Button></div>
       {items.length === 0 && <p className="rounded-xl border border-dashed p-8 text-center text-sm text-neutral-500">No items yet. Add the first one.</p>}
-      <DndContext id="items-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+      <div className="grid gap-3 min-[1700px]:grid-cols-2"><DndContext id="items-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+        <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
           {items.map((item) => (
             <Row key={item.id} item={item} onEdit={() => setEditing({ item })}
               onDelete={async () => { const r = await deleteSectionItem(sid, item.id); if (!r.ok) return toast.error(r.error ?? "Failed"); setItems((l) => l.filter((x) => x.id !== item.id)); toast.success("Deleted"); }}
               onToggle={async (c) => { setItems((l) => l.map((x) => (x.id === item.id ? { ...x, published: c } : x))); const r = await toggleSectionItem(sid, item.id, c); r.ok ? toast.success(c ? "Published" : "Moved to draft") : toast.error(r.error ?? "Failed"); }} />
           ))}
         </SortableContext>
-      </DndContext>
+      </DndContext></div>
       {editing && <Editor key={editing.item?.id ?? "new"} sid={sid} item={editing.item} onClose={() => setEditing(null)}
         onSaved={(row) => { setItems((l) => (l.some((x) => x.id === row.id) ? l.map((x) => (x.id === row.id ? row : x)) : [...l, row])); setEditing(null); }} />}
     </div>

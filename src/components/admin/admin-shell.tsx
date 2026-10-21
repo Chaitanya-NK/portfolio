@@ -25,8 +25,8 @@ function SignOut() {
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-neutral-100 text-neutral-900 lg:flex">
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-[#14161A] px-4 lg:hidden">
+    <div className="min-h-dvh bg-neutral-100 text-neutral-900 lg:flex">
+      <header className="sticky top-0 z-30 flex min-h-14 items-center pt-[env(safe-area-inset-top)] justify-between bg-[#14161A] px-4 lg:hidden">
         <strong className="text-white">Admin · Portfolio</strong>
         <Button
           variant="ghost" size="icon" aria-label="Open menu"
@@ -46,13 +46,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </SheetContent>
       </Sheet>
 
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col gap-6 overflow-y-auto bg-[#14161A] p-4 lg:flex">
+      <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col gap-6 overflow-y-auto bg-[#14161A] p-4 lg:flex">
         <strong className="px-3 pt-2 text-white">Admin · Portfolio</strong>
         <Nav />
         <SignOut />
       </aside>
 
-      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8 min-[1700px]:p-10"><div className="mx-auto w-full max-w-[88rem]">{children}</div></main>
     </div>
   );
 }

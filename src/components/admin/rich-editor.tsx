@@ -104,7 +104,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
     ],
     content: (initialJSON as object) ?? initialHTML ?? "",
     editorProps: {
-      attributes: { class: "rich min-h-[460px] px-4 py-4 outline-none sm:px-6 sm:py-5" },
+      attributes: { class: "rich mx-auto min-h-[460px] max-w-[56rem] px-4 py-4 outline-none sm:px-6 sm:py-5" },
       handlePaste: (_v, event) => {
         const files = Array.from(event.clipboardData?.files ?? []).filter((f) => f.type.startsWith("image/"));
         if (!files.length) return false;

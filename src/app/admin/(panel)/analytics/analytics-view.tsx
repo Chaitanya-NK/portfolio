@@ -78,7 +78,7 @@ export function AnalyticsView({ initial }: { initial: Summary }) {
   };
   const perVisitor = s.visitors ? (s.views / s.visitors).toFixed(1) : "0";
   return (
-    <div className={`flex max-w-5xl flex-col gap-4 ${pending ? "opacity-60" : ""}`}>
+    <div className={`flex max-w-none flex-col gap-4 ${pending ? "opacity-60" : ""}`}>
       <div className="flex gap-2">
         {[7, 30, 90].map((d) => (
           <Button key={d} size="sm" variant={days === d ? "default" : "outline"} onClick={() => pick(d)}>{d} days</Button>
@@ -102,7 +102,7 @@ export function AnalyticsView({ initial }: { initial: Summary }) {
         </div>
         <Chart daily={s.daily} />
       </div>
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <BarList title="Top pages" items={s.pages} />
         <BarList title="Referrers" items={s.referrers} />
         <BarList title="Devices" items={s.devices} />

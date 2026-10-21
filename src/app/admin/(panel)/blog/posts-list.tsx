@@ -17,7 +17,7 @@ export function PostsList({ initial }: { initial: P[] }) {
   const [posts, setPosts] = useState(initial);
   const [del, setDel] = useState<P | null>(null);
   return (
-    <div className="flex max-w-4xl flex-col gap-3">
+    <div className="flex max-w-none flex-col gap-3">
       <div className="flex justify-end">
         <Link href="/admin/blog/new" className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white">+ New post</Link>
       </div>

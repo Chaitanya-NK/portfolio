@@ -11,7 +11,7 @@ export function Library({ initial }: { initial: F[] }) {
   const [files, setFiles] = useState(initial);
   if (!files.length) return <p className="rounded-xl border border-dashed p-8 text-center text-sm text-neutral-500">No files uploaded yet.</p>;
   return (
-    <div className="grid max-w-5xl grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid max-w-none grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 min-[1700px]:grid-cols-6 min-[2200px]:grid-cols-8">
       {files.map((f) => (
         <div key={f.path} className="flex flex-col overflow-hidden rounded-xl border bg-white">
           <div className="flex h-32 items-center justify-center bg-neutral-100 text-xs text-neutral-500">

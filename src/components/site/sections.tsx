@@ -13,7 +13,7 @@ const grid = (c: string) => `grid gap-4 ${c}`;
 
 export function Shell({ s, n, children }: { s: Row; n: string; children: React.ReactNode }) {
   return (
-    <section id={s.key} className="mx-auto w-[min(1120px,92%)] pt-20 sm:pt-28">
+    <section id={s.key} className="mx-auto w-[min(92%,70rem)] pt-20 sm:pt-28">
       <header className="mb-8 flex flex-col gap-3 sm:mb-10">
         <span className={`${M} text-xs uppercase tracking-widest text-[var(--accent)]`}>
           {n}{s.subtitle ? ` / ${s.title}` : ""}
@@ -29,7 +29,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
   const stats: Row[] = p.stats ?? [];
   const socials: Row[] = p.socials ?? [];
   return (
-    <section id="hero" className="mx-auto grid w-[min(1120px,92%)] items-end gap-10 pt-16 sm:pt-24 lg:grid-cols-[1.5fr_1fr] lg:gap-12">
+    <section id="hero" className="mx-auto grid w-[min(92%,70rem)] items-end gap-10 pt-16 sm:pt-24 lg:grid-cols-[1.5fr_1fr] lg:gap-12">
       <div className="fade-up flex flex-col gap-6">
         {p.availability && (
           <span className="flex w-fit items-center gap-2.5 rounded-full border border-[#23232F] bg-[#12121A] px-4 py-2 text-sm">
@@ -295,7 +295,7 @@ export function Contact({ p }: { p: Row }) {
 
 export function Footer({ p, year }: { p: Row; year: number }) {
   return (
-    <footer className={`mx-auto mt-24 w-[min(1120px,92%)] border-t border-[#23232F] py-8 text-center text-sm ${muted}`}>
+    <footer className={`mx-auto mt-24 w-[min(92%,70rem)] border-t border-[#23232F] py-8 text-center text-sm ${muted}`}>
       {p.theme?.footer_text || `© ${year} ${p.full_name ?? ""}`}
     </footer>
   );

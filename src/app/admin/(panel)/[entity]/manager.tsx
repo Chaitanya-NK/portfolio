@@ -5,7 +5,7 @@ import {
   useSensor, useSensors, type DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  SortableContext, verticalListSortingStrategy, useSortable, arrayMove,
+  SortableContext, rectSortingStrategy, useSortable, arrayMove,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -185,7 +185,7 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
   };
 
   return (
-    <div className="flex max-w-4xl flex-col gap-3">
+    <div className="flex max-w-none flex-col gap-3">
       <div className="flex justify-end">
         <Button onClick={() => setEditing({ item: null })}>+ Add {cfg.singular}</Button>
       </div>
@@ -194,8 +194,8 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
           Nothing here yet. Click “Add {cfg.singular}” to create the first one.
         </p>
       )}
-      <DndContext id={`${entity}-dnd`} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+      <div className="grid gap-3 min-[1700px]:grid-cols-2"><DndContext id={`${entity}-dnd`} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+        <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
           {items.map((item) => (
             <SortableRow
               key={item.id} entity={entity} cfg={cfg} item={item}
@@ -209,7 +209,7 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
             />
           ))}
         </SortableContext>
-      </DndContext>
+      </DndContext></div>
 
       {editing && (
         <ItemSheet

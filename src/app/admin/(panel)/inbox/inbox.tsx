@@ -17,7 +17,7 @@ export function Inbox({ initial }: { initial: M[] }) {
   };
   if (!list.length) return <p className="rounded-xl border border-dashed p-8 text-center text-sm text-neutral-500">No messages yet. Messages from the public contact form will appear here.</p>;
   return (
-    <div className="flex max-w-4xl flex-col gap-2">
+    <div className="flex max-w-none flex-col gap-2">
       {list.map((m) => (
         <div key={m.id} className="rounded-xl border bg-white">
           <button className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 p-4 text-left" onClick={() => { setOpen(open === m.id ? null : m.id); if (!m.is_read) mark(m, true); }}>

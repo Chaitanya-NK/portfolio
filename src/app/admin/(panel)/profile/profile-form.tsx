@@ -17,8 +17,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export function ProfileForm({ p }: { p: P }) {
   const [state, action, pending] = useActionState<FormState, FormData>(updateProfile, null);
   return (
-    <form action={action} className="flex max-w-3xl flex-col gap-6">
-      <Card>
+    <form action={action} className="grid max-w-none items-start gap-6 xl:grid-cols-2">
+      <Card className="xl:col-span-2">
         <CardHeader><CardTitle>Basics</CardTitle></CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field label="Full name"><Input name="full_name" defaultValue={p.full_name ?? ""} /></Field>
@@ -55,7 +55,7 @@ export function ProfileForm({ p }: { p: P }) {
           <Field label="Meta description"><Textarea name="seo_description" rows={2} defaultValue={p.seo?.description ?? ""} /></Field>
         </CardContent>
       </Card>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 xl:col-span-2">
         <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save profile"}</Button>
         {state && <span className={`text-sm ${state.ok ? "text-green-600" : "text-red-600"}`}>{state.message}</span>}
       </div>

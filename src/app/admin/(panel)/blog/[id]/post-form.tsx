@@ -90,7 +90,7 @@ export function PostForm({ post }: { post: Post | null }) {
   };
 
   return (
-    <div className="max-w-6xl">
+    <div className="max-w-none">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <Link href="/admin/blog" className="text-sm text-indigo-600 underline">← All posts</Link>
         <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ export function PostForm({ post }: { post: Post | null }) {
           <Button onClick={save} disabled={busy}>{busy ? "Saving…" : status === "published" ? "Save & publish" : "Save draft"}</Button>
         </div>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-6 lg:grid-cols-[1fr_20rem] xl:grid-cols-[1fr_22rem]">
         <div className="flex min-w-0 flex-col gap-4">
           <Input
             className="h-auto border-0 bg-transparent px-0 text-2xl font-bold sm:text-3xl shadow-none focus-visible:ring-0"

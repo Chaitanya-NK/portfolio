@@ -6,7 +6,7 @@ import {
   useSensor, useSensors, type DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  SortableContext, verticalListSortingStrategy, useSortable, arrayMove,
+  SortableContext, rectSortingStrategy, useSortable, arrayMove,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -95,16 +95,16 @@ export function SectionBuilder({ initial }: { initial: Section[] }) {
     });
 
   return (
-    <div className="flex max-w-4xl flex-col gap-3">
-      <DndContext id="sections-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+    <div className="flex max-w-none flex-col gap-3">
+      <div className="grid gap-3 min-[1700px]:grid-cols-2"><DndContext id="sections-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+        <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
           {items.map((s) => (
             <Row key={s.id} s={s}
               onChange={(n) => setItems((l) => l.map((x) => (x.id === n.id ? n : x)))}
               onRemove={(id) => setItems((l) => l.filter((x) => x.id !== id))} />
           ))}
         </SortableContext>
-      </DndContext>
+      </DndContext></div>
       <form
         className="mt-4 flex flex-col gap-2 sm:flex-row"
         onSubmit={(e) => { e.preventDefault(); add("custom"); }}
