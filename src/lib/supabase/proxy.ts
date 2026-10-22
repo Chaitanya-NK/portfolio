@@ -25,10 +25,24 @@ export async function updateSession(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims();
   const path = request.nextUrl.pathname;
-  if (path.startsWith("/admin") && path !== "/admin/login" && !data?.claims) {
+
+  const redirectTo = (to: string) => {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/login";
-    return NextResponse.redirect(url);
+    url.pathname = to;
+    url.search = "";
+    const res = NextResponse.redirect(url);
+    response.cookies.getAll().forEach((c) => res.cookies.set(c)); // keep refreshed session cookies
+    return res;
+  };
+
+  if (path.startsWith("/admin") && path !== "/admin/login") {
+    if (!data?.claims) return redirectTo("/admin/login");
+
+    // password done, but the authenticator code is still required
+    if (path !== "/admin/mfa") {
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") return redirectTo("/admin/mfa");
+    }
   }
   return response;
 }

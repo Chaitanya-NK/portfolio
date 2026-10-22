@@ -1,41 +1,26 @@
 import { Suspense } from "react";
-import { login } from "../actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Lock } from "lucide-react";
+import { AuthShell } from "@/components/admin/auth-shell";
+import { LoginForm } from "./login-form";
 
-async function LoginError({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
+async function ErrorNote({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   if (!error) return null;
-  return <p className="text-sm text-red-500">{error === "limit" ? "Too many attempts. Try again in a few minutes." : "Invalid email or password."}</p>;
+  return (
+    <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+      {error === "limit"
+        ? "Too many attempts. Please wait a few minutes and try again."
+        : "That email or password is incorrect."}
+    </p>
+  );
 }
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
+export default function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Admin sign in</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form action={login} className="flex flex-col gap-3">
-            <Input name="email" type="email" placeholder="Email" required />
-            <Input name="password" type="password" placeholder="Password" required />
-            <Suspense>
-              <LoginError searchParams={searchParams} />
-            </Suspense>
-            <Button type="submit">Sign in</Button>
-          </form>
-        </CardContent>
-      </Card>
-    </main>
+    <AuthShell icon={Lock} title="Welcome back" subtitle="Sign in to manage your portfolio.">
+      <LoginForm>
+        <Suspense><ErrorNote searchParams={searchParams} /></Suspense>
+      </LoginForm>
+    </AuthShell>
   );
 }
