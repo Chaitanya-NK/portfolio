@@ -11,7 +11,7 @@ async function Content() {
   return (
     <div style={{ ["--accent" as string]: profile.theme?.accent || "#C6F432" }}>
       <main className="mx-auto w-[min(92%,70rem)] py-10 sm:py-16">
-        <Link href="/" className="text-sm text-[#9A9AAE] hover:text-white">← {profile.full_name || "Back to portfolio"}</Link>
+        <Link href="/" className="text-sm text-[color:var(--muted)] hover:text-[color:var(--fg)]">← {profile.full_name || "Back to portfolio"}</Link>
         <h1 className="mb-8 mt-6 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight sm:text-6xl">Blog</h1>
         <BlogIndex posts={posts} />
       </main>
@@ -20,5 +20,5 @@ async function Content() {
 }
 
 export default function Page() {
-  return <Suspense fallback={<p className="p-10 text-[#9A9AAE]">Loading…</p>}><Content /></Suspense>;
+  return <Suspense fallback={<p className="p-10 text-[color:var(--muted)]">Loading…</p>}><Content /></Suspense>;
 }

@@ -14,6 +14,9 @@ export async function saveSettings(_p: SettingsState, fd: FormData): Promise<Set
     accent,
     site_name: String(fd.get("site_name") ?? "").trim() || null,
     footer_text: String(fd.get("footer_text") ?? "").trim() || null,
+    favicon_url: String(fd.get("favicon_url") ?? "").trim() || null,
+    share_image_url: String(fd.get("share_image_url") ?? "").trim() || null,
+    resume_mode: fd.get("resume_mode") === "generated" ? "generated" : "upload",
   };
   const { error } = await supabase.from("profile").update({ theme }).eq("id", 1);
   if (error) return { ok: false, message: error.message };

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FileUpload } from "@/components/admin/file-upload";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const PRESETS = ["#C6F432", "#7DD3FC", "#F472B6", "#FBBF24", "#34D399", "#A78BFA"];
 
@@ -22,6 +24,7 @@ const contrastOnDark = (hex: string) => (luminance(hex) + 0.05) / (0.003 + 0.05)
 export function SettingsForm({ theme }: { theme: Record<string, any> }) {
   const [state, action, pending] = useActionState<SettingsState, FormData>(saveSettings, null);
   const [accent, setAccent] = useState<string>(theme.accent || "#C6F432");
+  const [resumeMode, setResumeMode] = useState<string>(theme.resume_mode || "upload");
   const valid = /^#[0-9a-fA-F]{6}$/.test(accent);
   const low = valid && contrastOnDark(accent) < 4.5;
   return (
@@ -37,6 +40,27 @@ export function SettingsForm({ theme }: { theme: Record<string, any> }) {
             Footer text
             <Input name="footer_text" defaultValue={theme.footer_text ?? ""} placeholder="© 2026 Your Name" />
           </label>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader><CardTitle>Site icons</CardTitle></CardHeader>
+        <CardContent className="grid gap-4">
+          <FileUpload name="favicon_url" label="Favicon (square PNG or SVG, at least 256 px)" folder="brand" accept="image/png,image/svg+xml,image/x-icon" defaultValue={theme.favicon_url} maxMB={1} />
+          <FileUpload name="share_image_url" label="Share image for WhatsApp, LinkedIn and X links (1200 × 630 PNG or JPG)" folder="brand" accept="image/png,image/jpeg" defaultValue={theme.share_image_url} maxMB={2} />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader><CardTitle>Resume button</CardTitle></CardHeader>
+        <CardContent className="grid gap-3">
+          <input type="hidden" name="resume_mode" value={resumeMode} />
+          <Select value={resumeMode} onValueChange={(v) => v != null && setResumeMode(String(v))}>
+            <SelectTrigger aria-label="Resume button action"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="upload">Open my uploaded PDF (Profile &amp; SEO)</SelectItem>
+              <SelectItem value="generated">Open the generated resume page (/resume)</SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="text-sm text-neutral-500">The generated page is built from your Experience, Skills, Education and Projects. <a href="/resume" target="_blank" className="underline">Preview it</a>.</p>
         </CardContent>
       </Card>
       <Card>

@@ -6,7 +6,10 @@ import { Inbox } from "./inbox";
 async function Loader() {
   await connection();
   const supabase = await createClient();
-  const { data } = await supabase.from("messages").select("*").order("created_at", { ascending: false });
+  const { data } = await supabase
+    .from("messages")
+    .select("*, message_replies(id,subject,body,created_at)")
+    .order("created_at", { ascending: false });
   return <Inbox initial={data ?? []} />;
 }
 

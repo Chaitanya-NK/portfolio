@@ -6,9 +6,9 @@ import { SocialLinks } from "./social-icon";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
-const card = "rounded-2xl border border-[#23232F] bg-[#12121A] p-5 sm:p-6";
-const muted = "text-[#9A9AAE]";
-const chip = "rounded-full border border-[#23232F] px-2.5 py-1 text-xs text-[#9A9AAE]";
+const card = "rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] p-5 sm:p-6";
+const muted = "text-[color:var(--muted)]";
+const chip = "rounded-full border border-[color:var(--line)] px-2.5 py-1 text-xs text-[color:var(--muted)]";
 const fmt = (s?: string | null) => (s ? format(new Date(s + "T00:00:00"), "MMM yyyy") : "");
 const grid = (c: string) => `grid gap-4 ${c}`;
 
@@ -16,7 +16,7 @@ export function Shell({ s, n, children }: { s: Row; n: string; children: React.R
   return (
     <section id={s.key} className="mx-auto w-[min(92%,70rem)] pt-20 sm:pt-28">
       <header className="mb-8 flex flex-col gap-3 sm:mb-10">
-        <span className={`${M} text-xs uppercase tracking-widest text-[var(--accent)]`}>
+        <span className={`${M} text-xs uppercase tracking-widest text-[color:var(--accent-ink)]`}>
           {n}{s.subtitle ? ` / ${s.title}` : ""}
         </span>
         <h2 className={`${D} text-3xl font-bold leading-tight tracking-tight sm:text-5xl`}>{s.subtitle || s.title}</h2>
@@ -33,7 +33,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
     <section id="hero" className="mx-auto grid w-[min(92%,70rem)] items-center gap-10 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-16">
       <div className="fade-up flex flex-col gap-6">
         {p.availability && (
-          <span className="flex w-fit items-center gap-2.5 rounded-full border border-[#23232F] bg-[#12121A] px-4 py-2 text-sm">
+          <span className="flex w-fit items-center gap-2.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-2 text-sm">
             <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />{p.availability}
           </span>
         )}
@@ -42,22 +42,22 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
         </h1>
         {p.bio && <p className={`max-w-xl text-base leading-relaxed sm:text-lg ${muted}`}>{p.bio}</p>}
         <div className="flex flex-wrap gap-3">
-          {hasProjects && <a href="#projects" className="rounded-full bg-[#F2F2F5] px-6 py-3.5 font-semibold text-[#0A0A0F]">View projects →</a>}
-          {p.resume_url && <a href={p.resume_url} target="_blank" rel="noreferrer" className="rounded-full border border-[#23232F] px-6 py-3.5">Download resume</a>}
+          {hasProjects && <a href="#projects" className="rounded-full bg-[color:var(--fg)] px-6 py-3.5 font-semibold text-[color:var(--bg)]">View projects →</a>}
+          {(p.resume_url || p.theme?.resume_mode === "generated") && <a href={p.theme?.resume_mode === "generated" ? "/resume" : p.resume_url} {...(p.theme?.resume_mode === "generated" ? {} : { target: "_blank", rel: "noreferrer" })} data-track="resume" data-label="hero" className="rounded-full border border-[color:var(--line)] px-6 py-3.5">Download resume</a>}
         </div>
       </div>
       <div className={`${card} fade-up d2 flex w-full max-w-md flex-col gap-5 justify-self-center lg:justify-self-end`}>
         {p.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className="aspect-[4/5] w-full rounded-xl object-cover object-top ring-1 ring-white/10" />
+          <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className="aspect-[4/5] w-full rounded-xl object-cover object-top ring-1 ring-[color:var(--line)]" />
         ) : (
-          <div className={`flex aspect-[4/5] items-center justify-center rounded-xl bg-[#1B1B26] text-5xl font-bold ${muted}`}>{(p.full_name ?? "?").slice(0, 1)}</div>
+          <div className={`flex aspect-[4/5] items-center justify-center rounded-xl bg-[color:var(--surface2)] text-5xl font-bold ${muted}`}>{(p.full_name ?? "?").slice(0, 1)}</div>
         )}
         {stats.length > 0 && (
           <div className="grid grid-cols-3 gap-3">
             {stats.slice(0, 3).map((x, i) => (
               <div key={i}>
-                <strong className={`${D} text-2xl text-[var(--accent)] sm:text-3xl`}>{x.value}</strong>
+                <strong className={`${D} text-2xl text-[color:var(--accent-ink)] sm:text-3xl`}>{x.value}</strong>
                 <div className={`text-xs ${muted}`}>{x.label}</div>
               </div>
             ))}
@@ -74,7 +74,7 @@ export function Tools({ items }: { items: Row[] }) {
     <div className={grid("grid-cols-2 sm:grid-cols-3 lg:grid-cols-4")}>
       {items.map((t) => (
         <div key={t.id} className={`${card} flex items-center gap-3 !p-4`}>
-          <span className={`${D} flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#23232F] bg-[#1B1B26] font-bold text-[var(--accent)]`}>
+          <span className={`${D} flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface2)] font-bold text-[color:var(--accent-ink)]`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {t.icon_url ? <img src={t.icon_url} alt="" className="h-full w-full object-contain p-1.5" /> : t.name.slice(0, 1)}
           </span>
@@ -101,7 +101,7 @@ export function Skills({ items }: { items: Row[] }) {
               <span>{s.name}</span>
               <span className="flex gap-1" aria-label={`Level ${s.level} of 5`}>
                 {Array.from({ length: 5 }, (_, i) => (
-                  <span key={i} className={`h-1.5 w-5 rounded-full ${i < s.level ? "bg-[var(--accent)]" : "bg-[#23232F]"}`} />
+                  <span key={i} className={`h-1.5 w-5 rounded-full ${i < s.level ? "bg-[var(--accent)]" : "bg-[color:var(--line)]"}`} />
                 ))}
               </span>
             </div>
@@ -122,7 +122,7 @@ export function Experience({ items }: { items: Row[] }) {
         const multi = roles.length > 1;
         const first: Row = roles[0] ?? {};
         const logo = (
-          <span className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#23232F] bg-[#1B1B26]">
+          <span className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface2)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {e.logo_url ? <img src={e.logo_url} alt="" className="h-full w-full object-contain p-1.5" /> : <span className={`${D} font-bold ${muted}`}>{e.company.slice(0, 1)}</span>}
           </span>
@@ -158,10 +158,10 @@ export function Experience({ items }: { items: Row[] }) {
                 <h3 className={`${D} text-xl font-bold sm:text-2xl`}>{e.company}</h3>
                 {e.tenure && <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>{e.tenure} total</span>}
               </div>
-              <ol className="relative ml-1 mt-5 flex flex-col gap-6 border-l border-[#23232F] pl-6">
+              <ol className="relative ml-1 mt-5 flex flex-col gap-6 border-l border-[color:var(--line)] pl-6">
                 {roles.map((r, i) => (
                   <li key={i} className="relative">
-                    <span aria-hidden className={`absolute -left-[1.9rem] top-1.5 h-3 w-3 rounded-full border-2 border-[#12121A] ${r.is_current ? "bg-[var(--accent)]" : "bg-[#3a3a4d]"}`} />
+                    <span aria-hidden className={`absolute -left-[1.9rem] top-1.5 h-3 w-3 rounded-full border-2 border-[color:var(--surface)] ${r.is_current ? "bg-[var(--accent)]" : "bg-[color:var(--line2)]"}`} />
                     <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
                       <h4 className={`${D} text-lg font-semibold`}>{r.title}</h4>
                       <span className={`${M} whitespace-nowrap text-xs uppercase ${muted}`}>{range(r)}</span>
@@ -187,7 +187,7 @@ export function Education({ items }: { items: Row[] }) {
     <div className={grid("sm:grid-cols-2")}>
       {items.map((e) => (
         <div key={e.id} className={card}>
-          <span className={`${M} text-xs uppercase tracking-widest text-[var(--accent)]`}>{[e.start_year, e.end_year].filter(Boolean).join(" – ")}</span>
+          <span className={`${M} text-xs uppercase tracking-widest text-[color:var(--accent-ink)]`}>{[e.start_year, e.end_year].filter(Boolean).join(" – ")}</span>
           <h3 className={`${D} mt-2 text-xl font-bold`}>{e.degree}</h3>
           <p className={`mt-1 text-sm ${muted}`}>{[e.institution, e.grade].filter(Boolean).join(" · ")}</p>
         </div>
@@ -201,7 +201,7 @@ export function Achievements({ items }: { items: Row[] }) {
     <div className={grid("sm:grid-cols-2 lg:grid-cols-3")}>
       {items.map((a) => (
         <div key={a.id} className={`${card} flex flex-col gap-2`}>
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#23232F] bg-[#1B1B26] text-[var(--accent)]">★</span>
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface2)] text-[color:var(--accent-ink)]">★</span>
           <h3 className={`${D} mt-1 text-lg font-bold`}>{a.title}</h3>
           <p className={`text-sm ${muted}`}>{[a.issuer, a.year].filter(Boolean).join(" · ")}</p>
           {a.description && <p className={`text-sm ${muted}`}>{a.description}</p>}
@@ -216,7 +216,7 @@ export function Projects({ items }: { items: Row[] }) {
     <div className={grid("md:grid-cols-2 lg:grid-cols-3")}>
       {items.map((p) => (
         <article key={p.id} className={`${card} relative flex flex-col overflow-hidden !p-0 ${p.featured ? "lg:col-span-2" : ""}`}>
-          <div className={`flex items-center justify-center overflow-hidden border-b border-[#23232F] bg-[#1B1B26] ${p.featured ? "h-56 sm:h-72" : "h-44"}`}>
+          <div className={`flex items-center justify-center overflow-hidden border-b border-[color:var(--line)] bg-[color:var(--surface2)] ${p.featured ? "h-56 sm:h-72" : "h-44"}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {p.cover_url ? <img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" loading="lazy" /> : <span className={`text-sm ${muted}`}>No cover</span>}
           </div>
@@ -227,15 +227,15 @@ export function Projects({ items }: { items: Row[] }) {
             {p.metrics?.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-x-6 gap-y-2">
                 {p.metrics.slice(0, 3).map((m: Row, i: number) => (
-                  <div key={i}><strong className={`${D} text-xl text-[var(--accent)]`}>{m.value}</strong><div className={`text-xs ${muted}`}>{m.label}</div></div>
+                  <div key={i}><strong className={`${D} text-xl text-[color:var(--accent-ink)]`}>{m.value}</strong><div className={`text-xs ${muted}`}>{m.label}</div></div>
                 ))}
               </div>
             )}
             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
               <div className="flex flex-wrap gap-2">{p.tags?.slice(0, 4).map((t: string) => <span key={t} className={chip}>{t}</span>)}</div>
               <div className="flex gap-4 text-sm font-medium">
-                {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" className="relative z-10 hover:text-[var(--accent)]">Live ↗</a>}
-                {p.repo_url && <a href={p.repo_url} target="_blank" rel="noreferrer" className="relative z-10 hover:text-[var(--accent)]">Code ↗</a>}
+                {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" data-track="project_live" data-label={p.title} className="relative z-10 hover:text-[color:var(--accent-ink)]">Live ↗</a>}
+                {p.repo_url && <a href={p.repo_url} target="_blank" rel="noreferrer" data-track="project_repo" data-label={p.title} className="relative z-10 hover:text-[color:var(--accent-ink)]">Code ↗</a>}
               </div>
             </div>
           </div>
@@ -253,7 +253,7 @@ export function Testimonials({ items }: { items: Row[] }) {
           <blockquote className="leading-relaxed">“{t.quote}”</blockquote>
           <figcaption className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {t.avatar_url ? <img src={t.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" /> : <span className="h-10 w-10 rounded-full bg-[#1B1B26]" />}
+            {t.avatar_url ? <img src={t.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" /> : <span className="h-10 w-10 rounded-full bg-[color:var(--surface2)]" />}
             <div><div className="text-sm font-semibold">{t.name}</div><div className={`text-xs ${muted}`}>{[t.title, t.company].filter(Boolean).join(", ")}</div></div>
           </figcaption>
         </figure>
@@ -267,13 +267,13 @@ export function Blog({ posts }: { posts: Row[] }) {
   return (
     <div className={grid("md:grid-cols-2 lg:grid-cols-3")}>
       {posts.map((p) => (
-        <a key={p.id} href={`/blog/${p.slug}`} className={`${card} group flex flex-col gap-3 overflow-hidden !p-0 transition-colors hover:border-[var(--accent)]`}>
+        <a key={p.id} href={`/blog/${p.slug}`} className={`${card} group flex flex-col gap-3 overflow-hidden !p-0 transition-colors hover:border-[color:var(--accent-ink)]`}>
           {p.cover_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={p.cover_url} alt="" loading="lazy" className="h-40 w-full object-cover" />
           )}
           <div className="flex flex-1 flex-col gap-2 p-5">
-            <span className={`${M} text-xs uppercase tracking-widest text-[var(--accent)]`}>
+            <span className={`${M} text-xs uppercase tracking-widest text-[color:var(--accent-ink)]`}>
               {p.published_at ? format(new Date(p.published_at), "dd MMM yyyy") : ""} · {p.reading_minutes} min
             </span>
             <h3 className={`${D} text-xl font-bold`}>{p.title}</h3>
@@ -295,12 +295,12 @@ export function Custom({ items }: { items: Row[] }) {
           <div key={it.id} className={`${card} flex flex-col gap-2 overflow-hidden`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {d.image_url && <img src={d.image_url} alt="" loading="lazy" className="-mx-1 mb-2 h-40 w-[calc(100%+0.5rem)] rounded-lg object-cover" />}
-            {d.date_label && <span className={`${M} text-xs uppercase tracking-widest text-[var(--accent)]`}>{d.date_label}</span>}
+            {d.date_label && <span className={`${M} text-xs uppercase tracking-widest text-[color:var(--accent-ink)]`}>{d.date_label}</span>}
             <h3 className={`${D} text-lg font-bold`}>{d.title}</h3>
             {d.subtitle && <p className={`text-sm ${muted}`}>{d.subtitle}</p>}
             {d.description && <p className={`text-sm ${muted}`}>{d.description}</p>}
             {d.tags?.length > 0 && <div className="flex flex-wrap gap-2">{d.tags.map((t: string) => <span key={t} className={chip}>{t}</span>)}</div>}
-            {d.link_url && <a href={d.link_url} target="_blank" rel="noreferrer" className="mt-auto pt-2 text-sm font-medium hover:text-[var(--accent)]">{d.link_label || "Learn more"} ↗</a>}
+            {d.link_url && <a href={d.link_url} target="_blank" rel="noreferrer" className="mt-auto pt-2 text-sm font-medium hover:text-[color:var(--accent-ink)]">{d.link_label || "Learn more"} ↗</a>}
           </div>
         );
       })}
@@ -311,12 +311,12 @@ export function Custom({ items }: { items: Row[] }) {
 export function Contact({ p }: { p: Row }) {
   const socials: Row[] = p.socials ?? [];
   return (
-    <div className="grid gap-8 rounded-3xl border border-[#23232F] bg-[#12121A] p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:gap-12 lg:p-14">
+    <div className="grid gap-8 rounded-3xl border border-[color:var(--line)] bg-[color:var(--surface)] p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:gap-12 lg:p-14">
       <div className="flex flex-col gap-4">
-        <h3 className={`${D} text-4xl font-bold leading-[1.02] tracking-tight sm:text-6xl`}>Let’s build<br /><span className="text-[var(--accent)]">something.</span></h3>
+        <h3 className={`${D} text-4xl font-bold leading-[1.02] tracking-tight sm:text-6xl`}>Let’s build<br /><span className="text-[color:var(--accent-ink)]">something.</span></h3>
         <div className={`flex flex-col gap-1 ${muted}`}>
-          {p.email && <a href={`mailto:${p.email}`} className="hover:text-white">{p.email}</a>}
-          {p.phone && <a href={`tel:${p.phone}`} className="hover:text-white">{p.phone}</a>}
+          {p.email && <a href={`mailto:${p.email}`} className="hover:text-[color:var(--fg)]">{p.email}</a>}
+          {p.phone && <a href={`tel:${p.phone}`} className="hover:text-[color:var(--fg)]">{p.phone}</a>}
           {p.location && <span>{p.location}</span>}
         </div>
         {socials.length > 0 && <SocialLinks socials={socials} />}
@@ -328,7 +328,7 @@ export function Contact({ p }: { p: Row }) {
 
 export function Footer({ p, year }: { p: Row; year: number }) {
   return (
-    <footer className={`mx-auto mt-24 w-[min(92%,70rem)] border-t border-[#23232F] py-8 text-center text-sm ${muted}`}>
+    <footer className={`mx-auto mt-24 w-[min(92%,70rem)] border-t border-[color:var(--line)] py-8 text-center text-sm ${muted}`}>
       {p.theme?.footer_text || `© ${year} ${p.full_name ?? ""}`}
     </footer>
   );
@@ -344,7 +344,7 @@ export function renderSection(s: Row, d: SiteData, n: string) {
       case "achievements": return d.achievements.length ? <Achievements items={d.achievements} /> : null;
       case "projects": return d.projects.length ? <Projects items={d.projects} /> : null;
       case "testimonials": return d.testimonials.length ? <Testimonials items={d.testimonials} /> : null;
-      case "blog": return <><Blog posts={d.posts} /><a href="/blog" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[var(--accent)]">View all posts →</a></>;
+      case "blog": return <><Blog posts={d.posts} /><a href="/blog" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[color:var(--accent-ink)]">View all posts →</a></>;
       case "contact": return <Contact p={d.profile} />;
       case "custom": return d.itemsBySection[s.id]?.length ? <Custom items={d.itemsBySection[s.id]} /> : null;
       default: return null;

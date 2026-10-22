@@ -3,16 +3,19 @@ import { useMemo, useState } from "react";
 import { format, isThisYear, isToday } from "date-fns";
 import { toast } from "sonner";
 import {
-  ArrowLeft, ChevronDown, ChevronUp, Copy, Inbox as InboxIcon, Mail, MailOpen, Search, Star, Trash2,
+  ArrowLeft, ChevronDown, ChevronUp, Copy, Inbox as InboxIcon, Mail, MailOpen, Search, Send, Star, Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { markReadMany, setStarred, deleteMany } from "./actions";
+import { markReadMany, setStarred, deleteMany, sendReply } from "./actions";
 
 type M = {
   id: string; name: string | null; email: string | null; body: string | null;
   is_read: boolean; is_starred: boolean; created_at: string;
+  replied_at?: string | null;
+  message_replies?: { id: string; subject: string | null; body: string; created_at: string }[];
 };
 type Tab = "all" | "unread" | "starred";
 
@@ -30,6 +33,52 @@ function Avatar({ m, size = "h-10 w-10" }: { m: M; size?: string }) {
     <span className={`flex ${size} shrink-0 items-center justify-center rounded-full text-sm font-semibold ${tone(m.email || m.name || "?")}`}>
       {initial(m)}
     </span>
+  );
+}
+
+type Reply = { id: string; subject: string | null; body: string; created_at: string };
+
+function ReplyThread({ m, onSent }: { m: M; onSent: (id: string, r: Reply) => void }) {
+  const [open, setOpen] = useState(false);
+  const [subject, setSubject] = useState("Re: your message");
+  const [body, setBody] = useState("");
+  const [busy, setBusy] = useState(false);
+  const replies = [...(m.message_replies ?? [])].sort((a, b) => a.created_at.localeCompare(b.created_at));
+
+  async function send() {
+    setBusy(true);
+    const r = await sendReply(m.id, subject, body);
+    setBusy(false);
+    if (!r.ok) return toast.error(r.error);
+    onSent(m.id, r.reply);
+    setBody("");
+    setOpen(false);
+    toast.success("Reply sent");
+  }
+
+  return (
+    <div className="mt-6 flex flex-col gap-3">
+      {replies.map((r) => (
+        <div key={r.id} className="ml-auto w-full max-w-[92%] rounded-xl bg-indigo-50 p-4 text-sm">
+          <div suppressHydrationWarning className="mb-1 text-xs text-neutral-500">You replied · {format(new Date(r.created_at), "d MMM yyyy, h:mm a")}</div>
+          <p className="whitespace-pre-wrap break-words">{r.body}</p>
+        </div>
+      ))}
+      {m.email && !open && (
+        <Button className="w-fit" onClick={() => setOpen(true)}><Send className="mr-2 h-4 w-4" />{replies.length ? "Reply again" : "Reply"}</Button>
+      )}
+      {open && (
+        <div className="flex flex-col gap-2 rounded-xl border p-3">
+          <div className="text-xs text-neutral-500">To: {m.email}</div>
+          <Input value={subject} onChange={(e) => setSubject(e.target.value)} aria-label="Subject" />
+          <Textarea rows={6} autoFocus value={body} onChange={(e) => setBody(e.target.value)} placeholder="Write your reply…" aria-label="Reply" />
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={send} disabled={busy || !body.trim()}>{busy ? "Sending…" : "Send reply"}</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)} disabled={busy}>Cancel</Button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -209,10 +258,11 @@ export function Inbox({ initial: initialList }: { initial: M[] }) {
                 </div>
               </div>
               <div className="mt-6 whitespace-pre-wrap break-words rounded-xl bg-neutral-50 p-4 text-[0.95rem] leading-relaxed sm:p-5">{current.body}</div>
+              <ReplyThread key={current.id} m={current} onSent={(id, r) => setList((l) => l.map((x) => (x.id === id ? { ...x, is_read: true, replied_at: r.created_at, message_replies: [...(x.message_replies ?? []), r] } : x)))} />
               <div className="mt-6 flex flex-wrap gap-2">
                 {current.email && (
                   <a href={replyHref(current)} className="inline-flex h-10 items-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white hover:bg-neutral-800">
-                    <Mail className="h-4 w-4" />Reply by email
+                    <Mail className="h-4 w-4" />Open in email app
                   </a>
                 )}
                 {current.email && (

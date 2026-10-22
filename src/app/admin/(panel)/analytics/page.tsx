@@ -3,7 +3,7 @@ import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { AnalyticsView, type Summary } from "./analytics-view";
 
-const empty: Summary = { views: 0, visitors: 0, daily: [], pages: [], referrers: [], devices: [], browsers: [], countries: [] };
+const empty: Summary = { views: 0, visitors: 0, daily: [], pages: [], referrers: [], devices: [], browsers: [], countries: [], clicks: [], resume_downloads: 0 };
 
 async function Loader() {
   await connection();

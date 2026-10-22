@@ -195,3 +195,8 @@ body{min-height:100dvh;padding-left:env(safe-area-inset-left);padding-right:env(
 @media (min-width:2560px){html{font-size:20px}}
 @media (min-width:3200px){html{font-size:24px}}
 @media (min-width:3840px){html{font-size:28px}}
+
+/* ---- public site theme ---- */
+.site{--bg:#0A0A0F;--surface:#12121A;--surface2:#1B1B26;--line:#23232F;--line2:#3a3a4d;--fg:#F2F2F5;--fg2:#C9C9D6;--muted:#9A9AAE;--faint:#6b6b80;--on-accent:#0A0A0F;--accent-ink:var(--accent);background:var(--bg);color:var(--fg);color-scheme:dark}
+html[data-theme="light"] .site{--bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F0F0EB;--line:#E2E2DA;--line2:#C9C9BF;--fg:#14141A;--fg2:#3A3A46;--muted:#5C5C6B;--faint:#8A8A98;--accent-ink:color-mix(in srgb,var(--accent) 48%,#000);color-scheme:light}
+@media print{html{font-size:16px!important}}

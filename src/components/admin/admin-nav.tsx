@@ -13,6 +13,7 @@ const items = [
   { label: "Achievements", href: "/admin/achievements" },
   { label: "Projects", href: "/admin/projects" },
   { label: "Testimonials", href: "/admin/testimonials" },
+  { label: "Testimonial requests", href: "/admin/requests" },
   { label: "Blog posts", href: "/admin/blog" },
   { label: "Media library", href: "/admin/media" },
   { label: "Inbox", href: "/admin/inbox" },

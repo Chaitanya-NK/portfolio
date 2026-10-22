@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   DndContext, closestCenter, PointerSensor, KeyboardSensor,
   useSensor, useSensors, type DragEndEvent,
@@ -249,6 +250,12 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
   const [items, setItems] = useState<Row[]>(initial);
   const [editing, setEditing] = useState<{ item: Row | null } | null>(null);
   const [deleting, setDeleting] = useState<Row | null>(null);
+  const editId = useSearchParams().get("edit");
+  useEffect(() => {
+    const it = editId ? items.find((i) => i.id === editId) : null;
+    if (it) setEditing({ item: it });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })

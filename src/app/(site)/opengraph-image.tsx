@@ -8,6 +8,15 @@ export const contentType = "image/png";
 export default async function Image() {
   const { profile: p } = await getSiteData();
   const accent = p.theme?.accent || "#C6F432";
+  if (p.theme?.share_image_url) {
+    return new ImageResponse(
+      (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={p.theme.share_image_url} alt="" width={1200} height={630} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      ),
+      size
+    );
+  }
   return new ImageResponse(
     (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0A0A0F", color: "#F2F2F5", padding: 72 }}>

@@ -8,7 +8,7 @@ type Item = { label: string; value: number };
 type Day = { day: string; views: number; visitors: number };
 export type Summary = {
   views: number; visitors: number; daily: Day[];
-  pages: Item[]; referrers: Item[]; devices: Item[]; browsers: Item[]; countries: Item[];
+  pages: Item[]; referrers: Item[]; devices: Item[]; browsers: Item[]; countries: Item[]; clicks: Item[]; resume_downloads: number;
 };
 
 function Chart({ daily }: { daily: Day[] }) {
@@ -64,6 +64,9 @@ const country = (c: string) => {
   try { return new Intl.DisplayNames(["en"], { type: "region" }).of(c) ?? c; } catch { return c; }
 };
 
+const clickLabel = (l: string) =>
+  l.replace("project_live", "Live link").replace("project_repo", "Code link").replace("resume", "Resume").replace("social", "Social");
+
 export function AnalyticsView({ initial }: { initial: Summary }) {
   const [days, setDays] = useState(30);
   const [s, setS] = useState(initial);
@@ -84,8 +87,8 @@ export function AnalyticsView({ initial }: { initial: Summary }) {
           <Button key={d} size="sm" variant={days === d ? "default" : "outline"} onClick={() => pick(d)}>{d} days</Button>
         ))}
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {[["Page views", s.views], ["Unique visitors", s.visitors], ["Views per visitor", perVisitor]].map(([l, v]) => (
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[["Page views", s.views], ["Unique visitors", s.visitors], ["Views per visitor", perVisitor], ["Resume clicks", s.resume_downloads ?? 0]].map(([l, v]) => (
           <div key={l as string} className="rounded-xl border bg-white p-4">
             <div className="text-sm text-neutral-500">{l}</div>
             <div className="text-3xl font-semibold">{v}</div>
@@ -108,6 +111,7 @@ export function AnalyticsView({ initial }: { initial: Summary }) {
         <BarList title="Devices" items={s.devices} />
         <BarList title="Browsers" items={s.browsers} />
         <BarList title="Countries" items={s.countries} fmt={country} />
+        <BarList title="Clicks" items={s.clicks ?? []} fmt={clickLabel} />
       </div>
     </div>
   );
