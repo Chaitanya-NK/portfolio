@@ -90,7 +90,7 @@ export function tenureLabel(roles: Role[], now = new Date()): string {
 }
 
 // used by the public site: old entries (no roles yet) become a single role
-export function toPublicExperience(e: Record<string, any>) {
+export function toPublicExperience(e: Record<string, any>): Record<string, any> {
   let roles = normalizeRoles(e.roles);
   if (!roles.length) {
     roles = normalizeRoles([{

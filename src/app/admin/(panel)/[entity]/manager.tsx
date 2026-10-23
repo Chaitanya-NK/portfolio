@@ -173,7 +173,7 @@ function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) 
         <MetricsEditor value={v} onChange={set} />
       ) : (
         <Input
-          type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "datetime" ? "datetime-local" : "text"}
+          type={f.type === "number" ? "number" : "text"}
           placeholder={f.placeholder}
           value={v}
           onChange={(e) => set(e.target.value)}

@@ -42,7 +42,7 @@ export function SocialIcon({ platform, url, className = "h-4 w-4" }: { platform:
   return <Icon className={className} aria-hidden />;
 }
 
-export function SocialLinks({ socials }: { socials: { platform?: string; label?: string; url: string }[] }) {
+export function SocialLinks({ socials }: { socials: Record<string, any>[] }) {
   return (
     <ul className="flex flex-wrap gap-2">
       {socials.map((x, i) => {

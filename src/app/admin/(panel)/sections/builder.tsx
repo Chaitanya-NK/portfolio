@@ -18,8 +18,10 @@ import { Badge } from "@/components/ui/badge";
 import { reorderSections, setVisible, renameSection, addSection, deleteSection } from "./actions";
 
 type Section = { id: string; key: string; type: string; title: string; subtitle: string | null; visible: boolean };
-const report = (r: { ok: boolean; error?: string }, msg = "Saved") =>
-  r.ok ? toast.success(msg) : toast.error(r.error ?? "Failed");
+const report = (r: { ok: boolean; error?: string }, msg = "Saved") => {
+  if (r.ok) toast.success(msg);
+  else toast.error(r.error ?? "Failed");
+};
 
 function Row({ s, onChange, onRemove }: {
   s: Section; onChange: (s: Section) => void; onRemove: (id: string) => void;

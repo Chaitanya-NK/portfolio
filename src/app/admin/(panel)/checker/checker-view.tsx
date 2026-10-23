@@ -95,7 +95,7 @@ export function CheckerView({ issues }: { issues: Issue[] }) {
           </div>
           <Button disabled={pending} onClick={() => start(async () => {
             const r = await checkLinks();
-            if (!r.ok) return toast.error(r.error);
+            if (!r.ok) { toast.error(r.error); return; }
             setReport(r.report);
             toast.success(r.report.broken.length ? `${r.report.broken.length} broken link${r.report.broken.length === 1 ? "" : "s"} found` : "No broken links");
           })}>{pending ? "Checking…" : "Run link check"}</Button>
