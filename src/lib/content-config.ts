@@ -94,6 +94,20 @@ export const CONTENT: Record<string, EntityConfig> = {
       published,
     ],
   },
+  services: {
+    table: "services", title: "Services", singular: "service", primary: "title", secondary: ["price_label"],
+    fields: [
+      { key: "title", label: "Service name", type: "text", required: true, placeholder: "e.g. CI/CD pipeline setup" },
+      { key: "description", label: "Short description", type: "textarea" },
+      { key: "price_label", label: "Price (optional)", type: "text", placeholder: "e.g. From ₹15,000", help: "Written exactly as you want it shown. Leave empty to hide the price." },
+      { key: "price_note", label: "Price note (optional)", type: "text", placeholder: "e.g. per project, or per month" },
+      { key: "features", label: "What's included (one per line)", type: "lines" },
+      { key: "cta_label", label: "Button text", type: "text", placeholder: "Get in touch" },
+      { key: "cta_url", label: "Button link (optional)", type: "text", placeholder: "Defaults to your Contact section", help: "Use a full link, like a booking page, if you prefer." },
+      { key: "featured", label: "Highlight as most popular", type: "switch" },
+      published,
+    ],
+  },
   testimonials: {
     table: "testimonials", title: "Testimonials", singular: "testimonial", primary: "name", secondary: ["company"],
     fields: [

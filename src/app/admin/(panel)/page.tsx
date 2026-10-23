@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { contentIssues } from "@/lib/health";
 
 const TABLES: [string, string, string][] = [
   ["tools", "Tools", "/admin/tools"], ["skills", "Skills", "/admin/skills"],
@@ -18,6 +19,7 @@ async function Stats() {
     if (f) q = f(q);
     return (await q).count ?? 0;
   };
+  const issues = await contentIssues(supabase);
   const [unread, drafts, hidden, ...totals] = await Promise.all([
     count("messages", (q) => q.eq("is_read", false)),
     count("projects", (q) => q.eq("published", false)),
@@ -47,6 +49,27 @@ async function Stats() {
             </Link>
           ))}
         </div>
+      </div>
+      <div className={card}>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h2 className="font-semibold">Content health</h2>
+          <Link href="/admin/checker" className="text-sm text-indigo-600 underline">Open checker</Link>
+        </div>
+        {issues.length === 0 ? (
+          <p className="text-sm text-green-700">✓ Everything looks good.</p>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {issues.slice(0, 6).map((i) => (
+              <li key={i.id}>
+                <Link href={i.items.length === 1 ? i.items[0].href : "/admin/checker"} className="flex items-start gap-2 text-sm hover:underline">
+                  <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${i.level === "error" ? "bg-red-500" : i.level === "warn" ? "bg-amber-500" : "bg-sky-500"}`} />
+                  {i.message}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        {issues.length > 6 && <p className="mt-3 text-xs text-neutral-500">+ {issues.length - 6} more in the checker</p>}
       </div>
       <div className={card}>
         <h2 className="mb-3 font-semibold">Profile checklist</h2>

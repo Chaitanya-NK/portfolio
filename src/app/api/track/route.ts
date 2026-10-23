@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 
 const BOT = /bot|crawl|spider|slurp|preview|headless|lighthouse|monitor|curl|wget|python|facebookexternalhit/i;
-const KINDS = ["resume", "project_live", "project_repo", "social"];
+const KINDS = ["resume", "project_live", "project_repo", "social", "service"];
 const done = () => new NextResponse(null, { status: 204 });
 
 function device(ua: string) {

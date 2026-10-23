@@ -3,6 +3,7 @@ import type { Row, SiteData } from "@/lib/site/data";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
 import { SocialLinks } from "./social-icon";
+import { ContactActions } from "./contact-actions";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
@@ -308,6 +309,49 @@ export function Custom({ items }: { items: Row[] }) {
   );
 }
 
+export function Services({ items, d }: { items: Row[]; d: SiteData }) {
+  const hasContact = d.sections.some((x) => x.type === "contact");
+  return (
+    <div className={grid("md:grid-cols-2 lg:grid-cols-3")}>
+      {items.map((s) => {
+        const href = s.cta_url || (hasContact ? "#contact" : d.profile.email ? `mailto:${d.profile.email}` : "#");
+        const external = /^https?:/i.test(href);
+        return (
+          <div key={s.id} className={`${card} relative flex flex-col gap-4 ${s.featured ? "border-[color:var(--accent-ink)]" : ""}`}>
+            {s.featured && (
+              <span className="absolute right-4 top-4 rounded-full bg-[var(--accent)] px-2.5 py-1 text-xs font-semibold text-[color:var(--on-accent)]">Most popular</span>
+            )}
+            <h3 className={`${D} text-xl font-bold ${s.featured ? "pr-28" : ""}`}>{s.title}</h3>
+            {s.description && <p className={`text-sm leading-relaxed ${muted}`}>{s.description}</p>}
+            {s.price_label && (
+              <div>
+                <div className={`${D} text-2xl font-bold text-[color:var(--accent-ink)]`}>{s.price_label}</div>
+                {s.price_note && <div className={`text-xs ${muted}`}>{s.price_note}</div>}
+              </div>
+            )}
+            {s.features?.length > 0 && (
+              <ul className="flex flex-col gap-2 text-sm">
+                {s.features.map((f: string, i: number) => (
+                  <li key={i} className="flex gap-2"><span aria-hidden className="text-[color:var(--accent-ink)]">✓</span><span>{f}</span></li>
+                ))}
+              </ul>
+            )}
+            <a
+              href={href} data-track="service" data-label={s.title}
+              {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+              className={`mt-auto inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold transition-colors ${
+                s.featured ? "bg-[var(--accent)] text-[color:var(--on-accent)]" : "border border-[color:var(--line)] hover:border-[color:var(--accent-ink)]"
+              }`}
+            >
+              {s.cta_label || "Get in touch"}
+            </a>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Contact({ p }: { p: Row }) {
   const socials: Row[] = p.socials ?? [];
   return (
@@ -319,6 +363,7 @@ export function Contact({ p }: { p: Row }) {
           {p.phone && <a href={`tel:${p.phone}`} className="hover:text-[color:var(--fg)]">{p.phone}</a>}
           {p.location && <span>{p.location}</span>}
         </div>
+        <ContactActions email={p.email} canSave={!!(p.email || p.phone)} />
         {socials.length > 0 && <SocialLinks socials={socials} />}
       </div>
       <ContactForm />
@@ -344,6 +389,7 @@ export function renderSection(s: Row, d: SiteData, n: string) {
       case "achievements": return d.achievements.length ? <Achievements items={d.achievements} /> : null;
       case "projects": return d.projects.length ? <Projects items={d.projects} /> : null;
       case "testimonials": return d.testimonials.length ? <Testimonials items={d.testimonials} /> : null;
+      case "services": return d.services.length ? <Services items={d.services} d={d} /> : null;
       case "blog": return <><Blog posts={d.posts} /><a href="/blog" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[color:var(--accent-ink)]">View all posts →</a></>;
       case "contact": return <Contact p={d.profile} />;
       case "custom": return d.itemsBySection[s.id]?.length ? <Custom items={d.itemsBySection[s.id]} /> : null;

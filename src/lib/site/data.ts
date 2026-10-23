@@ -28,6 +28,7 @@ export async function getSiteData() {
         .order("published_at", { ascending: false }).limit(6),
     ]);
 
+  const servicesRes = await pub("services");
   const itemsBySection: Record<string, Row[]> = {};
   for (const it of (items.data ?? []) as Row[]) (itemsBySection[it.section_id] ??= []).push(it);
 
@@ -43,6 +44,7 @@ export async function getSiteData() {
     testimonials: (testimonials.data ?? []) as Row[],
     posts: (posts.data ?? []) as Row[],
     itemsBySection,
+    services: (servicesRes.data ?? []) as Row[],
     year: new Date().getFullYear(),
   };
 }

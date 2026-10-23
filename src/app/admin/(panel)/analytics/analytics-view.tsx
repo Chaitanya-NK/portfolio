@@ -65,7 +65,7 @@ const country = (c: string) => {
 };
 
 const clickLabel = (l: string) =>
-  l.replace("project_live", "Live link").replace("project_repo", "Code link").replace("resume", "Resume").replace("social", "Social");
+  l.replace("project_live", "Live link").replace("project_repo", "Code link").replace("resume", "Resume").replace("social", "Social").replace("service", "Service");
 
 export function AnalyticsView({ initial }: { initial: Summary }) {
   const [days, setDays] = useState(30);
