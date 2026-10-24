@@ -29,6 +29,8 @@ export async function getSiteData() {
     ]);
 
   const servicesRes = await pub("services");
+  const notesRes = await sb.from("notes").select("*").eq("published", true)
+    .order("pinned", { ascending: false }).order("created_at", { ascending: false }).limit(6);
   const itemsBySection: Record<string, Row[]> = {};
   for (const it of (items.data ?? []) as Row[]) (itemsBySection[it.section_id] ??= []).push(it);
 
@@ -50,6 +52,7 @@ export async function getSiteData() {
     posts: (posts.data ?? []) as Row[],
     itemsBySection,
     services: (servicesRes.data ?? []) as Row[],
+    notes: (notesRes.data ?? []) as Row[],
     year: new Date().getFullYear(),
   };
 }
@@ -92,4 +95,14 @@ export async function getProject(slug: string) {
     .from("projects").select("*").eq("slug", slug).eq("published", true)
     .or(`publish_at.is.null,publish_at.lte.${now}`).maybeSingle();
   return (data ?? null) as Row | null;
+}
+
+export async function getAllNotes() {
+  "use cache";
+  cacheTag("site");
+  cacheLife("minutes");
+  const sb = createPublicClient();
+  const { data } = await sb.from("notes").select("*").eq("published", true)
+    .order("pinned", { ascending: false }).order("created_at", { ascending: false }).limit(200);
+  return (data ?? []) as Row[];
 }

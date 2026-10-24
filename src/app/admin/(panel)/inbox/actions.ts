@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { sendReplyEmail } from "@/lib/email";
+import { LABELS } from "@/lib/labels";
 
 type R = { ok: boolean; error?: string };
 const ids = (a: string[]) => a.filter((x) => typeof x === "string" && x).slice(0, 200);
@@ -23,9 +24,22 @@ export async function setStarred(id: string, is_starred: boolean): Promise<R> {
   return done(error);
 }
 
+export async function setLabels(id: string, labels: string[]): Promise<R> {
+  const supabase = await requireAdmin();
+  const clean = [...new Set(labels)].filter((l) => (LABELS as readonly string[]).includes(l));
+  const patch: Record<string, unknown> = { labels: clean };
+  if (clean.includes("Spam")) patch.is_read = true;
+  const { error } = await supabase.from("messages").update(patch).eq("id", id);
+  return done(error);
+}
+
 export async function deleteMany(list: string[]): Promise<R> {
   const supabase = await requireAdmin();
-  const { error } = await supabase.from("messages").delete().in("id", ids(list));
+  const wanted = ids(list);
+  const { data: rows } = await supabase.from("messages").select("attachments").in("id", wanted);
+  const paths = (rows ?? []).flatMap((r: any) => (r.attachments ?? []).map((a: any) => a.path)).filter(Boolean);
+  if (paths.length) await supabase.storage.from("attachments").remove(paths);
+  const { error } = await supabase.from("messages").delete().in("id", wanted);
   return done(error);
 }
 
@@ -45,4 +59,30 @@ export async function sendReply(id: string, subject: string, body: string) {
   await supabase.from("messages").update({ replied_at: new Date().toISOString(), is_read: true }).eq("id", id);
   revalidatePath("/admin/inbox");
   return { ok: true as const, reply };
+}
+
+export async function saveTemplate(id: string | null, v: { title: string; subject: string; body: string }) {
+  const supabase = await requireAdmin();
+  const title = v.title.trim().slice(0, 80);
+  const body = v.body.trim().slice(0, 4000);
+  const subject = v.subject.trim().slice(0, 200) || null;
+  if (!title || !body) return { ok: false as const, error: "Title and message are required." };
+  if (id) {
+    const { data, error } = await supabase.from("reply_templates").update({ title, subject, body }).eq("id", id).select("id,title,subject,body").single();
+    if (error || !data) return { ok: false as const, error: error?.message ?? "Failed" };
+    revalidatePath("/admin/inbox");
+    return { ok: true as const, row: data };
+  }
+  const { data: last } = await supabase.from("reply_templates").select("sort_order").order("sort_order", { ascending: false }).limit(1);
+  const { data, error } = await supabase.from("reply_templates")
+    .insert({ title, subject, body, sort_order: (last?.[0]?.sort_order ?? 0) + 1 }).select("id,title,subject,body").single();
+  if (error || !data) return { ok: false as const, error: error?.message ?? "Failed" };
+  revalidatePath("/admin/inbox");
+  return { ok: true as const, row: data };
+}
+
+export async function deleteTemplate(id: string): Promise<R> {
+  const supabase = await requireAdmin();
+  const { error } = await supabase.from("reply_templates").delete().eq("id", id);
+  return done(error);
 }

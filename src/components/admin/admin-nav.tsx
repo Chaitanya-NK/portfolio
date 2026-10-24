@@ -16,12 +16,14 @@ const items = [
   { label: "Testimonials", href: "/admin/testimonials" },
   { label: "Testimonial requests", href: "/admin/requests" },
   { label: "Blog posts", href: "/admin/blog" },
+  { label: "Notes", href: "/admin/notes" },
   { label: "Media library", href: "/admin/media" },
   { label: "Inbox", href: "/admin/inbox" },
   { label: "Content checker", href: "/admin/checker" },
   { label: "Analytics", href: "/admin/analytics" },
   { label: "Audit log", href: "/admin/audit" },
   { label: "Security", href: "/admin/security" },
+  { label: "Email signature", href: "/admin/signature" },
   { label: "Settings", href: "/admin/settings" },
 ];
 

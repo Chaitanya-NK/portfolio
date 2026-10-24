@@ -352,6 +352,28 @@ export function Services({ items, d }: { items: Row[]; d: SiteData }) {
   );
 }
 
+export function Notes({ items }: { items: Row[] }) {
+  return (
+    <div className="flex flex-col gap-3">
+      {items.map((n) => (
+        <article key={n.id} className={`${card} flex flex-col gap-3`}>
+          <div className={`${M} flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-widest ${muted}`}>
+            <time dateTime={n.created_at}>{format(new Date(n.created_at), "d MMM yyyy")}</time>
+            {n.pinned && <span className="text-[color:var(--accent-ink)]">Pinned</span>}
+          </div>
+          <p className="whitespace-pre-line break-words leading-relaxed">{n.body}</p>
+          {(n.tags?.length > 0 || n.link_url) && (
+            <div className="flex flex-wrap items-center gap-2">
+              {n.tags?.map((t: string) => <span key={t} className={chip}>#{t}</span>)}
+              {n.link_url && <a href={n.link_url} target="_blank" rel="noreferrer" className="text-sm font-medium hover:text-[color:var(--accent-ink)]">Link ↗</a>}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export function Contact({ p }: { p: Row }) {
   const socials: Row[] = p.socials ?? [];
   return (
@@ -391,6 +413,7 @@ export function renderSection(s: Row, d: SiteData, n: string) {
       case "achievements": return d.achievements.length ? <Achievements items={d.achievements} /> : null;
       case "projects": return d.projects.length ? <Projects items={d.projects} /> : null;
       case "testimonials": return d.testimonials.length ? <Testimonials items={d.testimonials} /> : null;
+      case "notes": return d.notes.length ? <><Notes items={d.notes} /><a href="/notes" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[color:var(--accent-ink)]">All notes →</a></> : null;
       case "services": return d.services.length ? <Services items={d.services} d={d} /> : null;
       case "blog": return <><Blog posts={d.posts} /><a href="/blog" className="mt-6 inline-flex min-h-11 items-center text-sm font-medium text-[color:var(--accent-ink)]">View all posts →</a></>;
       case "contact": return <Contact p={d.profile} />;

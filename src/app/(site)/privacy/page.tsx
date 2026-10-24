@@ -42,6 +42,7 @@ export default async function PrivacyPage() {
       </Block>
       <Block title="Services that run this site">
         <p>The site is hosted on Vercel. Content and messages are stored with Supabase. Emails are delivered through an email provider. They process data only to run the site.</p>
+        <p>The contact form is protected by Cloudflare Turnstile, which checks that you are a person without puzzles or advertising cookies.</p>
       </Block>
       <Block title="Questions or deletion requests">
         <p>
