@@ -41,6 +41,11 @@ export async function contentIssues(sb: SupabaseClient): Promise<Issue[]> {
     if (!ok) out.push({ id, level, area, message, items: [{ label: "Fix", href }] });
   };
 
+  // site status
+  one("maint", "error", "Site", !P.theme?.maintenance, "Maintenance mode is ON. Visitors see a “back soon” page.", "/admin/settings");
+  one("avail-expired", "info", "Site", !(P.theme?.availability_until && new Date(P.theme.availability_until) <= new Date()),
+    "Your availability badge has expired and is now hidden. Set a new date in Settings if you’re still open to work.", "/admin/settings");
+
   // profile
   one("p-name", "error", "Profile", !!P.full_name, "Your name is empty.", "/admin/profile");
   one("p-headline", "warn", "Profile", !!P.headline, "No headline. It is the biggest text on your page.", "/admin/profile");

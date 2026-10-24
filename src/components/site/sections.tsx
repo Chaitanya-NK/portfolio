@@ -375,6 +375,8 @@ export function Footer({ p, year }: { p: Row; year: number }) {
   return (
     <footer className={`mx-auto mt-24 w-[min(92%,70rem)] border-t border-[color:var(--line)] py-8 text-center text-sm ${muted}`}>
       {p.theme?.footer_text || `© ${year} ${p.full_name ?? ""}`}
+      <span aria-hidden> · </span>
+      <a href="/privacy" className="underline-offset-4 hover:underline">Privacy</a>
     </footer>
   );
 }

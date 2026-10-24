@@ -200,3 +200,13 @@ body{min-height:100dvh;padding-left:env(safe-area-inset-left);padding-right:env(
 .site{--bg:#0A0A0F;--surface:#12121A;--surface2:#1B1B26;--line:#23232F;--line2:#3a3a4d;--fg:#F2F2F5;--fg2:#C9C9D6;--muted:#9A9AAE;--faint:#6b6b80;--on-accent:#0A0A0F;--accent-ink:var(--accent);background:var(--bg);color:var(--fg);color-scheme:dark}
 html[data-theme="light"] .site{--bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F0F0EB;--line:#E2E2DA;--line2:#C9C9BF;--fg:#14141A;--fg2:#3A3A46;--muted:#5C5C6B;--faint:#8A8A98;--accent-ink:color-mix(in srgb,var(--accent) 48%,#000);color-scheme:light}
 @media print{html{font-size:16px!important}}
+
+/* ---- code blocks and diagrams in posts ---- */
+.rich pre{position:relative}
+.rich pre[data-lang]{padding-top:2.4rem}
+.rich pre[data-lang]::before{content:attr(data-lang);position:absolute;top:.7rem;left:1.25rem;font:500 .7rem/1 var(--font-mono,monospace);text-transform:uppercase;letter-spacing:.08em;opacity:.55}
+.code-copy{position:absolute;top:.4rem;right:.5rem;min-height:2.25rem;padding:0 .8rem;border-radius:.5rem;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#e6edf3;font-size:.75rem;cursor:pointer}
+.code-copy:hover{background:rgba(255,255,255,.18)}
+.mermaid-box{overflow-x:auto;text-align:center;border:1px solid rgba(127,127,127,.3);border-radius:12px;padding:1rem}
+.mermaid-box svg{max-width:100%;height:auto}
+.rich pre[data-error]::after{content:"Diagram has a syntax error";display:block;margin-top:.75rem;color:#f87171;font-size:.8rem}

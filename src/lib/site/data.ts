@@ -33,7 +33,12 @@ export async function getSiteData() {
   for (const it of (items.data ?? []) as Row[]) (itemsBySection[it.section_id] ??= []).push(it);
 
   return {
-    profile: (profile.data ?? {}) as Row,
+    profile: (() => {
+      const p = (profile.data ?? {}) as Row;
+      const until = p.theme?.availability_until;
+      // the availability badge hides itself once its date has passed
+      return until && new Date(until) <= new Date() ? { ...p, availability: null } : p;
+    })(),
     sections: (sections.data ?? []) as Row[],
     tools: (tools.data ?? []) as Row[],
     skills: (skills.data ?? []) as Row[],

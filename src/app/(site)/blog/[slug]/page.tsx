@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getPost, getSiteData } from "@/lib/site/data";
+import { PostBody } from "@/components/site/post-body";
+import { highlightCode } from "@/lib/highlight";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -37,7 +39,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={post.cover_url} alt="" className="mt-8 w-full rounded-2xl object-cover" />
         )}
-        <div className="rich mt-8 [&_a]:text-[color:var(--accent-ink)] [&_h1]:text-3xl [&_h2]:text-2xl" dangerouslySetInnerHTML={{ __html: post.content_html }} />
+        <PostBody className="mt-8 [&_a]:text-[color:var(--accent-ink)] [&_h1]:text-3xl [&_h2]:text-2xl" html={highlightCode(post.content_html)} />
       </article>
     </div>
   );

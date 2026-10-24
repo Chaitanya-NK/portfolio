@@ -32,6 +32,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 
 const lowlight = createLowlight(common);
 const COLORS = ["#fef08a", "#bbf7d0", "#bfdbfe", "#fbcfe8", "#fed7aa"];
+const LANGS: [string, string][] = [
+  ["auto", "Auto-detect"], ["mermaid", "Mermaid diagram"], ["bash", "Bash / shell"], ["yaml", "YAML"], ["json", "JSON"],
+  ["javascript", "JavaScript"], ["typescript", "TypeScript"], ["python", "Python"], ["sql", "SQL"], ["java", "Java"],
+  ["csharp", "C#"], ["go", "Go"], ["php", "PHP"], ["xml", "HTML / XML"], ["css", "CSS"], ["ini", "INI / config"],
+  ["diff", "Diff"], ["markdown", "Markdown"], ["plaintext", "Plain text"],
+];
+
 
 export type EditorOut = { json: unknown; html: string; words: number };
 
@@ -242,6 +249,20 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
               {l as string}
             </Button>
           ))}
+        </div>
+      )}
+
+      {editor.isActive("codeBlock") && (
+        <div className="flex flex-wrap items-center gap-2 border-b bg-neutral-50 px-3 py-2 text-sm">
+          <span className="font-medium">Code language</span>
+          <Select
+            value={editor.getAttributes("codeBlock").language || "auto"}
+            onValueChange={(v) => v != null && editor.chain().focus().updateAttributes("codeBlock", { language: String(v) === "auto" ? null : String(v) }).run()}
+          >
+            <SelectTrigger className="h-8 w-48" aria-label="Code language"><SelectValue /></SelectTrigger>
+            <SelectContent>{LANGS.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent>
+          </Select>
+          <span className="text-xs text-neutral-500">Pick “Mermaid diagram” and type e.g. <code>flowchart LR; A[Commit] --&gt; B[Build] --&gt; C[Deploy]</code></span>
         </div>
       )}
 
