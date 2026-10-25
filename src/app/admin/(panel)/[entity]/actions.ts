@@ -3,6 +3,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { CONTENT, type Field } from "@/lib/content-config";
 import { normalizeRoles, deriveFromRoles, type Role } from "@/lib/roles";
+import { normalizeGallery } from "@/lib/case-study";
 
 type R = { ok: boolean; error?: string; row?: Record<string, any> };
 
@@ -28,6 +29,7 @@ function coerce(f: Field, v: unknown): unknown {
     }
     case "switch": return Boolean(v);
     case "roles": return normalizeRoles(v);
+    case "gallery": return normalizeGallery(v);
     case "tags": return list(v, ",");
     case "lines": return list(v, "\n");
     case "metrics":

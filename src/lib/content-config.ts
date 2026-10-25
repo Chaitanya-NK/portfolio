@@ -1,6 +1,6 @@
 export type FieldType =
   | "text" | "textarea" | "number" | "date" | "datetime"
-  | "image" | "tags" | "lines" | "switch" | "select" | "metrics" | "roles";
+  | "image" | "tags" | "lines" | "switch" | "select" | "metrics" | "roles" | "gallery";
 
 export type Field = {
   key: string;
@@ -81,7 +81,7 @@ export const CONTENT: Record<string, EntityConfig> = {
     fields: [
       { key: "title", label: "Title", type: "text", required: true },
       { key: "summary", label: "One-line outcome", type: "text" },
-      { key: "description", label: "Description", type: "textarea" },
+      { key: "description", label: "Overview (shown at the top of the page)", type: "textarea" },
       { key: "cover_url", label: "Cover image", type: "image", folder: "projects" },
       { key: "role", label: "Your role", type: "text" },
       { key: "year", label: "Year", type: "number" },
@@ -89,6 +89,10 @@ export const CONTENT: Record<string, EntityConfig> = {
       { key: "live_url", label: "Live URL", type: "text", placeholder: "https://..." },
       { key: "repo_url", label: "Code URL", type: "text", placeholder: "https://..." },
       { key: "metrics", label: "Result metrics", type: "metrics" },
+      { key: "problem", label: "Case study: the problem", type: "textarea", help: "What was wrong or needed? A blank line starts a new paragraph. Lines starting with - become a list." },
+      { key: "approach", label: "Case study: your approach", type: "textarea", help: "What you did and why. Mention the key decisions." },
+      { key: "result", label: "Case study: the result", type: "textarea", help: "What changed. Put the numbers in the metrics above." },
+      { key: "gallery", label: "Screenshot gallery", type: "gallery", folder: "projects" },
       { key: "featured", label: "Featured (shown large)", type: "switch" },
       { key: "publish_at", label: "Schedule publishing (optional)", type: "datetime", help: "Leave empty to publish immediately when Published is on." },
       published,

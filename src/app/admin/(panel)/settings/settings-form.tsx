@@ -171,6 +171,16 @@ export function SettingsForm({ theme, aiReady }: { theme: Record<string, any>; a
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader><CardTitle>Intro video</CardTitle></CardHeader>
+        <CardContent className="grid gap-4">
+          <L t="Video link (YouTube, Vimeo or Loom)"><Input name="intro_video_url" defaultValue={theme.intro_video?.url ?? ""} placeholder="https://www.loom.com/share/…" /></L>
+          <FileUpload name="intro_video_file" label="…or upload a video (MP4 or WebM, up to 40 MB)" folder="video" accept="video/mp4,video/webm" maxMB={40} defaultValue={theme.intro_video?.file_url} />
+          <FileUpload name="intro_video_poster" label="Poster image (shown on the button; wide 16:9 works best)" folder="video" accept="image/png,image/jpeg,image/webp" maxMB={2} defaultValue={theme.intro_video?.poster_url} />
+          <p className="text-sm text-neutral-500">Keep it under 90 seconds. Nothing loads from YouTube, Vimeo or Loom until a visitor presses play. An uploaded file wins over the link. Clear both to hide the button.</p>
+        </CardContent>
+      </Card>
+
       <Card className={maint ? "border-red-300" : ""}>
         <CardHeader><CardTitle>Maintenance mode</CardTitle></CardHeader>
         <CardContent className="grid gap-4">

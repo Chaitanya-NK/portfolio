@@ -1,11 +1,11 @@
 "use client";
 
-export function PrintButton() {
+export function PrintButton({ label = "print" }: { label?: string }) {
   return (
     <button
       onClick={() => {
         try {
-          navigator.sendBeacon("/api/track", new Blob([JSON.stringify({ type: "click", kind: "resume", label: "print", path: "/resume" })], { type: "application/json" }));
+          navigator.sendBeacon("/api/track", new Blob([JSON.stringify({ type: "click", kind: "resume", label, path: location.pathname })], { type: "application/json" }));
         } catch {}
         window.print();
       }}

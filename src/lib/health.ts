@@ -19,7 +19,7 @@ export async function contentIssues(sb: SupabaseClient): Promise<Issue[]> {
   const [profile, sections, projects, posts, tools, skills, exps, edu, ach, tests, services, msgs, reqs] = await Promise.all([
     sb.from("profile").select("*").eq("id", 1).maybeSingle(),
     sb.from("sections").select("type,title,visible"),
-    sb.from("projects").select("id,title,summary,cover_url,live_url,repo_url,tags,published"),
+    sb.from("projects").select("id,title,summary,cover_url,live_url,repo_url,tags,published,problem,result"),
     sb.from("posts").select("id,title,excerpt,cover_url,tags,seo_title,content_html,status"),
     sb.from("tools").select("id,name,icon_url,published"),
     sb.from("skills").select("id,published"),
@@ -90,6 +90,7 @@ export async function contentIssues(sb: SupabaseClient): Promise<Issue[]> {
   add("proj-cover", "warn", "Projects", proj((p) => !p.cover_url), (n) => `${n} ${s(n, "project has", "projects have")} no cover image.`);
   add("proj-summary", "warn", "Projects", proj((p) => !p.summary?.trim()), (n) => `${n} ${s(n, "project has", "projects have")} no one-line summary.`);
   add("proj-live", "info", "Projects", proj((p) => !p.live_url), (n) => `${n} ${s(n, "project has", "projects have")} no Live link.`);
+  add("proj-case", "info", "Projects", proj((p) => !p.problem?.trim() && !p.result?.trim()), (n) => `${n} ${s(n, "project has", "projects have")} no case study (problem and result).`);
   add("proj-tags", "info", "Projects", proj((p) => !(p.tags?.length)), (n) => `${n} ${s(n, "project has", "projects have")} no tech tags.`);
   add("proj-long", "info", "Projects", proj((p) => String(p.title).length > 60), (n) => `${n} project ${s(n, "title is", "titles are")} longer than 60 characters.`);
   const drafts = rows(projects).filter((p) => !p.published).map((p) => ({ label: p.title, href: `/admin/projects?edit=${p.id}` }));

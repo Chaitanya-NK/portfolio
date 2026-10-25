@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
+import { parseVideo } from "@/lib/video";
 
 export type SettingsState = { ok: boolean; message: string } | null;
 
@@ -25,6 +26,12 @@ export async function saveSettings(_p: SettingsState, fd: FormData): Promise<Set
   if (annStart && annEnd && new Date(annEnd) <= new Date(annStart))
     return { ok: false, message: "The banner end time must be after its start time" };
 
+  const vLink = str(fd, "intro_video_url", 300);
+  const vFile = str(fd, "intro_video_file", 500);
+  const vPoster = str(fd, "intro_video_poster", 500);
+  if (vLink && !parseVideo(vLink)) return { ok: false, message: "The intro video link must be a YouTube, Vimeo or Loom link." };
+  const intro = vLink || vFile ? { url: vLink || null, file_url: vFile || null, poster_url: vPoster || null } : null;
+
   const { data: cur } = await supabase.from("profile").select("theme").eq("id", 1).single();
   const theme = {
     ...(cur?.theme ?? {}),
@@ -38,6 +45,7 @@ export async function saveSettings(_p: SettingsState, fd: FormData): Promise<Set
     maintenance: fd.get("maintenance") === "on",
     maintenance_message: str(fd, "maintenance_message", 300) || null,
     assistant_enabled: fd.get("assistant_enabled") === "on",
+    intro_video: intro,
     announcement: annText
       ? {
           enabled: fd.get("ann_enabled") === "on",

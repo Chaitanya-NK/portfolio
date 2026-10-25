@@ -106,3 +106,12 @@ export async function getAllNotes() {
     .order("pinned", { ascending: false }).order("created_at", { ascending: false }).limit(200);
   return (data ?? []) as Row[];
 }
+
+export async function getResumeVersion(slug: string) {
+  "use cache";
+  cacheTag("site");
+  cacheLife("minutes");
+  const sb = createPublicClient();
+  const { data } = await sb.from("resume_versions").select("*").eq("slug", slug).eq("published", true).maybeSingle();
+  return (data ?? null) as Row | null;
+}

@@ -33,6 +33,9 @@ export default async function PrivacyPage() {
       <Block title="Who is here right now">
         <p>While a page is open and visible, it sends a short signal about every 45 seconds, using the same anonymous daily code, so I can see how many people are on the site at this moment. These signals are regularly cleared and are not kept as history.</p>
       </Block>
+      <Block title="Intro video (when shown)">
+        <p>Nothing is loaded from YouTube, Vimeo or Loom until you press “Watch intro”. After that, the video player loads from that service and its own privacy rules apply.</p>
+      </Block>
       <Block title="AI assistant (when shown)">
         <p>If the “Ask AI” chat is visible, the question you type is sent to Google’s Gemini service, which writes an answer from this site’s public content. This website does not store your questions. Please don’t enter personal or sensitive information. Google may use content sent through its free service to improve its products.</p>
       </Block>

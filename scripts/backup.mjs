@@ -7,7 +7,7 @@ if (!url || !key) { console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE
 
 const headers = { apikey: key, authorization: `Bearer ${key}` };
 const TABLES = ["profile", "sections", "section_items", "tools", "skills", "experiences", "education",
-  "achievements", "projects", "services", "testimonials", "posts", "notes", "reply_templates"];
+  "achievements", "projects", "services", "testimonials", "posts", "notes", "reply_templates", "resume_versions"];
 
 const tables = {};
 for (const t of TABLES) {

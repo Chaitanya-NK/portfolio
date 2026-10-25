@@ -100,3 +100,6 @@ export function toPublicExperience(e: Record<string, any>): Record<string, any> 
   }
   return { ...e, roles: sortRoles(roles), tenure: tenureLabel(roles) };
 }
+
+// identifies one role at one company, used for per-version highlight overrides
+export const roleKey = (experienceId: string, title: string) => `${experienceId}|${String(title).trim().toLowerCase()}`;

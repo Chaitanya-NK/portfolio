@@ -23,6 +23,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { FileUpload } from "@/components/admin/file-upload";
 import { BulkTools } from "@/components/admin/bulk-tools";
 import { BulkSkills } from "@/components/admin/bulk-skills";
+import { GalleryEditor } from "@/components/admin/gallery-editor";
 import { AiTextAssist } from "@/components/admin/ai-assist";
 import { aiBullets } from "@/app/admin/ai-actions";
 import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
@@ -40,6 +41,7 @@ function initValues(cfg: EntityConfig, item: Row | null): Values {
     else if (f.type === "lines") v[f.key] = Array.isArray(raw) ? raw.join("\n") : "";
     else if (f.type === "metrics") v[f.key] = Array.isArray(raw) ? raw : [];
     else if (f.type === "roles") v[f.key] = rolesInit(item);
+    else if (f.type === "gallery") v[f.key] = Array.isArray(raw) ? raw : [];
     else if (f.type === "switch") v[f.key] = item ? Boolean(raw) : f.key === "published";
     else if (f.type === "datetime") v[f.key] = raw ? format(new Date(raw), "yyyy-MM-dd'T'HH:mm") : "";
     else if (f.type === "select") v[f.key] = raw != null ? String(raw) : f.default ?? "";
@@ -149,6 +151,13 @@ function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) 
       <div className="flex flex-col gap-2 text-sm font-medium">
         {f.label}
         <RolesEditor value={v} onChange={set} />
+      </div>
+    );
+  if (f.type === "gallery")
+    return (
+      <div className="flex flex-col gap-2 text-sm font-medium">
+        {f.label}
+        <GalleryEditor value={v} onChange={set} folder={f.folder} />
       </div>
     );
   if (f.type === "image")

@@ -4,6 +4,7 @@ import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
 import { SocialLinks } from "./social-icon";
 import { ContactActions } from "./contact-actions";
+import { IntroVideo } from "./intro-video";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
@@ -45,6 +46,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
         <div className="flex flex-wrap gap-3">
           {hasProjects && <a href="#projects" className="rounded-full bg-[color:var(--fg)] px-6 py-3.5 font-semibold text-[color:var(--bg)]">View projects →</a>}
           {(p.resume_url || p.theme?.resume_mode === "generated") && <a href={p.theme?.resume_mode === "generated" ? "/resume" : p.resume_url} {...(p.theme?.resume_mode === "generated" ? {} : { target: "_blank", rel: "noreferrer" })} data-track="resume" data-label="hero" className="rounded-full border border-[color:var(--line)] px-6 py-3.5">Download resume</a>}
+          {p.theme?.intro_video && <IntroVideo v={p.theme.intro_video} />}
         </div>
       </div>
       <div className={`${card} fade-up d2 flex w-full max-w-md flex-col gap-5 justify-self-center lg:justify-self-end`}>
@@ -224,6 +226,7 @@ export function Projects({ items }: { items: Row[] }) {
           <div className="flex flex-1 flex-col gap-2.5 p-5 sm:p-6">
             <span className={`${M} text-xs uppercase tracking-widest ${muted}`}>{[p.role, p.year].filter(Boolean).join(" · ")}</span>
             <h3 className={`${D} text-xl font-bold sm:text-2xl`}><a href={`/projects/${p.slug}`} className="after:absolute after:inset-0">{p.title}</a></h3>
+            {(p.problem || p.approach || p.result || p.gallery?.length > 0) && <span className={`${M} text-[11px] uppercase tracking-widest text-[color:var(--accent-ink)]`}>Case study →</span>}
             {p.summary && <p className={muted}>{p.summary}</p>}
             {p.metrics?.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-x-6 gap-y-2">
