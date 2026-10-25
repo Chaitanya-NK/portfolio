@@ -20,10 +20,11 @@ import {
   Bold, Italic, Underline, Strikethrough, Code, Link as LinkIcon, List, ListOrdered,
   ListChecks, Quote, Minus, AlignLeft, AlignCenter, AlignRight, AlignJustify,
   ImagePlus, Video, Undo2, Redo2, Highlighter, Subscript as SubIcon,
-  Superscript as SupIcon, RemoveFormatting, Table as TableIcon,
+  Superscript as SupIcon, RemoveFormatting, Table as TableIcon, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { aiAltText } from "@/app/admin/ai-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -77,6 +78,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
   const [dialog, setDialog] = useState<null | "link" | "youtube">(null);
   const [url, setUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [altBusy, setAltBusy] = useState(false);
 
   const insertFiles = async (files: File[]) => {
     setUploading(true);
@@ -134,6 +136,31 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
   useEffect(() => { editorRef.current = editor; }, [editor]);
 
   if (!editor) return <div className="min-h-[560px] rounded-xl border bg-white" />;
+
+
+  const fillAlt = async (all: boolean) => {
+    const targets: { pos: number; src: string }[] = [];
+    if (all) {
+      editor.state.doc.descendants((node, pos) => {
+        if (node.type.name === "image" && !String(node.attrs.alt ?? "").trim() && node.attrs.src) targets.push({ pos, src: String(node.attrs.src) });
+      });
+    } else {
+      const sel = editor.state.selection as unknown as { node?: { type: { name: string }; attrs: { src?: string } }; from: number };
+      if (sel.node?.type.name === "image" && sel.node.attrs.src) targets.push({ pos: sel.from, src: sel.node.attrs.src });
+    }
+    if (!targets.length) { toast.info("No images need alt text."); return; }
+    setAltBusy(true);
+    let done = 0;
+    for (const t of targets.slice(0, 12)) {
+      const r = await aiAltText(t.src);
+      if (!r.ok) { toast.error(r.error); break; }
+      const cur = editor.state.doc.nodeAt(t.pos);
+      if (cur && cur.type.name === "image") editor.view.dispatch(editor.state.tr.setNodeMarkup(t.pos, undefined, { ...cur.attrs, alt: r.text }));
+      done++;
+    }
+    setAltBusy(false);
+    if (done) toast.success(`Added alt text to ${done} image${done === 1 ? "" : "s"}. Please check it.`);
+  };
 
   const heading = [1, 2, 3, 4].find((l) => editor.isActive("heading", { level: l }));
   const block = heading ? String(heading) : "p";
@@ -219,6 +246,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
         <Btn label="Embed YouTube video" onClick={() => { setUrl(""); setDialog("youtube"); }}><Video className={ic} /></Btn>
         <Btn label="Insert table" onClick={() => chain().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}><TableIcon className={ic} /></Btn>
         <Btn label="Clear formatting" onClick={() => chain().clearNodes().unsetAllMarks().run()}><RemoveFormatting className={ic} /></Btn>
+        <Btn label="AI: write missing alt text for all images" disabled={altBusy} onClick={() => fillAlt(true)}><Sparkles className={ic} /></Btn>
         {uploading && <span className="ml-2 text-xs text-neutral-500">Uploading image…</span>}
       </div>
 
@@ -228,6 +256,7 @@ export function RichEditor({ initialJSON, initialHTML, onChange }: {
           <Input className="h-8 min-w-0 flex-1 basis-48 bg-white sm:max-w-md" placeholder="Describe the image for accessibility and SEO"
             value={editor.getAttributes("image").alt ?? ""}
             onChange={(e) => editor.chain().updateAttributes("image", { alt: e.target.value }).run()} />
+          <Button type="button" variant="outline" size="sm" disabled={altBusy} onClick={() => fillAlt(false)}><Sparkles className="mr-1.5 h-3.5 w-3.5" />{altBusy ? "Writing…" : "Suggest alt text"}</Button>
           <Button type="button" variant="ghost" size="sm" onClick={() => chain().deleteSelection().run()}>Remove image</Button>
         </div>
       )}

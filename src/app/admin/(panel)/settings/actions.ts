@@ -37,6 +37,7 @@ export async function saveSettings(_p: SettingsState, fd: FormData): Promise<Set
     availability_until: iso(str(fd, "availability_until", 40)),
     maintenance: fd.get("maintenance") === "on",
     maintenance_message: str(fd, "maintenance_message", 300) || null,
+    assistant_enabled: fd.get("assistant_enabled") === "on",
     announcement: annText
       ? {
           enabled: fd.get("ann_enabled") === "on",

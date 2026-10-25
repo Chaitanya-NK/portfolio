@@ -29,7 +29,6 @@ export async function POST(req: Request) {
 
   const path = String(body.path ?? "").split("?")[0].slice(0, 200);
   if (!path.startsWith("/") || /^\/(admin|api|testimonial)/.test(path)) return done();
-  if (!(await rateLimit("track", 200, 3600))) return done();
 
   const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
   const day = new Date().toISOString().slice(0, 10);
@@ -37,6 +36,16 @@ export async function POST(req: Request) {
     .update(`${ip}|${ua}|${day}|${process.env.SUPABASE_SERVICE_ROLE_KEY}`)
     .digest("hex").slice(0, 32);
   const sb = createAdminClient();
+
+  // "someone is here right now" signal, sent every ~45 seconds while a page is open
+  if (body.type === "ping") {
+    if (!(await rateLimit("ping", 400, 3600))) return done();
+    await sb.from("live_presence").upsert({ visitor, path, seen_at: new Date().toISOString() });
+    if (Math.random() < 0.02) await sb.from("live_presence").delete().lt("seen_at", new Date(Date.now() - 3600_000).toISOString());
+    return done();
+  }
+
+  if (!(await rateLimit("track", 200, 3600))) return done();
 
   if (body.type === "click") {
     const kind = String(body.kind ?? "");

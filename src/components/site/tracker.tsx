@@ -13,10 +13,22 @@ function send(data: object) {
 
 export function Tracker() {
   const pathname = usePathname();
+
   useEffect(() => {
     if (skip()) return;
     send({ path: pathname, referrer: document.referrer });
   }, [pathname]);
+
+  // presence: tell the server this page is open, but only while the tab is visible
+  useEffect(() => {
+    if (skip()) return;
+    const ping = () => { if (document.visibilityState === "visible") send({ type: "ping", path: pathname }); };
+    ping();
+    const timer = setInterval(ping, 45000);
+    document.addEventListener("visibilitychange", ping);
+    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", ping); };
+  }, [pathname]);
+
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (skip()) return;
@@ -27,5 +39,6 @@ export function Tracker() {
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
   }, []);
+
   return null;
 }

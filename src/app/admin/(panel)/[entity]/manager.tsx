@@ -23,6 +23,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { FileUpload } from "@/components/admin/file-upload";
 import { BulkTools } from "@/components/admin/bulk-tools";
 import { BulkSkills } from "@/components/admin/bulk-skills";
+import { AiTextAssist } from "@/components/admin/ai-assist";
+import { aiBullets } from "@/app/admin/ai-actions";
 import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
 import type { EntityConfig, Field } from "@/lib/content-config";
 import { saveItem, deleteItem, togglePublished, reorderItems } from "./actions";
@@ -123,6 +125,7 @@ function RolesEditor({ value, onChange }: { value: RoleDraft[]; onChange: (v: Ro
           <label className="flex flex-col gap-1 text-sm font-medium">Highlights (one per line)
             <Textarea rows={3} value={r.bullets} onChange={(e) => set(i, { bullets: e.target.value })} />
           </label>
+          <AiTextAssist label="Polish with AI" getValue={() => r.bullets} setValue={(v) => set(i, { bullets: v })} run={(cur) => aiBullets({ title: r.title, notes: cur })} />
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" className="w-fit" onClick={() => onChange([blankRole(), ...value])}>

@@ -29,7 +29,7 @@ const L = ({ t, children }: { t: string; children: React.ReactNode }) => (
   <label className="flex flex-col gap-1 text-sm font-medium">{t}{children}</label>
 );
 
-export function SettingsForm({ theme }: { theme: Record<string, any> }) {
+export function SettingsForm({ theme, aiReady }: { theme: Record<string, any>; aiReady: boolean }) {
   const [state, action, pending] = useActionState<SettingsState, FormData>(saveSettings, null);
   const [accent, setAccent] = useState<string>(theme.accent || "#C6F432");
   const [resumeMode, setResumeMode] = useState<string>(theme.resume_mode || "upload");
@@ -42,6 +42,7 @@ export function SettingsForm({ theme }: { theme: Record<string, any> }) {
   const [annEnd, setAnnEnd] = useState("");
   const [availUntil, setAvailUntil] = useState("");
   const [maint, setMaint] = useState<boolean>(Boolean(theme.maintenance));
+  const [ask, setAsk] = useState<boolean>(Boolean(theme.assistant_enabled));
 
   // dates are shown in the browser's own time zone, so fill them after mount
   useEffect(() => {
@@ -152,6 +153,21 @@ export function SettingsForm({ theme }: { theme: Record<string, any> }) {
             <span className="text-sm font-semibold" style={{ color: valid ? accent : "#888" }}>Accent text</span>
           </div>
           {low && <p className="text-sm text-amber-600">This color is quite dark on the dark site, so text may be hard to read. Pick a lighter one.</p>}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader><CardTitle>“Ask AI” assistant</CardTitle></CardHeader>
+        <CardContent className="grid gap-3">
+          <input type="hidden" name="assistant_enabled" value={ask ? "on" : ""} />
+          <div className="flex items-center justify-between rounded-lg border p-3 text-sm font-medium">
+            Show the Ask AI chat on my site
+            <Switch checked={ask} onCheckedChange={(c: boolean) => setAsk(c)} aria-label="Show the Ask AI chat" />
+          </div>
+          <p className={`text-sm ${aiReady ? "text-green-700" : "text-amber-600"}`}>
+            {aiReady ? "✓ AI key found." : "No GEMINI_API_KEY is set, so the chat stays hidden. Add the key in your environment variables."}
+          </p>
+          <p className="text-sm text-neutral-500">Answers come only from your public portfolio content. Visitors are limited per person and to a daily total (ASK_DAILY_CAP) so the free quota lasts. Visitors’ questions are processed by Google Gemini.</p>
         </CardContent>
       </Card>
 

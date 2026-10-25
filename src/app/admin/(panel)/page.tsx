@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { contentIssues } from "@/lib/health";
+import { LiveVisitors } from "@/components/admin/live-visitors";
 
 const TABLES: [string, string, string][] = [
   ["tools", "Tools", "/admin/tools"], ["skills", "Skills", "/admin/skills"],
@@ -35,6 +36,7 @@ async function Stats() {
   const card = "rounded-xl border bg-white p-5";
   return (
     <div className="flex max-w-none flex-col gap-6">
+      <LiveVisitors />
       <div className="grid gap-4 sm:grid-cols-3">
         <Link href="/admin/inbox" className={card}><div className="text-sm text-neutral-500">Unread messages</div><div className="text-3xl font-semibold">{unread}</div></Link>
         <Link href="/admin/projects" className={card}><div className="text-sm text-neutral-500">Draft projects</div><div className="text-3xl font-semibold">{drafts}</div></Link>

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUpload } from "@/components/admin/file-upload";
+import { AiTextAssist, domField } from "@/components/admin/ai-assist";
+import { aiBio, aiProfileMeta } from "@/app/admin/ai-actions";
 import { StatsEditor, SocialsEditor } from "@/components/admin/list-editors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -25,6 +27,7 @@ export function ProfileForm({ p }: { p: P }) {
           <Field label="Availability"><Input name="availability" defaultValue={p.availability ?? ""} /></Field>
           <div className="sm:col-span-2"><Field label="Headline"><Input name="headline" defaultValue={p.headline ?? ""} /></Field></div>
           <div className="sm:col-span-2"><Field label="Bio"><Textarea name="bio" rows={4} defaultValue={p.bio ?? ""} /></Field></div>
+          <div className="sm:col-span-2"><AiTextAssist label="Polish bio with AI" getValue={() => domField("bio").get()} setValue={(v) => domField("bio").set(v)} run={(cur) => aiBio({ name: domField("full_name").get(), headline: domField("headline").get(), bio: cur })} /></div>
           <Field label="Email"><Input name="email" defaultValue={p.email ?? ""} /></Field>
           <Field label="Phone"><Input name="phone" defaultValue={p.phone ?? ""} /></Field>
           <Field label="Location"><Input name="location" defaultValue={p.location ?? ""} /></Field>
@@ -53,6 +56,7 @@ export function ProfileForm({ p }: { p: P }) {
         <CardContent className="grid gap-4">
           <Field label="Page title"><Input name="seo_title" defaultValue={p.seo?.title ?? ""} /></Field>
           <Field label="Meta description"><Textarea name="seo_description" rows={2} defaultValue={p.seo?.description ?? ""} /></Field>
+          <AiTextAssist label="Suggest with AI" getValue={() => domField("seo_description").get()} setValue={(v) => domField("seo_description").set(v)} run={() => aiProfileMeta({ name: domField("full_name").get(), headline: domField("headline").get(), bio: domField("bio").get() })} />
         </CardContent>
       </Card>
       <div className="flex items-center gap-4 xl:col-span-2">

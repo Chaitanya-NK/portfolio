@@ -13,3 +13,12 @@ export async function rateLimit(scope: string, max: number, windowSeconds: numbe
   if (error) return true; // fail open if the limiter is unavailable
   return data === true;
 }
+
+// one shared budget for everyone (used to protect the free AI quota)
+export async function globalLimit(scope: string, max: number, windowSeconds: number) {
+  const { data, error } = await createAdminClient().rpc("check_rate_limit", {
+    p_key: `global:${scope}`, p_max: max, p_window_seconds: windowSeconds,
+  });
+  if (error) return true;
+  return data === true;
+}

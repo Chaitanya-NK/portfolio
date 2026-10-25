@@ -30,6 +30,12 @@ export default async function PrivacyPage() {
         <p>To see which pages are read, the site records each page view: the page address, the website you came from (domain only), your country, your device type (desktop, mobile or tablet) and your browser name.</p>
         <p>Visitors are counted using an anonymous code that is scrambled from your connection details and changes every day. Your IP address is never stored, nothing is saved in your browser for this, and there are no advertising or third-party trackers. If your browser sends a “Do Not Track” signal, it is respected.</p>
       </Block>
+      <Block title="Who is here right now">
+        <p>While a page is open and visible, it sends a short signal about every 45 seconds, using the same anonymous daily code, so I can see how many people are on the site at this moment. These signals are regularly cleared and are not kept as history.</p>
+      </Block>
+      <Block title="AI assistant (when shown)">
+        <p>If the “Ask AI” chat is visible, the question you type is sent to Google’s Gemini service, which writes an answer from this site’s public content. This website does not store your questions. Please don’t enter personal or sensitive information. Google may use content sent through its free service to improve its products.</p>
+      </Block>
       <Block title="Link clicks">
         <p>Clicks on key buttons, such as the resume download, project links and social links, are counted anonymously so I can see what is useful.</p>
       </Block>

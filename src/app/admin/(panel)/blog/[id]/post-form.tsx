@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FileUpload } from "@/components/admin/file-upload";
 import { DateTimePicker } from "@/components/admin/date-picker";
 import { RichEditor } from "@/components/admin/rich-editor";
+import { AiTextAssist } from "@/components/admin/ai-assist";
+import { aiExcerpt, aiPostMeta } from "@/app/admin/ai-actions";
 import { savePost } from "../actions";
 
 type Post = Record<string, any>;
@@ -106,6 +108,7 @@ export function PostForm({ post }: { post: Post | null }) {
             onChange={(e) => { setTitle(e.target.value); if (!slugTouched) setSlug(slugify(e.target.value)); setDirty(true); }}
           />
           <Textarea rows={2} placeholder="Short excerpt shown on the blog list and in search results" value={excerpt} onChange={up(setExcerpt)} />
+          <AiTextAssist label="Write excerpt with AI" getValue={() => excerpt} setValue={(v) => { setExcerpt(v); setDirty(true); }} run={() => aiExcerpt({ title, html: doc.html })} />
           <RichEditor
             initialJSON={post?.content_json} initialHTML={post?.content_html}
             onChange={(o) => { setDoc({ json: o.json, html: o.html }); setWords(o.words); setDirty(true); }}
@@ -143,6 +146,7 @@ export function PostForm({ post }: { post: Post | null }) {
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium">SEO description
               <Textarea rows={3} value={seoDesc} onChange={up(setSeoDesc)} placeholder={excerpt} />
+              <AiTextAssist label="Suggest with AI" getValue={() => seoDesc} setValue={(v) => { setSeoDesc(v); setDirty(true); }} run={() => aiPostMeta({ title, html: doc.html })} />
             </label>
           </Box>
         </div>
