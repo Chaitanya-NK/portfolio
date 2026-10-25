@@ -22,6 +22,7 @@ const items = [
   { label: "Content checker", href: "/admin/checker" },
   { label: "Analytics", href: "/admin/analytics" },
   { label: "Audit log", href: "/admin/audit" },
+  { label: "Backup & restore", href: "/admin/backup" },
   { label: "Security", href: "/admin/security" },
   { label: "Email signature", href: "/admin/signature" },
   { label: "Settings", href: "/admin/settings" },

@@ -12,7 +12,7 @@ const PAGES: [string, string][] = [
   ["Education", "/admin/education"], ["Achievements", "/admin/achievements"], ["Projects", "/admin/projects"],
   ["Testimonials", "/admin/testimonials"], ["Testimonial requests", "/admin/requests"], ["Blog posts", "/admin/blog"],
   ["Media library", "/admin/media"], ["Inbox", "/admin/inbox"], ["Analytics", "/admin/analytics"],
-  ["Content checker", "/admin/checker"], ["Services", "/admin/services"], ["Notes", "/admin/notes"], ["Email signature", "/admin/signature"], ["Audit log", "/admin/audit"], ["Security", "/admin/security"], ["Settings", "/admin/settings"],
+  ["Content checker", "/admin/checker"], ["Services", "/admin/services"], ["Notes", "/admin/notes"], ["Email signature", "/admin/signature"], ["Backup & restore", "/admin/backup"], ["Audit log", "/admin/audit"], ["Security", "/admin/security"], ["Settings", "/admin/settings"],
 ];
 
 export function SearchButton({ compact }: { compact?: boolean }) {

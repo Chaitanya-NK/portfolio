@@ -41,6 +41,12 @@ export async function contentIssues(sb: SupabaseClient): Promise<Issue[]> {
     if (!ok) out.push({ id, level, area, message, items: [{ label: "Fix", href }] });
   };
 
+  // backups
+  const { data: bk } = await sb.from("audit_logs").select("created_at").eq("action", "backup").order("created_at", { ascending: false }).limit(1);
+  const lastBk = bk?.[0]?.created_at ? new Date(bk[0].created_at).getTime() : 0;
+  one("backup", "warn", "Backup", lastBk > 0 && Date.now() - lastBk < 30 * 864e5,
+    lastBk ? "Your last backup is over 30 days old." : "You haven’t made a backup yet.", "/admin/backup");
+
   // site status
   one("maint", "error", "Site", !P.theme?.maintenance, "Maintenance mode is ON. Visitors see a “back soon” page.", "/admin/settings");
   one("avail-expired", "info", "Site", !(P.theme?.availability_until && new Date(P.theme.availability_until) <= new Date()),

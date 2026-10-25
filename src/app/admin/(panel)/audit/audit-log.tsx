@@ -13,7 +13,7 @@ type L = {
 
 const verb: Record<string, string> = {
   insert: "created", update: "updated", delete: "deleted", reorder: "reordered",
-  login: "signed in", logout: "signed out", login_failed: "failed sign-in",
+  login: "signed in", logout: "signed out", login_failed: "failed sign-in", backup: "backed up", restore: "restored",
 };
 const variant = (a: string) =>
   a === "delete" || a === "login_failed" ? "destructive" : a === "insert" ? "default" : "secondary";
