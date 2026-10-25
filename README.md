@@ -248,4 +248,4 @@ Then sign in with the password alone and set up the authenticator again.
 
 ## Author
 
-**Chaitanya NK**. Built as a personal portfolio. Add a `LICENSE` file if you want others to reuse the code.
+**Chaitanya NK**. Built as a personal portfolio.
