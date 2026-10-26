@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { AdminNav } from "./admin-nav";
 import { CommandPalette, SearchButton } from "./command-palette";
+import { UploadCenter } from "./upload-center";
 import { logout } from "@/app/admin/actions";
 
 function Nav({ onNavigate }: { onNavigate?: () => void }) {
@@ -40,6 +41,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <CommandPalette />
+      <UploadCenter />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="flex w-72 flex-col gap-4 overflow-y-auto border-0 bg-[#14161A] p-4 text-white">
           <SheetTitle className="sr-only">Menu</SheetTitle>

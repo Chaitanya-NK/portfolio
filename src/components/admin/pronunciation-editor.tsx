@@ -5,6 +5,7 @@ import { Mic, Square, Trash2, Upload } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { uploadFiles } from "@/lib/upload-store";
 
 const MAX_SECONDS = 10;
 const PICK = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"];
@@ -60,17 +61,12 @@ export function PronunciationEditor({ defaultPhonetic, defaultUrl }: { defaultPh
   }
 
   async function upload(blob: Blob) {
-    if (blob.size > 1_000_000) { toast.error("Keep it under 1 MB (about 10 seconds)."); return; }
-    setBusy(true);
-    const sb = createClient();
     const mime = (blob.type || "audio/webm").split(";")[0];
-    const path = `pronunciation/${Date.now()}-name.${extOf(mime)}`;
-    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: mime, cacheControl: "3600", upsert: false });
+    const file = blob instanceof File ? blob : new File([blob], `name.${extOf(mime)}`, { type: mime });
+    setBusy(true);
+    const r = await uploadFiles(file, { folder: "pronunciation", accept: ["audio/*"], maxMB: 1 });
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
-    setUrl(sb.storage.from("media").getPublicUrl(path).data.publicUrl);
-    setTake(null);
-    toast.success("Uploaded. Click Save profile to apply.");
+    if (r[0]) { setUrl(r[0].url); setTake(null); toast.success("Uploaded. Click Save profile to apply."); }
   }
 
   return (

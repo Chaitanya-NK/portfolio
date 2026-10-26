@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { uploadFiles } from "@/lib/upload-store";
 
 type Props = {
   name?: string;
@@ -25,18 +25,15 @@ export function FileUpload({ name, label, folder, accept, defaultValue, maxMB = 
 
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > maxMB * 1024 * 1024) { toast.error(`File is larger than ${maxMB} MB`); return; }
-    setBusy(true);
-    const supabase = createClient();
-    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `${folder}/${Date.now()}-${safe}`;
-    const { error } = await supabase.storage.from("media").upload(path, file, { cacheControl: "3600", upsert: false });
-    setBusy(false);
     if (ref.current) ref.current.value = "";
-    if (error) { toast.error(error.message); return; }
-    update(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);
-    toast.success("Uploaded. Click Save to apply.");
+    if (!file) return;
+    setBusy(true);
+    await uploadFiles(file, {
+      folder, maxMB,
+      accept: accept.split(",").map((s) => s.trim()).filter(Boolean),
+      onEach: (u) => { update(u.url); toast.success("Uploaded. Click Save to apply."); },
+    });
+    setBusy(false);
   }
 
   return (

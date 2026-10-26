@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { aiAltText } from "@/app/admin/ai-actions";
+import { uploadFiles } from "@/lib/upload-store";
 import type { GalleryItem } from "@/lib/case-study";
 
 const MAX = 24;
@@ -26,20 +27,12 @@ export function GalleryEditor({ value, onChange, folder = "projects" }: {
     if (ok.length > room) toast.error(`A gallery holds up to ${MAX} images.`);
     const take = ok.slice(0, Math.max(0, room));
     if (!take.length) return;
-    const sb = createClient();
-    const added: GalleryItem[] = [];
-    for (const [i, f] of take.entries()) {
-      setBusy(`Uploading ${i + 1} of ${take.length}…`);
-      const safe = f.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const path = `${folder}/gallery/${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${safe}`;
-      const { error } = await sb.storage.from("media").upload(path, f, { cacheControl: "3600", upsert: false, contentType: f.type });
-      if (error) { toast.error(error.message); continue; }
-      added.push({ url: sb.storage.from("media").getPublicUrl(path).data.publicUrl, alt: "", caption: "" });
-    }
+    setBusy("Uploading…");
+    const ups = await uploadFiles(take, { folder: `${folder}/gallery`, accept: ["image/png", "image/jpeg", "image/webp", "image/gif"], maxMB: 5 });
     setBusy("");
-    if (added.length) {
-      onChange([...value, ...added]);
-      toast.success(`Added ${added.length} image${added.length === 1 ? "" : "s"}. Click Save to apply.`);
+    if (ups.length) {
+      onChange([...value, ...ups.map((u) => ({ url: u.url, alt: "", caption: "" }))]);
+      toast.success(`Added ${ups.length} image${ups.length === 1 ? "" : "s"}. Click Save to apply.`);
     }
   }
 

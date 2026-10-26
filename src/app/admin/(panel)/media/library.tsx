@@ -1,14 +1,15 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Copy, ExternalLink, FileText, LayoutGrid, List, Search, Trash2 } from "lucide-react";
+import { Copy, ExternalLink, FileText, LayoutGrid, List, Search, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { deleteMediaMany } from "./actions";
+import { uploadFiles } from "@/lib/upload-store";
 
 type F = { path: string; name: string; folder: string; url: string; size: number; at: string; used: boolean };
 type View = "grid" | "list";
@@ -37,6 +38,16 @@ export function Library({ initial }: { initial: F[] }) {
   const [preview, setPreview] = useState<F | null>(null);
   const [confirm, setConfirm] = useState<F[] | null>(null);
   const [busy, setBusy] = useState(false);
+  const pickRef = useRef<HTMLInputElement>(null);
+  const [drag, setDrag] = useState(false);
+
+  async function addFiles(list: File[]) {
+    if (!list.length) return;
+    await uploadFiles(list, {
+      folder: "uploads", maxMB: 50, accept: ["image/*", "video/*", "audio/*", "application/pdf"],
+      onEach: (u) => setFiles((l) => [{ path: u.path, name: u.path.split("/").pop() ?? u.name, folder: "uploads", url: u.url, size: u.size, at: new Date().toISOString(), used: false }, ...l]),
+    });
+  }
 
   useEffect(() => {
     const v = localStorage.getItem("media-view");
@@ -81,7 +92,18 @@ export function Library({ initial }: { initial: F[] }) {
   const usedInSel = selected.filter((f) => f.used).length;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className={`flex flex-col gap-4 rounded-xl ${drag ? "ring-2 ring-indigo-400 ring-offset-4" : ""}`}
+      onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+      onDragLeave={(e) => { if (e.currentTarget === e.target) setDrag(false); }}
+      onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(Array.from(e.dataTransfer.files)); }}
+    >
+      <input ref={pickRef} type="file" multiple className="hidden" accept="image/*,video/*,audio/*,application/pdf"
+        onChange={(e) => { const f = Array.from(e.target.files ?? []); e.target.value = ""; addFiles(f); }} />
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-dashed bg-white p-3">
+        <Button size="sm" onClick={() => pickRef.current?.click()}><Upload className="mr-1.5 h-4 w-4" />Upload files</Button>
+        <span className="text-sm text-neutral-500">or drop images, videos, audio and PDFs anywhere on this page (up to 50 MB each).</span>
+      </div>
       <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
         <div className="relative lg:max-w-xs lg:flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />

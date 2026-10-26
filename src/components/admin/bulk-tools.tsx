@@ -5,8 +5,10 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { guardUpload } from "@/lib/upload-guard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { bulkCreateTools } from "@/app/admin/(panel)/[entity]/bulk-actions";
+import { uploadFiles } from "@/lib/upload-store";
 
 type Draft = { id: string; file: File; name: string; category: string; preview: string };
 
@@ -71,22 +73,8 @@ export function BulkTools({ existing }: { existing: string[] }) {
     const todo = drafts.filter((d) => d.name.trim() && !have.has(d.name.trim().toLowerCase()));
     if (!todo.length) return toast.error("Nothing new to import");
     setBusy(true); setProgress(0);
-    const sb = createClient();
-    const out: ({ name: string; category: string; icon_url: string } | null)[] = new Array(todo.length).fill(null);
-    let next = 0, done = 0;
-    const worker = async () => {
-      while (next < todo.length) {
-        const i = next++;
-        const d = todo[i];
-        const safe = d.file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const path = `tools/${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${safe}`;
-        const { error } = await sb.storage.from("media").upload(path, d.file, { cacheControl: "3600", upsert: false, contentType: d.file.type });
-        if (!error) out[i] = { name: d.name, category: d.category, icon_url: sb.storage.from("media").getPublicUrl(path).data.publicUrl };
-        setProgress(++done);
-      }
-    };
-    await Promise.all([worker(), worker(), worker(), worker()]);
-    const rows = out.filter(Boolean) as { name: string; category: string; icon_url: string }[];
+    const ups = await uploadFiles(todo.map((d) => d.file), { folder: "tools", accept: ["image/svg+xml", "image/png", "image/webp", "image/jpeg"], maxMB: 1 });
+    const rows = ups.map((u) => ({ name: todo[u.index].name, category: todo[u.index].category, icon_url: u.url }));
     const failedUploads = todo.length - rows.length;
     const r = await bulkCreateTools(rows);
     setBusy(false);
@@ -101,7 +89,7 @@ export function BulkTools({ existing }: { existing: string[] }) {
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>Bulk import</Button>
       <Dialog open={open} onOpenChange={(o) => { if (!busy) { setOpen(o); if (!o) reset(); } }}>
-        <DialogContent className="max-h-[92dvh] overflow-y-auto sm:max-w-3xl">
+        <DialogContent {...guardUpload} className="max-h-[92dvh] overflow-y-auto sm:max-w-3xl">
           <DialogHeader><DialogTitle>Bulk import tools</DialogTitle></DialogHeader>
 
           <input ref={inputRef} type="file" multiple accept=".svg,.png,.webp,.jpg,.jpeg,image/svg+xml,image/png,image/webp,image/jpeg"

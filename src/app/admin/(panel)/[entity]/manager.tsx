@@ -24,6 +24,7 @@ import { FileUpload } from "@/components/admin/file-upload";
 import { BulkTools } from "@/components/admin/bulk-tools";
 import { BulkSkills } from "@/components/admin/bulk-skills";
 import { GalleryEditor } from "@/components/admin/gallery-editor";
+import { guardUpload } from "@/lib/upload-guard";
 import { AiTextAssist } from "@/components/admin/ai-assist";
 import { aiBullets } from "@/app/admin/ai-actions";
 import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
@@ -203,7 +204,7 @@ function ItemSheet({ entity, cfg, item, onClose, onSaved }: {
   const [busy, setBusy] = useState(false);
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+      <SheetContent {...guardUpload} className="w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader><SheetTitle>{item ? `Edit ${cfg.singular}` : `New ${cfg.singular}`}</SheetTitle></SheetHeader>
         <form
           className="flex flex-col gap-4 p-4"

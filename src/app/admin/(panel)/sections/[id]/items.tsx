@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { FileUpload } from "@/components/admin/file-upload";
+import { guardUpload } from "@/lib/upload-guard";
 import { saveSectionItem, deleteSectionItem, toggleSectionItem, reorderSectionItems } from "./actions";
 
 type Item = { id: string; data: Record<string, any>; published: boolean };
@@ -27,7 +28,7 @@ function Editor({ sid, item, onClose, onSaved }: { sid: string; item: Item | nul
   const L = ({ t, children }: { t: string; children: React.ReactNode }) => <label className="flex flex-col gap-1 text-sm font-medium">{t}{children}</label>;
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+      <SheetContent {...guardUpload} className="w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader><SheetTitle>{item ? "Edit item" : "New item"}</SheetTitle></SheetHeader>
         <form className="flex flex-col gap-4 p-4" onSubmit={async (e) => {
           e.preventDefault(); setBusy(true);

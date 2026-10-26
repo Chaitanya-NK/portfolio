@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { aiAltText } from "@/app/admin/ai-actions";
+import { uploadFiles } from "@/lib/upload-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -44,14 +45,8 @@ const LANGS: [string, string][] = [
 export type EditorOut = { json: unknown; html: string; words: number };
 
 async function uploadImage(file: File) {
-  if (!file.type.startsWith("image/")) { toast.error("Only images can be inserted"); return null; }
-  if (file.size > 8 * 1024 * 1024) { toast.error("Image is larger than 8 MB"); return null; }
-  const supabase = createClient();
-  const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `blog/${Date.now()}-${safe}`;
-  const { error } = await supabase.storage.from("media").upload(path, file, { cacheControl: "3600", upsert: false });
-  if (error) { toast.error(error.message); return null; }
-  return supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+  const r = await uploadFiles(file, { folder: "blog", accept: ["image/*"], maxMB: 8 });
+  return r[0]?.url ?? null;
 }
 
 function Btn({ label, active, disabled, onClick, children }: {
