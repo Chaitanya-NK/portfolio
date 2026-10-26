@@ -226,6 +226,9 @@ create table if not exists public.rate_limits (
 -- 4. Columns added over time (safe on both new and existing databases)
 -- ---------------------------------------------------------------------
 alter table public.experiences add column if not exists roles jsonb not null default '[]'::jsonb;
+alter table public.profile
+  add column if not exists name_phonetic text,
+  add column if not exists name_audio_url text;
 alter table public.projects
   add column if not exists problem text, add column if not exists approach text,
   add column if not exists result text, add column if not exists gallery jsonb not null default '[]'::jsonb;

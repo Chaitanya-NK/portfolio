@@ -31,6 +31,7 @@ export function ResumeView({ data, label }: { data: ResumeData; label?: string }
       <article className="mx-auto w-[min(100%,210mm)] bg-white p-[min(14mm,6vw)] text-[0.92rem] leading-snug shadow-lg print:w-full print:p-0 print:shadow-none">
         <header>
           <h1 className="text-3xl font-bold tracking-tight">{p.full_name}</h1>
+          {p.name_phonetic && <p className="mt-0.5 text-sm text-neutral-500">Pronounced: {p.name_phonetic}</p>}
           {p.headline && <p className="mt-1 text-base text-neutral-700">{p.headline}</p>}
           <p className="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-neutral-600">
             {contact.map((c) => <span key={c}>{c}</span>)}

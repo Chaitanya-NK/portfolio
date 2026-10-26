@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUpload } from "@/components/admin/file-upload";
+import { PronunciationEditor } from "@/components/admin/pronunciation-editor";
 import { AiTextAssist, domField } from "@/components/admin/ai-assist";
 import { aiBio, aiProfileMeta } from "@/app/admin/ai-actions";
 import { StatsEditor, SocialsEditor } from "@/components/admin/list-editors";
@@ -33,6 +34,7 @@ export function ProfileForm({ p }: { p: P }) {
           <Field label="Location"><Input name="location" defaultValue={p.location ?? ""} /></Field>
           <FileUpload name="resume_url" label="Resume (PDF, max 10 MB)" folder="resume" accept="application/pdf" maxMB={10} defaultValue={p.resume_url} />
           <FileUpload name="avatar_url" label="Profile photo (max 5 MB)" folder="profile" accept="image/*" defaultValue={p.avatar_url} />
+          <PronunciationEditor defaultPhonetic={p.name_phonetic} defaultUrl={p.name_audio_url} />
         </CardContent>
       </Card>
       <Card>

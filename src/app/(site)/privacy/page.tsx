@@ -33,6 +33,9 @@ export default async function PrivacyPage() {
       <Block title="Who is here right now">
         <p>While a page is open and visible, it sends a short signal about every 45 seconds, using the same anonymous daily code, so I can see how many people are on the site at this moment. These signals are regularly cleared and are not kept as history.</p>
       </Block>
+      <Block title="Name pronunciation (when shown)">
+        <p>The recording of how to say my name only loads when you press “Hear my name”.</p>
+      </Block>
       <Block title="Intro video (when shown)">
         <p>Nothing is loaded from YouTube, Vimeo or Loom until you press “Watch intro”. After that, the video player loads from that service and its own privacy rules apply.</p>
       </Block>

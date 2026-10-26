@@ -23,6 +23,9 @@ function fixUrl(platform: string, raw: string) {
 export async function updateProfile(_prev: FormState, fd: FormData): Promise<FormState> {
   const supabase = await requireAdmin();
   const s = (k: string) => String(fd.get(k) ?? "").trim() || null;
+  const audio = s("name_audio_url");
+  if (audio && !audio.startsWith(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/`))
+    return { ok: false, message: "The name recording must come from your media library." };
 
   const stats = json<{ label: string; value: string }>(fd.get("stats"))
     .map((x) => ({ label: String(x.label ?? "").trim(), value: String(x.value ?? "").trim() }))
@@ -39,7 +42,7 @@ export async function updateProfile(_prev: FormState, fd: FormData): Promise<For
   const { error } = await supabase
     .from("profile")
     .update({
-      full_name: s("full_name"), headline: s("headline"), bio: s("bio"),
+      full_name: s("full_name"), name_phonetic: (s("name_phonetic") ?? "").slice(0, 120) || null, name_audio_url: audio, headline: s("headline"), bio: s("bio"),
       availability: s("availability"), email: s("email"), phone: s("phone"),
       location: s("location"), avatar_url: s("avatar_url"), resume_url: s("resume_url"),
       stats, socials,

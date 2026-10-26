@@ -18,6 +18,7 @@ export function buildContext(d: SiteData): string {
     p.location && `Location: ${t(p.location)}`,
     p.availability && `Availability: ${t(p.availability)}`,
     p.bio && `About: ${t(p.bio, 900)}`,
+    p.name_phonetic && `How the name is pronounced: ${t(p.name_phonetic, 120)}${p.name_audio_url ? " (there is an audio recording on the site, under the Hear my name button)" : ""}`,
     p.email && `Email: ${t(p.email, 100)}`,
     ...((p.stats ?? []) as Record<string, string>[]).map((s) => `Stat: ${t(s.value, 30)} ${t(s.label, 60)}`),
   ]);

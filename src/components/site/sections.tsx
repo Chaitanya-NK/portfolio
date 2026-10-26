@@ -5,6 +5,7 @@ import { Reveal } from "./reveal";
 import { SocialLinks } from "./social-icon";
 import { ContactActions } from "./contact-actions";
 import { IntroVideo } from "./intro-video";
+import { PronounceButton } from "./pronounce-button";
 
 const D = "font-[family-name:var(--font-display)]";
 const M = "font-[family-name:var(--font-mono)]";
@@ -43,6 +44,7 @@ export function Hero({ p, hasProjects }: { p: Row; hasProjects: boolean }) {
           {p.headline || p.full_name || "Add your headline in the admin"}
         </h1>
         {p.bio && <p className={`max-w-xl text-base leading-relaxed sm:text-lg ${muted}`}>{p.bio}</p>}
+        {(p.name_phonetic || p.name_audio_url) && <PronounceButton name={p.full_name} phonetic={p.name_phonetic} audioUrl={p.name_audio_url} />}
         <div className="flex flex-wrap gap-3">
           {hasProjects && <a href="#projects" className="rounded-full bg-[color:var(--fg)] px-6 py-3.5 font-semibold text-[color:var(--bg)]">View projects →</a>}
           {(p.resume_url || p.theme?.resume_mode === "generated") && <a href={p.theme?.resume_mode === "generated" ? "/resume" : p.resume_url} {...(p.theme?.resume_mode === "generated" ? {} : { target: "_blank", rel: "noreferrer" })} data-track="resume" data-label="hero" className="rounded-full border border-[color:var(--line)] px-6 py-3.5">Download resume</a>}
