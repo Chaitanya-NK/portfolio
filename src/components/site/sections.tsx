@@ -7,6 +7,7 @@ import { ContactActions } from "./contact-actions";
 import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
 import { Journey, type JourneyEvent } from "./journey";
+import { SkillsTabs } from "./skills-tabs";
 
 const M = "font-[family-name:var(--font-mono)]";
 const muted = "text-[color:var(--muted)]";
@@ -158,20 +159,9 @@ export function Skills({ items }: { items: Row[] }) {
   const groups = new Map<string, Row[]>();
   items.forEach((s) => groups.set(s.category, [...(groups.get(s.category) ?? []), s]));
   return (
-    <div className="flex flex-col gap-6">
-      {[...groups].map(([cat, list]) => (
-        <div key={cat}>
-          <h3 className={`${cap} mb-2.5`}>{cat}</h3>
-          <ul className="flex flex-wrap gap-1.5">
-            {list.map((s) => (
-              <li key={s.id} className="rounded-md bg-[color:var(--surface2)] px-2.5 py-1 text-sm text-[color:var(--fg2)]">
-                {s.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
+    <SkillsTabs
+      groups={[...groups].map(([cat, list]) => ({ cat, list: list.map((s) => ({ id: s.id, name: s.name, level: s.level })) }))}
+    />
   );
 }
 
