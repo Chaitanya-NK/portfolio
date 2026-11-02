@@ -6,6 +6,7 @@ import { SocialLinks } from "./social-icon";
 import { ContactActions } from "./contact-actions";
 import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
+import { Journey, type JourneyEvent } from "./journey";
 
 const M = "font-[family-name:var(--font-mono)]";
 const muted = "text-[color:var(--muted)]";
@@ -278,6 +279,42 @@ export function Achievements({ items }: { items: Row[] }) {
   );
 }
 
+/** Merge work, education and achievements into one newest-first list for the combined timeline. */
+export function buildJourney(d: SiteData): JourneyEvent[] {
+  const ev: (JourneyEvent & { key: string })[] = [];
+  for (const e of d.experiences) {
+    const roles: Row[] = e.roles ?? [];
+    const first: Row = roles[0] ?? {};
+    const starts = roles.map((r) => r.start_date).filter(Boolean).sort() as string[];
+    const current = roles.some((r) => r.is_current);
+    const multi = roles.length > 1;
+    const latest = [...starts].pop() ?? first.end_date ?? "";
+    const when = starts.length ? `${fmt(starts[0])} – ${current ? "Present" : fmt(first.end_date)}` : "";
+    ev.push({
+      id: `w-${e.id}`, kind: "work", when, key: current ? "9999" : String(first.end_date ?? latest),
+      title: multi ? first.title ?? e.company : first.title ?? e.role ?? e.company,
+      org: e.company, logo: e.logo_url,
+      note: multi ? [roles.length + " roles", e.tenure].filter(Boolean).join(" · ") : undefined,
+      roles: multi ? roles.map((r) => ({ title: r.title, range: rangeOf(r), summary: r.summary, bullets: r.bullets })) : undefined,
+      summary: multi ? undefined : first.summary, bullets: multi ? undefined : first.bullets, tech: e.tech,
+    });
+  }
+  for (const e of d.education) {
+    ev.push({
+      id: `e-${e.id}`, kind: "edu", when: [e.start_year, e.end_year].filter(Boolean).join(" – "),
+      key: String(e.end_year ?? e.start_year ?? ""), title: e.degree,
+      org: e.institution, note: e.grade || undefined,
+    });
+  }
+  for (const a of d.achievements) {
+    ev.push({
+      id: `a-${a.id}`, kind: "award", when: a.year ? String(a.year) : "", key: String(a.year ?? ""),
+      title: a.title, org: a.issuer || undefined, summary: a.description || undefined,
+    });
+  }
+  return ev.sort((a, b) => b.key.localeCompare(a.key)).map(({ key, ...rest }) => rest);
+}
+
 export function Projects({ items }: { items: Row[] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -486,8 +523,11 @@ export function Footer({ p, year }: { p: Row; year: number }) {
   );
 }
 
-export function renderSection(s: Row, d: SiteData, n: string) {
+export function renderSection(s: Row, d: SiteData, n: string, journey = false) {
   const body = (() => {
+    if (journey && (s.type === "experience" || s.type === "education" || s.type === "achievements")) {
+      return <Journey events={buildJourney(d)} />;
+    }
     switch (s.type) {
       case "tools": return d.tools.length ? <Tools items={d.tools} /> : null;
       case "skills": return d.skills.length ? <Skills items={d.skills} /> : null;

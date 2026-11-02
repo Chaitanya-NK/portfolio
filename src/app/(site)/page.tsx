@@ -22,10 +22,15 @@ export default async function Home() {
     education: data.education.length > 0, achievements: data.achievements.length > 0, projects: data.projects.length > 0,
     services: data.services.length > 0, testimonials: data.testimonials.length > 0, notes: data.notes.length > 0,
   };
-  const shown = sections.filter((s) =>
+  const visible = sections.filter((s) =>
     s.type === "hero" || s.type === "contact" || s.type === "blog" ||
     (s.type === "custom" ? Boolean(data.itemsBySection[s.id]?.length) : filled[s.type] !== false)
   );
+  // Work, education and achievements share one combined timeline when at least two of them have content.
+  const JOURNEY = ["experience", "education", "achievements"];
+  const parts = visible.filter((s) => JOURNEY.includes(s.type));
+  const host = parts.length >= 2 ? (parts.find((s) => s.type === "experience") ?? parts[0]) : null;
+  const shown = host ? visible.filter((s) => !JOURNEY.includes(s.type) || s.id === host.id) : visible;
 
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org", "@type": "Person",
@@ -45,7 +50,7 @@ export default async function Home() {
         {shown.map((s, i) => {
           const n = String(i + 1).padStart(2, "0");
           if (s.type === "hero") return <Hero key={s.id} p={p} hasProjects={shown.some((x) => x.type === "projects")} hasContact={hasContact} />;
-          return renderSection(s, data, n);
+          return renderSection(s, data, n, host?.id === s.id);
         })}
       </main>
       <Footer p={p} year={data.year} />
