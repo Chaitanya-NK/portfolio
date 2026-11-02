@@ -46,11 +46,11 @@ function Dots({ n }: { n: number }) {
 export function Shell({ s, n, children }: { s: Row; n: string; children: React.ReactNode }) {
   return (
     <section id={s.key} className={WRAP}>
-      <div className={`grid gap-5 border-t ${ln} py-10 sm:py-12 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-10`}>
-        <header className="lg:sticky lg:top-24 lg:self-start">
-          <p className={cap}>{n}</p>
-          <h2 className="mt-1.5 text-base font-semibold tracking-tight">{s.title}</h2>
-          {s.subtitle && <p className={`mt-1 text-sm leading-snug ${muted}`}>{s.subtitle}</p>}
+      <div className={`border-t ${ln} py-12 sm:py-16`}>
+        <header className="mb-8 max-w-2xl sm:mb-10">
+          <p className={`${cap} text-[color:var(--accent-ink)]`}>{n}</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-[1.75rem]">{s.title}</h2>
+          {s.subtitle && <p className={`mt-2 text-[0.9375rem] leading-relaxed ${muted}`}>{s.subtitle}</p>}
         </header>
         <Reveal>{children}</Reveal>
       </div>
