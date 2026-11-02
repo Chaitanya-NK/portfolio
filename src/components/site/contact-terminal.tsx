@@ -137,9 +137,9 @@ export function ContactTerminal({ name, email, phone, location, socials, canSave
   const upto = all ? blocks.length : mode === "idle" ? -1 : shown;
 
   return (
-    <div ref={box} className="overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--fg2)] shadow-sm">
+    <div ref={box} className="flex flex-col overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--fg2)] shadow-sm">
       <WindowBar title={`${user}@portfolio: ~/contact`} />
-      <div className="px-4 py-5 font-[family-name:var(--font-mono)] text-[0.8125rem] leading-relaxed sm:px-5">
+      <div className="flex-1 px-4 py-5 font-[family-name:var(--font-mono)] text-[0.8125rem] leading-relaxed sm:px-5">
         {blocks.map((b, i) => {
           const complete = i < upto;
           const active = !all && mode === "run" && i === shown;

@@ -33,7 +33,7 @@ export function ContactForm({ to }: { to?: string | null }) {
   const blocked = pending || (!!SITE_KEY && !token);
 
   return (
-    <form action={action} className="flex flex-col">
+    <form action={action} className="flex flex-1 flex-col">
       <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute left-[-9999px] h-0 w-0 opacity-0" />
 
       {to && (
@@ -71,8 +71,8 @@ export function ContactForm({ to }: { to?: string | null }) {
 
       <textarea
         name="message" value={msg} onChange={(e) => setMsg(e.target.value)}
-        placeholder="Write your message…" aria-label="Message" required minLength={10} maxLength={4000} rows={7}
-        className="min-h-44 w-full resize-y bg-transparent px-5 py-4 text-sm leading-relaxed text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)]"
+        placeholder="Write your message…" aria-label="Message" required minLength={10} maxLength={4000} rows={4}
+        className="min-h-32 w-full flex-1 resize-none bg-transparent px-5 py-4 text-sm leading-relaxed text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)]"
       />
 
       {SITE_KEY && (

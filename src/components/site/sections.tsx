@@ -480,13 +480,13 @@ export function Custom({ items }: { items: Row[] }) {
 export function Contact({ p }: { p: Row }) {
   const socials: Row[] = p.socials ?? [];
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-8">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-stretch lg:gap-8">
       <ContactTerminal
         name={p.full_name} email={p.email} phone={p.phone} location={p.location}
         socials={socials as { platform?: string; label?: string; url: string }[]}
         canSave={!!(p.email || p.phone)}
       />
-      <div className={`${panel} overflow-hidden`}>
+      <div className={`${panel} flex flex-col overflow-hidden`}>
         <div className={`flex items-center gap-2.5 border-b ${ln} bg-[color:var(--surface2)] px-5 py-3`}>
           <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden />
           <p className={cap}>New message</p>
