@@ -106,7 +106,7 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
           )}
         </div>
 
-        <aside className="fade-up d2 order-first flex w-full flex-col items-start gap-6 lg:order-none lg:max-w-[15rem] lg:items-stretch lg:justify-self-end">
+        <aside className="fade-up d2 order-first flex w-full flex-col items-center gap-6 lg:order-none lg:max-w-[15rem] lg:items-stretch lg:justify-self-end">
           <div className="relative w-40 shrink-0 sm:w-44 lg:w-full">
             {/* offset accent frame behind the portrait */}
             <span aria-hidden className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-xl border border-[color:var(--accent-ink)]/40 bg-[var(--accent)]/10" />
@@ -120,7 +120,7 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
               </div>
             )}
           </div>
-          <div className="flex min-w-0 flex-col gap-3 lg:gap-4">
+          <div className="flex min-w-0 flex-col items-center gap-3 text-center lg:items-start lg:gap-4 lg:text-left">
             {p.location && <p className={`text-sm ${muted}`}>{p.location}</p>}
             {socials.length > 0 && <SocialLinks socials={socials} />}
           </div>
