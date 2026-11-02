@@ -2,7 +2,7 @@
 import { useActionState } from "react";
 import { submitTestimonial, type SubmitState } from "../actions";
 
-const input = "w-full rounded-xl border border-[color:var(--line)] bg-[color:var(--bg)] px-4 py-3 text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)] focus:border-[color:var(--accent-ink)]";
+const input = "w-full rounded-md border border-[color:var(--line)] bg-[color:var(--bg)] px-4 py-3 text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)] focus:border-[color:var(--accent-ink)]";
 
 export function TestimonialForm({ token }: { token: string }) {
   const [state, action, pending] = useActionState<SubmitState, FormData>(submitTestimonial.bind(null, token), null);
@@ -30,7 +30,7 @@ export function TestimonialForm({ token }: { token: string }) {
         <input type="checkbox" name="consent" required className="mt-1 h-4 w-4" />
         I’m happy for this to be shown publicly on the portfolio, with my name and the details above.
       </label>
-      <button disabled={pending} className="min-h-12 rounded-xl bg-[var(--accent)] px-6 py-3 font-semibold text-[color:var(--on-accent)] disabled:opacity-60">
+      <button disabled={pending} className="min-h-12 rounded-md bg-[var(--accent)] px-6 py-3 font-semibold text-[color:var(--on-accent)] disabled:opacity-60">
         {pending ? "Sending…" : "Submit testimonial"}
       </button>
       {state && !state.ok && <p role="alert" className="text-sm text-red-400">{state.message}</p>}

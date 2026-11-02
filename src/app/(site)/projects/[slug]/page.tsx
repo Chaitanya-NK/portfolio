@@ -57,7 +57,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
   const next = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;
   const hasContact = site.sections.some((s) => s.type === "contact");
   const contactHref = hasContact ? "/#contact" : site.profile.email ? `mailto:${site.profile.email}` : "/";
-  const pill = "inline-flex min-h-11 items-center rounded-full px-5 text-sm font-semibold";
+  const pill = "inline-flex min-h-11 items-center rounded-md px-5 text-sm font-semibold";
   let n = 0;
   const num = () => String(++n).padStart(2, "0");
 
@@ -67,7 +67,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
       <p className="mt-4 font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-[color:var(--accent-ink)]">
         {[p.role, p.year].filter(Boolean).join(" · ")}
       </p>
-      <h1 className={`${D} mt-2 text-4xl font-bold leading-tight tracking-tight sm:text-6xl`}>{p.title}</h1>
+      <h1 className={`${D} mt-2 text-2xl font-bold leading-tight tracking-tight sm:text-3xl`}>{p.title}</h1>
       {p.summary && <p className="mt-4 text-lg text-[color:var(--muted)]">{p.summary}</p>}
 
       <div className="mt-6 flex flex-wrap gap-3">
@@ -77,13 +77,13 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
 
       {p.cover_url && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={p.cover_url} alt={p.title} className="mt-8 w-full rounded-2xl border border-[color:var(--line)] object-cover" />
+        <img src={p.cover_url} alt={p.title} className="mt-8 w-full rounded-lg border border-[color:var(--line)] object-cover" />
       )}
 
       {p.metrics?.length > 0 && (
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {p.metrics.map((m: Record<string, string>, i: number) => (
-            <div key={i} className="rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] p-5">
+            <div key={i} className="rounded-lg border border-[color:var(--line)] bg-[color:var(--surface)] p-5">
               <strong className={`${D} text-3xl text-[color:var(--accent-ink)]`}>{m.value}</strong>
               <div className="mt-1 text-sm text-[color:var(--muted)]">{m.label}</div>
             </div>
@@ -109,20 +109,20 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
 
       {p.tags?.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2 border-t border-[color:var(--line)] pt-6">
-          {p.tags.map((t: string) => <span key={t} className="rounded-full border border-[color:var(--line)] px-3 py-1.5 text-sm text-[color:var(--muted)]">{t}</span>)}
+          {p.tags.map((t: string) => <span key={t} className="rounded-md border border-[color:var(--line)] px-3 py-1.5 text-sm text-[color:var(--muted)]">{t}</span>)}
         </div>
       )}
 
       {(prev || next) && (
         <nav aria-label="More projects" className="mt-10 grid gap-3 sm:grid-cols-2">
           {prev ? (
-            <Link href={`/projects/${prev.slug}`} className="rounded-2xl border border-[color:var(--line)] p-4 hover:border-[color:var(--accent-ink)]">
+            <Link href={`/projects/${prev.slug}`} className="rounded-lg border border-[color:var(--line)] p-4 hover:border-[color:var(--accent-ink)]">
               <div className="text-xs text-[color:var(--muted)]">← Previous</div>
               <div className={`${D} mt-1 font-bold`}>{prev.title}</div>
             </Link>
           ) : <span />}
           {next && (
-            <Link href={`/projects/${next.slug}`} className="rounded-2xl border border-[color:var(--line)] p-4 text-right hover:border-[color:var(--accent-ink)]">
+            <Link href={`/projects/${next.slug}`} className="rounded-lg border border-[color:var(--line)] p-4 text-right hover:border-[color:var(--accent-ink)]">
               <div className="text-xs text-[color:var(--muted)]">Next →</div>
               <div className={`${D} mt-1 font-bold`}>{next.title}</div>
             </Link>
@@ -130,7 +130,7 @@ async function Article({ params }: { params: Promise<{ slug: string }> }) {
         </nav>
       )}
 
-      <div className="mt-10 flex flex-col items-start gap-3 rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-10 flex flex-col items-start gap-3 rounded-lg border border-[color:var(--line)] bg-[color:var(--surface)] p-6 sm:flex-row sm:items-center sm:justify-between">
         <p className={`${D} text-xl font-bold`}>Have a similar problem?</p>
         <a href={contactHref} className={`${pill} bg-[var(--accent)] text-[color:var(--on-accent)]`}>Get in touch</a>
       </div>

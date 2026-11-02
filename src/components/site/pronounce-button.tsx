@@ -44,7 +44,7 @@ export function PronounceButton({ name, phonetic, audioUrl }: { name?: string | 
           type="button" onClick={toggle} aria-pressed={playing}
           aria-label={playing ? "Stop the recording" : `Hear how to pronounce ${name ?? "my name"}`}
           data-track="social" data-label="Pronunciation"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--line)] px-4 font-medium transition-colors hover:border-[color:var(--accent-ink)]"
+          className="inline-flex min-h-11 items-center gap-2 rounded-md border border-[color:var(--line)] px-4 font-medium transition-colors hover:border-[color:var(--accent-ink)]"
         >
           {playing ? <Square className="h-3.5 w-3.5 fill-current" /> : <Volume2 className="h-4 w-4 text-[color:var(--accent-ink)]" />}
           {playing ? "Playing…" : "Hear my name"}

@@ -7,7 +7,7 @@ import { Turnstile } from "./turnstile";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 const MAX = 2.5 * 1024 * 1024;
-const input = "w-full rounded-xl border border-[color:var(--line)] bg-[color:var(--bg)] px-4 py-3 text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)] focus:border-[color:var(--accent-ink)]";
+const input = "w-full rounded-md border border-[color:var(--line)] bg-[color:var(--bg)] px-3 py-2.5 text-sm text-[color:var(--fg)] outline-none placeholder:text-[color:var(--faint)] focus:border-[color:var(--accent-ink)]";
 
 export function ContactForm() {
   const [state, action, pending] = useActionState<ContactState, FormData>(sendMessage, null);
@@ -53,13 +53,13 @@ export function ContactForm() {
           }}
         />
         {file ? (
-          <div className="flex items-center justify-between gap-2 rounded-xl border border-[color:var(--line)] px-4 py-2.5 text-sm">
+          <div className="flex items-center justify-between gap-2 rounded-md border border-[color:var(--line)] px-4 py-2.5 text-sm">
             <span className="flex min-w-0 items-center gap-2"><Paperclip className="h-4 w-4 shrink-0" /><span className="truncate">{file.name}</span></span>
             <button type="button" onClick={clearFile} aria-label="Remove attachment" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full hover:bg-[color:var(--surface2)]"><X className="h-4 w-4" /></button>
           </div>
         ) : (
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="flex min-h-11 items-center gap-2 self-start rounded-xl border border-dashed border-[color:var(--line2)] px-4 text-sm text-[color:var(--muted)] hover:border-[color:var(--accent-ink)] hover:text-[color:var(--fg)]">
+            className="flex min-h-11 items-center gap-2 self-start rounded-md border border-dashed border-[color:var(--line2)] px-4 text-sm text-[color:var(--muted)] hover:border-[color:var(--accent-ink)] hover:text-[color:var(--fg)]">
             <Paperclip className="h-4 w-4" />Attach a file (optional)
           </button>
         )}
@@ -74,7 +74,7 @@ export function ContactForm() {
         </>
       )}
 
-      <button disabled={pending || (!!SITE_KEY && !token)} className="min-h-12 rounded-xl bg-[var(--accent)] px-6 py-3 font-semibold text-[color:var(--on-accent)] disabled:opacity-60">
+      <button disabled={pending || (!!SITE_KEY && !token)} className="min-h-11 rounded-md bg-[var(--accent)] px-5 text-sm font-semibold text-[color:var(--on-accent)] disabled:opacity-60">
         {pending ? "Sending…" : SITE_KEY && !token ? "Verifying you’re human…" : "Send message"}
       </button>
       {state && <p role="status" className={`text-sm ${state.ok ? "text-[color:var(--accent-ink)]" : "text-red-400"}`}>{state.message}</p>}

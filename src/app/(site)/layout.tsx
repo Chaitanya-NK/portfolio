@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Tracker } from "@/components/site/tracker";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { AnnouncementBar } from "@/components/site/announcement-bar";
@@ -9,7 +9,7 @@ import { AskWidget } from "@/components/site/ask-widget";
 import { aiConfigured } from "@/lib/ai";
 import { getSiteData } from "@/lib/site/data";
 
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["500", "700"] });
+const display = Inter({ subsets: ["latin"], variable: "--font-display", weight: ["400", "500", "600", "700"] });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 // runs before first paint so there is no flash of the wrong theme

@@ -30,9 +30,9 @@ export function IntroVideo({ v }: { v: V }) {
       <button
         ref={opener} type="button" onClick={() => setOpen(true)} aria-haspopup="dialog"
         data-track="social" data-label="Intro video"
-        className="flex min-h-11 items-center gap-3 rounded-full border border-[color:var(--line)] py-1.5 pl-1.5 pr-5 text-sm font-medium transition-colors hover:border-[color:var(--accent-ink)]"
+        className="flex min-h-11 items-center gap-3 rounded-md border border-[color:var(--line)] py-1.5 pl-1.5 pr-4 text-sm font-medium transition-colors hover:border-[color:var(--accent-ink)]"
       >
-        <span className="relative flex h-9 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[color:var(--surface2)]">
+        <span className="relative flex h-9 w-14 shrink-0 items-center justify-center overflow-hidden rounded bg-[color:var(--surface2)]">
           {v.poster_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={v.poster_url} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />

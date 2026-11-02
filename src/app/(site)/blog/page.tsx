@@ -12,7 +12,7 @@ async function Content() {
     <div style={{ ["--accent" as string]: profile.theme?.accent || "#C6F432" }}>
       <main className="mx-auto w-[min(92%,70rem)] py-10 sm:py-16">
         <Link href="/" className="text-sm text-[color:var(--muted)] hover:text-[color:var(--fg)]">← {profile.full_name || "Back to portfolio"}</Link>
-        <h1 className="mb-8 mt-6 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight sm:text-6xl">Blog</h1>
+        <h1 className="mb-8 mt-6 font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight sm:text-3xl">Blog</h1>
         <BlogIndex posts={posts} />
       </main>
     </div>

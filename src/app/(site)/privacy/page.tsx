@@ -23,7 +23,7 @@ export default async function PrivacyPage() {
   return (
     <main className="mx-auto w-[min(92%,44rem)] py-12 sm:py-20">
       <Link href="/" className="text-sm text-[color:var(--muted)] hover:text-[color:var(--fg)]">← {p.full_name || "Back to portfolio"}</Link>
-      <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight sm:text-5xl">Privacy</h1>
+      <h1 className="mt-6 font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight sm:text-3xl">Privacy</h1>
       <p className="mt-3 text-[color:var(--muted)]">A plain-language summary of what this website does with your data. In short: very little, and no cookies.</p>
 
       <Block title="Visit statistics">
