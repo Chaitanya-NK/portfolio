@@ -86,7 +86,7 @@ export function ContactTerminal({ name, email, phone, location, socials, canSave
                   className={`inline-flex min-h-9 items-center gap-2 ${link}`}
                 >
                   <SocialIcon platform={label} url={x.url} className="h-3.5 w-3.5" />
-                  {label.toLowerCase().replace(/\s+/g, "-")}
+                  {label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
                 </a>
               </li>
             );

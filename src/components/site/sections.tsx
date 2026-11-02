@@ -491,7 +491,7 @@ export function Contact({ p }: { p: Row }) {
           <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden />
           <p className={cap}>New message</p>
         </div>
-        <div className="p-5"><ContactForm /></div>
+        <ContactForm to={p.full_name} />
       </div>
     </div>
   );
