@@ -33,18 +33,6 @@ function Bullets({ items }: { items?: string[] }) {
   );
 }
 
-const LEVELS = ["", "Beginner", "Basic", "Proficient", "Advanced", "Expert"];
-
-function Dots({ n }: { n: number }) {
-  return (
-    <span role="img" aria-label={`${LEVELS[n] ?? "Level"} (${n} of 5)`} className="flex shrink-0 gap-[3px]">
-      {Array.from({ length: 5 }, (_, i) => (
-        <span key={i} className={`h-1 w-4 rounded-full ${i < n ? "bg-[var(--accent)]" : "bg-[color:var(--line2)]"}`} />
-      ))}
-    </span>
-  );
-}
-
 export function Shell({ s, n, children }: { s: Row; n: string; children: React.ReactNode }) {
   return (
     <section id={s.key} className={WRAP}>
@@ -170,18 +158,14 @@ export function Skills({ items }: { items: Row[] }) {
   const groups = new Map<string, Row[]>();
   items.forEach((s) => groups.set(s.category, [...(groups.get(s.category) ?? []), s]));
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="flex flex-col gap-6">
       {[...groups].map(([cat, list]) => (
-        <div key={cat} className={`${panel} p-4`}>
-          <div className="mb-1 flex items-center justify-between">
-            <h3 className={cap}>{cat}</h3>
-            <span className={`${cap} tabular-nums`}>{String(list.length).padStart(2, "0")}</span>
-          </div>
-          <ul>
+        <div key={cat}>
+          <h3 className={`${cap} mb-2.5`}>{cat}</h3>
+          <ul className="flex flex-wrap gap-1.5">
             {list.map((s) => (
-              <li key={s.id} className={`flex items-center justify-between gap-3 border-b ${ln} py-2.5 text-sm last:border-b-0 last:pb-0`}>
-                <span className="min-w-0 break-words">{s.name}</span>
-                <Dots n={s.level} />
+              <li key={s.id} className="rounded-md bg-[color:var(--surface2)] px-2.5 py-1 text-sm text-[color:var(--fg2)]">
+                {s.name}
               </li>
             ))}
           </ul>
