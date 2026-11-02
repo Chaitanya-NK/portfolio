@@ -33,11 +33,13 @@ function Bullets({ items }: { items?: string[] }) {
   );
 }
 
+const LEVELS = ["", "Beginner", "Basic", "Proficient", "Advanced", "Expert"];
+
 function Dots({ n }: { n: number }) {
   return (
-    <span role="img" aria-label={`Level ${n} of 5`} className="flex gap-0.5">
+    <span role="img" aria-label={`${LEVELS[n] ?? "Level"} (${n} of 5)`} className="flex shrink-0 gap-[3px]">
       {Array.from({ length: 5 }, (_, i) => (
-        <span key={i} className={`h-1 w-1 rounded-full ${i < n ? "bg-[color:var(--accent-ink)]" : "bg-[color:var(--line2)]"}`} />
+        <span key={i} className={`h-1 w-4 rounded-full ${i < n ? "bg-[var(--accent)]" : "bg-[color:var(--line2)]"}`} />
       ))}
     </span>
   );
@@ -168,14 +170,18 @@ export function Skills({ items }: { items: Row[] }) {
   const groups = new Map<string, Row[]>();
   items.forEach((s) => groups.set(s.category, [...(groups.get(s.category) ?? []), s]));
   return (
-    <div className="flex flex-col">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {[...groups].map(([cat, list]) => (
-        <div key={cat} className={`grid gap-2.5 border-b ${ln} py-4 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-6`}>
-          <h3 className={`${cap} pt-1.5`}>{cat}</h3>
-          <ul className="flex flex-wrap gap-2">
+        <div key={cat} className={`${panel} p-4`}>
+          <div className="mb-1 flex items-center justify-between">
+            <h3 className={cap}>{cat}</h3>
+            <span className={`${cap} tabular-nums`}>{String(list.length).padStart(2, "0")}</span>
+          </div>
+          <ul>
             {list.map((s) => (
-              <li key={s.id} className={`inline-flex items-center gap-2 rounded-md border ${ln} px-2.5 py-1 text-sm`}>
-                {s.name}<Dots n={s.level} />
+              <li key={s.id} className={`flex items-center justify-between gap-3 border-b ${ln} py-2.5 text-sm last:border-b-0 last:pb-0`}>
+                <span className="min-w-0 break-words">{s.name}</span>
+                <Dots n={s.level} />
               </li>
             ))}
           </ul>
