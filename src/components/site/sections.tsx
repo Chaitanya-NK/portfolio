@@ -106,12 +106,12 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
           )}
         </div>
 
-        <aside className="fade-up d2 order-first flex w-full items-center gap-4 lg:order-none lg:max-w-[15rem] lg:flex-col lg:items-stretch lg:justify-self-end">
+        <aside className="fade-up d2 order-first flex w-full flex-col items-start gap-4 lg:order-none lg:max-w-[15rem] lg:items-stretch lg:justify-self-end">
           {p.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`aspect-[4/5] w-24 shrink-0 rounded-lg border ${ln} object-cover object-top sm:w-28 lg:w-full`} />
+            <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`aspect-[4/5] w-40 shrink-0 rounded-lg border ${ln} object-cover object-top sm:w-44 lg:w-full`} />
           ) : (
-            <div className={`flex aspect-[4/5] w-24 shrink-0 items-center justify-center rounded-lg border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold sm:w-28 lg:w-full ${muted}`}>
+            <div className={`flex aspect-[4/5] w-40 shrink-0 items-center justify-center rounded-lg border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold sm:w-44 lg:w-full ${muted}`}>
               {(p.full_name ?? "?").slice(0, 1)}
             </div>
           )}
@@ -125,12 +125,12 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
       {stats.length > 0 && (
         <div
           style={{ ["--cols" as string]: stats.length }}
-          className={`mt-10 grid ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2"} gap-px overflow-hidden rounded-lg border ${ln} bg-[color:var(--line)] sm:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]`}
+          className={`mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-lg border ${ln} bg-[color:var(--line)] sm:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]`}
         >
           {stats.map((x, i) => (
-            <div key={i} className={`min-w-0 bg-[color:var(--bg)] p-3 sm:p-4 ${stats.length !== 3 && i === stats.length - 1 && stats.length % 2 ? "col-span-2 sm:col-span-1" : ""}`}>
+            <div key={i} className="flex min-w-0 items-baseline justify-between gap-4 bg-[color:var(--bg)] px-4 py-3.5 sm:block sm:p-4">
               <p className="text-xl font-semibold tabular-nums tracking-tight">{x.value}</p>
-              <p className={`mt-0.5 text-xs ${muted}`}>{x.label}</p>
+              <p className={`text-sm sm:mt-0.5 sm:text-xs ${muted}`}>{x.label}</p>
             </div>
           ))}
         </div>
