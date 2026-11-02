@@ -304,21 +304,21 @@ export function buildJourney(d: SiteData): JourneyEvent[] {
 
 export function Projects({ items }: { items: Row[] }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((p) => {
         const case_ = Boolean(p.problem || p.approach || p.result || p.gallery?.length);
         return (
-          <article key={p.id} className={`group relative flex flex-col overflow-hidden ${panel} transition-colors hover:border-[color:var(--line2)] ${p.featured ? "sm:col-span-2" : ""}`}>
+          <article key={p.id} className={`group relative flex flex-col overflow-hidden ${panel} transition-colors hover:border-[color:var(--line2)] ${p.featured ? "lg:col-span-2" : ""}`}>
             {p.cover_url && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.cover_url} alt={p.title} loading="lazy" className={`w-full border-b ${ln} object-cover ${p.featured ? "aspect-[16/7]" : "aspect-[16/9]"}`} />
+              <img src={p.cover_url} alt={p.title} loading="lazy" className={`w-full border-b ${ln} object-cover ${p.featured ? "aspect-[3/1]" : "aspect-[2/1]"} max-h-44`} />
             )}
-            <div className="flex flex-1 flex-col gap-2.5 p-4">
+            <div className="flex flex-1 flex-col gap-2 p-3.5">
               {(p.role || p.year) && <p className={cap}>{[p.role, p.year].filter(Boolean).join(" · ")}</p>}
-              <h3 className="text-base font-semibold tracking-tight">
+              <h3 className="text-[0.9375rem] font-semibold tracking-tight">
                 <a href={`/projects/${p.slug}`} className="after:absolute after:inset-0">{p.title}</a>
               </h3>
-              {p.summary && <p className={`line-clamp-2 text-sm ${muted}`}>{p.summary}</p>}
+              {p.summary && <p className={`line-clamp-2 text-[0.8125rem] leading-snug ${muted}`}>{p.summary}</p>}
               {p.metrics?.length > 0 && (
                 <p className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
                   {p.metrics.slice(0, 3).map((m: Row, i: number) => (
