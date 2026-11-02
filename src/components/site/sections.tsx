@@ -349,8 +349,16 @@ export function Services({ items, d }: { items: Row[]; d: SiteData }) {
       {items.map((s) => {
         const href = s.cta_url || (hasContact ? "#contact" : d.profile.email ? `mailto:${d.profile.email}` : "#");
         return (
-          <div key={s.id} className={`${panel} flex flex-col gap-3 p-5 ${s.featured ? "border-[color:var(--accent-ink)]" : ""}`}>
-            {s.featured && <p className={`${cap} ${accent}`}>Most popular</p>}
+          <div key={s.id} className={`${panel} relative flex flex-col gap-3 overflow-hidden p-5 ${s.featured ? "border-[var(--accent)] bg-[var(--accent)]/[0.06] shadow-[0_0_0_1px_var(--accent),0_8px_30px_-12px_var(--accent)]" : ""}`}>
+            {s.featured && (
+              <>
+                <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-[var(--accent)]" />
+                <p className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--accent)] px-2.5 py-1 text-[0.6875rem] font-semibold uppercase tracking-wider text-[color:var(--on-accent)]">
+                  <svg aria-hidden viewBox="0 0 24 24" className="h-3 w-3 fill-current"><path d="M12 2l2.9 6.9L22 9.6l-5.4 4.8 1.6 7.1L12 17.8 5.8 21.5l1.6-7.1L2 9.6l7.1-.7z" /></svg>
+                  Most popular
+                </p>
+              </>
+            )}
             <h3 className={title}>{s.title}</h3>
             {s.description && <p className={`text-sm leading-relaxed ${muted}`}>{s.description}</p>}
             {s.price_label && (
