@@ -3,7 +3,7 @@ import type { Row, SiteData } from "@/lib/site/data";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./reveal";
 import { SocialLinks } from "./social-icon";
-import { ContactActions } from "./contact-actions";
+import { ContactTerminal } from "./contact-terminal";
 import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
 import { Journey, type JourneyEvent } from "./journey";
@@ -479,30 +479,20 @@ export function Custom({ items }: { items: Row[] }) {
 
 export function Contact({ p }: { p: Row }) {
   const socials: Row[] = p.socials ?? [];
-  const details = ([
-    ["Email", p.email, p.email ? `mailto:${p.email}` : null],
-    ["Phone", p.phone, p.phone ? `tel:${String(p.phone).replace(/[^\d+]/g, "")}` : null],
-    ["Location", p.location, null],
-  ] as [string, string | null, string | null][]).filter(([, v]) => v);
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
-      <div className="flex flex-col gap-5">
-        {details.length > 0 && (
-          <dl className="flex flex-col gap-3">
-            {details.map(([k, v, h]) => (
-              <div key={k} className="grid grid-cols-[5rem_minmax(0,1fr)] items-baseline gap-3 text-sm">
-                <dt className={cap}>{k}</dt>
-                <dd className="min-w-0 break-words">
-                  {h ? <a href={h} className="underline-offset-4 hover:text-[color:var(--accent-ink)] hover:underline">{v}</a> : v}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
-        {socials.length > 0 && <SocialLinks socials={socials} />}
-        <ContactActions email={p.email} canSave={!!(p.email || p.phone)} />
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-8">
+      <ContactTerminal
+        name={p.full_name} email={p.email} phone={p.phone} location={p.location}
+        socials={socials as { platform?: string; label?: string; url: string }[]}
+        canSave={!!(p.email || p.phone)}
+      />
+      <div className={`${panel} overflow-hidden`}>
+        <div className={`flex items-center gap-2.5 border-b ${ln} bg-[color:var(--surface2)] px-5 py-3`}>
+          <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden />
+          <p className={cap}>New message</p>
+        </div>
+        <div className="p-5"><ContactForm /></div>
       </div>
-      <div className={`${panel} p-5`}><ContactForm /></div>
     </div>
   );
 }
