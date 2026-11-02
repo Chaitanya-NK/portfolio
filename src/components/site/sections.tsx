@@ -106,15 +106,20 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
           )}
         </div>
 
-        <aside className="fade-up d2 order-first flex w-full flex-col items-start gap-4 lg:order-none lg:max-w-[15rem] lg:items-stretch lg:justify-self-end">
-          {p.avatar_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`aspect-[4/5] w-40 shrink-0 rounded-lg border ${ln} object-cover object-top sm:w-44 lg:w-full`} />
-          ) : (
-            <div className={`flex aspect-[4/5] w-40 shrink-0 items-center justify-center rounded-lg border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold sm:w-44 lg:w-full ${muted}`}>
-              {(p.full_name ?? "?").slice(0, 1)}
-            </div>
-          )}
+        <aside className="fade-up d2 order-first flex w-full flex-col items-start gap-6 lg:order-none lg:max-w-[15rem] lg:items-stretch lg:justify-self-end">
+          <div className="relative w-40 shrink-0 sm:w-44 lg:w-full">
+            {/* offset accent frame behind the portrait */}
+            <span aria-hidden className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-xl border border-[color:var(--accent-ink)]/40 bg-[var(--accent)]/10" />
+            <span aria-hidden className="absolute -left-1.5 -top-1.5 h-6 w-6 rounded-tl-xl border-l-2 border-t-2 border-[color:var(--accent-ink)]" />
+            {p.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`relative aspect-[4/5] w-full rounded-xl border ${ln} bg-[color:var(--surface)] object-cover object-top shadow-lg shadow-black/10`} />
+            ) : (
+              <div className={`relative flex aspect-[4/5] w-full items-center justify-center rounded-xl border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold ${muted}`}>
+                {(p.full_name ?? "?").slice(0, 1)}
+              </div>
+            )}
+          </div>
           <div className="flex min-w-0 flex-col gap-3 lg:gap-4">
             {p.location && <p className={`text-sm ${muted}`}>{p.location}</p>}
             {socials.length > 0 && <SocialLinks socials={socials} />}
