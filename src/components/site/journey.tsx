@@ -120,7 +120,7 @@ export function Journey({ events }: { events: JourneyEvent[] }) {
               const above = i % 2 === 0;
               const on = i === sel;
               return (
-                <div key={e.id} className="relative w-44 shrink-0">
+                <div key={e.id} className="relative min-w-44 flex-1">
                   <button type="button" onClick={() => setSel(i)} aria-pressed={on}
                     aria-label={`${e.title}${e.org ? `, ${e.org}` : ""}, ${e.when}`}
                     className={`absolute left-1/2 top-[8.5rem] z-10 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full ring-4 transition ${dot} ${on ? "scale-110 ring-[color:var(--line2)]" : "ring-[color:var(--bg)] hover:scale-105"}`}>

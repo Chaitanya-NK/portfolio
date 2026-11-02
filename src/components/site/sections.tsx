@@ -78,12 +78,12 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
               </span>
             )}
           </div>
-          <h1 className="max-w-2xl text-[clamp(1.75rem,3.4vw,2.5rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+          <h1 className="max-w-2xl text-balance break-words text-[clamp(1.5rem,5.2vw,2.5rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
             {p.headline || "Add your headline in the admin"}
           </h1>
           {p.bio && <p className={`max-w-xl leading-relaxed ${muted}`}>{p.bio}</p>}
 
-          <div className="flex flex-wrap items-center gap-2.5 pt-1">
+          <div className="flex flex-wrap items-center gap-2 pt-1 sm:gap-2.5">
             {primary && <a href={primary.href} className={`${btn} bg-[var(--accent)] text-[color:var(--on-accent)] hover:brightness-95`}>{primary.label}</a>}
             {(p.resume_url || generated) && (
               <a
@@ -95,7 +95,7 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
                 Download resume
               </a>
             )}
-            {hasContact && hasProjects && <a href="#contact" className={`${btn} ${muted} hover:text-[color:var(--fg)]`}>Contact</a>}
+            {hasContact && hasProjects && <a href="#contact" className={`${btn} ${muted} hover:text-[color:var(--fg)] px-2! -ml-2 sm:ml-0`}>Contact</a>}
           </div>
 
           {extras && (
@@ -106,27 +106,29 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
           )}
         </div>
 
-        <aside className="fade-up d2 flex w-full max-w-[15rem] flex-col gap-4 lg:justify-self-end">
+        <aside className="fade-up d2 order-first flex w-full items-center gap-4 lg:order-none lg:max-w-[15rem] lg:flex-col lg:items-stretch lg:justify-self-end">
           {p.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`aspect-[4/5] w-full rounded-lg border ${ln} object-cover object-top`} />
+            <img src={p.avatar_url} alt={p.full_name ?? "Profile photo"} className={`aspect-[4/5] w-24 shrink-0 rounded-lg border ${ln} object-cover object-top sm:w-28 lg:w-full`} />
           ) : (
-            <div className={`flex aspect-[4/5] w-full items-center justify-center rounded-lg border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold ${muted}`}>
+            <div className={`flex aspect-[4/5] w-24 shrink-0 items-center justify-center rounded-lg border ${ln} bg-[color:var(--surface2)] text-4xl font-semibold sm:w-28 lg:w-full ${muted}`}>
               {(p.full_name ?? "?").slice(0, 1)}
             </div>
           )}
-          {p.location && <p className={`text-sm ${muted}`}>{p.location}</p>}
-          {socials.length > 0 && <SocialLinks socials={socials} />}
+          <div className="flex min-w-0 flex-col gap-3 lg:gap-4">
+            {p.location && <p className={`text-sm ${muted}`}>{p.location}</p>}
+            {socials.length > 0 && <SocialLinks socials={socials} />}
+          </div>
         </aside>
       </div>
 
       {stats.length > 0 && (
         <div
           style={{ ["--cols" as string]: stats.length }}
-          className={`mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border ${ln} bg-[color:var(--line)] sm:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]`}
+          className={`mt-10 grid ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2"} gap-px overflow-hidden rounded-lg border ${ln} bg-[color:var(--line)] sm:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]`}
         >
           {stats.map((x, i) => (
-            <div key={i} className={`bg-[color:var(--bg)] p-4 ${i === stats.length - 1 && stats.length % 2 ? "col-span-2 sm:col-span-1" : ""}`}>
+            <div key={i} className={`min-w-0 bg-[color:var(--bg)] p-3 sm:p-4 ${stats.length !== 3 && i === stats.length - 1 && stats.length % 2 ? "col-span-2 sm:col-span-1" : ""}`}>
               <p className="text-xl font-semibold tabular-nums tracking-tight">{x.value}</p>
               <p className={`mt-0.5 text-xs ${muted}`}>{x.label}</p>
             </div>
@@ -150,7 +152,7 @@ export function Tools({ items }: { items: Row[] }) {
               <span className="text-xs font-semibold text-neutral-500">{String(t.name).slice(0, 1)}</span>
             )}
           </span>
-          <span className="min-w-0 truncate text-sm">{t.name}</span>
+          <span className="min-w-0 break-words text-sm leading-tight">{t.name}</span>
         </li>
       ))}
     </ul>

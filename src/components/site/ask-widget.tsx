@@ -196,10 +196,10 @@ export function AskWidget({ name }: { name?: string | null; photo?: string | nul
       <button
         ref={opener} type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-haspopup="dialog"
         data-track="social" data-label="Ask AI"
-        className="flex h-10 items-center gap-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] pl-3.5 pr-3 text-[0.8125rem] font-medium text-[color:var(--fg)] shadow-lg transition-colors hover:border-[color:var(--accent-ink)]"
+        aria-label="Ask AI" className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-[0.8125rem] sm:h-10 sm:w-auto sm:justify-start sm:pl-3.5 sm:pr-3 font-medium text-[color:var(--fg)] shadow-lg transition-colors hover:border-[color:var(--accent-ink)]"
       >
         <Sparkles className="h-4 w-4 text-[color:var(--accent-ink)]" />
-        Ask AI
+        <span className="hidden sm:inline">Ask AI</span>
         <kbd className="ml-0.5 hidden rounded border border-[color:var(--line)] px-1.5 py-0.5 font-sans text-[10px] font-medium text-[color:var(--muted)] sm:inline">{mac ? "⌘K" : "Ctrl K"}</kbd>
       </button>
 
