@@ -27,7 +27,7 @@ async function Body({ params }: { params: Promise<{ token: string }> }) {
           <TestimonialForm token={token} />
         </>
       ) : (
-        <div className="rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] p-8 text-center">
+        <div className="rounded-lg border border-[color:var(--line)] bg-[color:var(--surface)] p-8 text-center">
           <h1 className="text-2xl font-bold">This link isn’t available</h1>
           <p className="mt-2 text-[color:var(--muted)]">It may have expired or already been used. Please ask for a new one.</p>
         </div>

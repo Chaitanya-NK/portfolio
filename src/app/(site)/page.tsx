@@ -16,32 +16,38 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const data = await getSiteData();
   const { profile: p, sections } = data;
-  const accent = p.theme?.accent || "#C6F432";
+
+  const filled: Record<string, boolean> = {
+    tools: data.tools.length > 0, skills: data.skills.length > 0, experience: data.experiences.length > 0,
+    education: data.education.length > 0, achievements: data.achievements.length > 0, projects: data.projects.length > 0,
+    services: data.services.length > 0, testimonials: data.testimonials.length > 0, notes: data.notes.length > 0,
+  };
+  const shown = sections.filter((s) =>
+    s.type === "hero" || s.type === "contact" || s.type === "blog" ||
+    (s.type === "custom" ? Boolean(data.itemsBySection[s.id]?.length) : filled[s.type] !== false)
+  );
+
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org", "@type": "Person",
     name: p.full_name, jobTitle: p.headline, description: p.bio, image: p.avatar_url, email: p.email,
     sameAs: (p.socials ?? []).map((x: any) => x.url).filter((u: string) => /^https?:/.test(u)),
   }).replace(/</g, "\\u003c");
 
-  const navLinks = sections
-    .filter((s) => !["hero", "contact"].includes(s.type))
-    .slice(0, 6)
-    .map((s) => ({ label: s.title, href: `#${s.key}` }));
-  const hasContact = sections.some((s) => s.type === "contact");
-  const cta = hasContact
-    ? { label: "Hire me", href: "#contact" }
-    : p.email ? { label: "Hire me", href: `mailto:${p.email}` } : undefined;
+  const hasContact = shown.some((s) => s.type === "contact");
+  const navLinks = shown.filter((s) => !["hero", "contact"].includes(s.type)).slice(0, 6).map((s) => ({ label: s.title, href: `#${s.key}` }));
+  const cta = hasContact ? { label: "Contact", href: "#contact" } : p.email ? { label: "Contact", href: `mailto:${p.email}` } : undefined;
 
   return (
-    <div style={{ ["--accent" as string]: accent }} className="relative">
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-160px] h-[420px] w-[min(900px,100%)] -translate-x-1/2 bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--accent)_14%,transparent),transparent)]" />
+    <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <SiteNav name={p.theme?.site_name || p.full_name || "Portfolio"} links={navLinks} cta={cta} />
-      {sections.map((s, i) => {
-        const n = String(i + 1).padStart(2, "0");
-        if (s.type === "hero") return <Hero key={s.id} p={p} hasProjects={sections.some((x) => x.type === "projects") && data.projects.length > 0} />;
-        return renderSection(s, data, n);
-      })}
+      <main>
+        {shown.map((s, i) => {
+          const n = String(i + 1).padStart(2, "0");
+          if (s.type === "hero") return <Hero key={s.id} p={p} hasProjects={shown.some((x) => x.type === "projects")} hasContact={hasContact} />;
+          return renderSection(s, data, n);
+        })}
+      </main>
       <Footer p={p} year={data.year} />
     </div>
   );

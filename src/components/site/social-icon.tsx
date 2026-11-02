@@ -55,7 +55,7 @@ export function SocialLinks({ socials }: { socials: Record<string, any>[] }) {
               aria-label={name}
               title={name}
               {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--muted)] transition-colors hover:border-[color:var(--accent-ink)] hover:text-[color:var(--accent-ink)]"
+              className="flex h-11 w-11 items-center justify-center rounded-md border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--muted)] transition-colors hover:border-[color:var(--accent-ink)] hover:text-[color:var(--accent-ink)]"
             >
               <SocialIcon platform={name} url={x.url} className="h-[1.15rem] w-[1.15rem]" />
             </a>

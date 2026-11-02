@@ -12,7 +12,7 @@ export function BlogIndex({ posts }: { posts: Row[] }) {
     (!q || `${p.title} ${p.excerpt ?? ""}`.toLowerCase().includes(q.toLowerCase()))
   );
   const pill = (on: boolean) =>
-    `rounded-full border px-3.5 py-2 text-sm transition-colors ${on ? "border-[color:var(--accent-ink)] text-[color:var(--accent-ink)]" : "border-[color:var(--line)] text-[color:var(--muted)] hover:text-[color:var(--fg)]"}`;
+    `rounded-md border px-3.5 py-2 text-sm transition-colors ${on ? "border-[color:var(--accent-ink)] text-[color:var(--accent-ink)]" : "border-[color:var(--line)] text-[color:var(--muted)] hover:text-[color:var(--fg)]"}`;
   return (
     <div className="flex flex-col gap-6">
       <input
@@ -29,7 +29,7 @@ export function BlogIndex({ posts }: { posts: Row[] }) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {list.map((p) => (
           <a key={p.id} href={`/blog/${p.slug}`}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] transition-colors hover:border-[color:var(--accent-ink)]">
+            className="group flex flex-col overflow-hidden rounded-lg border border-[color:var(--line)] bg-[color:var(--surface)] transition-colors hover:border-[color:var(--accent-ink)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {p.cover_url && <img src={p.cover_url} alt="" loading="lazy" className="h-44 w-full object-cover" />}
             <div className="flex flex-1 flex-col gap-2 p-5">

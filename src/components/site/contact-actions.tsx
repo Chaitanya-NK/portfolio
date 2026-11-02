@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Check, Copy, Download } from "lucide-react";
 
-const btn = "inline-flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--line)] px-4 text-sm transition-colors hover:border-[color:var(--accent-ink)] hover:text-[color:var(--accent-ink)]";
+const btn = "inline-flex min-h-11 items-center gap-2 rounded-md border border-[color:var(--line)] px-4 text-sm transition-colors hover:border-[color:var(--accent-ink)] hover:text-[color:var(--accent-ink)]";
 
 export function ContactActions({ email, canSave }: { email?: string | null; canSave: boolean }) {
   const [done, setDone] = useState(false);
