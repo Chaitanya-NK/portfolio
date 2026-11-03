@@ -81,9 +81,12 @@ create table if not exists public.skills (
   id uuid primary key default gen_random_uuid(),
   category text not null, name text not null,
   level smallint not null default 3 check (level between 1 and 5),
+  icon_url text,
   published boolean not null default true, sort_order int not null default 0,
   updated_at timestamptz not null default now()
 );
+-- databases created before skill icons existed
+alter table public.skills add column if not exists icon_url text;
 
 create table if not exists public.experiences (
   id uuid primary key default gen_random_uuid(),

@@ -41,6 +41,7 @@ export const CONTENT: Record<string, EntityConfig> = {
     fields: [
       { key: "category", label: "Category", type: "text", required: true, placeholder: "e.g. Frontend" },
       { key: "name", label: "Skill", type: "text", required: true, placeholder: "e.g. React" },
+      { key: "icon_url", label: "Icon (optional)", type: "image", folder: "skills" },
       { key: "level", label: "Level (1 to 5)", type: "select", options: ["1", "2", "3", "4", "5"], numeric: true, default: "3" },
       published,
     ],

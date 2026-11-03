@@ -8,6 +8,7 @@ import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
 import { Journey, type JourneyEvent } from "./journey";
 import { SkillsTabs } from "./skills-tabs";
+import { skillUsage } from "@/lib/site/skills";
 
 const M = "font-[family-name:var(--font-mono)]";
 const muted = "text-[color:var(--muted)]";
@@ -157,12 +158,13 @@ export function Tools({ items }: { items: Row[] }) {
   );
 }
 
-export function Skills({ items }: { items: Row[] }) {
+export function Skills({ items, projects, experiences }: { items: Row[]; projects: Row[]; experiences: Row[] }) {
   const groups = new Map<string, Row[]>();
   items.forEach((s) => groups.set(s.category, [...(groups.get(s.category) ?? []), s]));
   return (
     <SkillsTabs
-      groups={[...groups].map(([cat, list]) => ({ cat, list: list.map((s) => ({ id: s.id, name: s.name, level: s.level })) }))}
+      usage={skillUsage(items, projects, experiences)}
+      groups={[...groups].map(([cat, list]) => ({ cat, list: list.map((s) => ({ id: s.id, name: s.name, level: s.level, icon: s.icon_url })) }))}
     />
   );
 }
@@ -517,7 +519,7 @@ export function renderSection(s: Row, d: SiteData, n: string, journey = false) {
     }
     switch (s.type) {
       case "tools": return d.tools.length ? <Tools items={d.tools} /> : null;
-      case "skills": return d.skills.length ? <Skills items={d.skills} /> : null;
+      case "skills": return d.skills.length ? <Skills items={d.skills} projects={d.projects} experiences={d.experiences} /> : null;
       case "experience": return d.experiences.length ? <Experience items={d.experiences} /> : null;
       case "education": return d.education.length ? <Education items={d.education} /> : null;
       case "achievements": return d.achievements.length ? <Achievements items={d.achievements} /> : null;
