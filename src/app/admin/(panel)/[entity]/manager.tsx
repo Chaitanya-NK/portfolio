@@ -23,8 +23,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { FileUpload } from "@/components/admin/file-upload";
 import { BulkTools } from "@/components/admin/bulk-tools";
 import { BulkSkills } from "@/components/admin/bulk-skills";
+import { BulkSkillIcons } from "@/components/admin/bulk-skill-icons";
 import { GalleryEditor } from "@/components/admin/gallery-editor";
 import { guardUpload } from "@/lib/upload-guard";
+import { EntityPreview, PREVIEWABLE } from "@/components/admin/live-preview";
 import { AiTextAssist } from "@/components/admin/ai-assist";
 import { aiBullets } from "@/app/admin/ai-actions";
 import { DatePicker, DateTimePicker } from "@/components/admin/date-picker";
@@ -197,15 +199,29 @@ function FieldInput({ f, v, set }: { f: Field; v: any; set: (x: any) => void }) 
   );
 }
 
-function ItemSheet({ entity, cfg, item, onClose, onSaved }: {
-  entity: string; cfg: EntityConfig; item: Row | null; onClose: () => void; onSaved: (r: Row) => void;
+function ItemSheet({ entity, cfg, item, siblings, accent, onClose, onSaved }: {
+  entity: string; cfg: EntityConfig; item: Row | null; siblings: Row[]; accent: string; onClose: () => void; onSaved: (r: Row) => void;
 }) {
   const [values, setValues] = useState<Values>(() => initValues(cfg, item));
   const [busy, setBusy] = useState(false);
+  const canPreview = PREVIEWABLE.has(entity);
+  const [preview, setPreview] = useState(true);
+  const showPreview = canPreview && preview;
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent {...guardUpload} className="w-full overflow-y-auto sm:max-w-lg">
-        <SheetHeader><SheetTitle>{item ? `Edit ${cfg.singular}` : `New ${cfg.singular}`}</SheetTitle></SheetHeader>
+      <SheetContent {...guardUpload} className={`w-full overflow-y-auto sm:max-w-lg ${showPreview ? "lg:max-w-[min(1240px,96vw)]" : ""}`}>
+        <SheetHeader>
+          <div className="flex items-center justify-between gap-3 pr-8">
+            <SheetTitle>{item ? `Edit ${cfg.singular}` : `New ${cfg.singular}`}</SheetTitle>
+            {canPreview && (
+              <label className="hidden items-center gap-2 text-sm lg:flex">
+                Live preview
+                <Switch checked={preview} onCheckedChange={(c: boolean) => setPreview(c)} aria-label="Live preview" />
+              </label>
+            )}
+          </div>
+        </SheetHeader>
+        <div className={showPreview ? "lg:grid lg:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] lg:items-start lg:gap-2" : ""}>
         <form
           className="flex flex-col gap-4 p-4"
           onSubmit={async (e) => {
@@ -228,6 +244,12 @@ function ItemSheet({ entity, cfg, item, onClose, onSaved }: {
             <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
           </div>
         </form>
+        {showPreview && (
+          <div className="hidden p-4 lg:sticky lg:top-0 lg:block">
+            <EntityPreview entity={entity} cfg={cfg} values={values} item={item} siblings={siblings} accent={accent} />
+          </div>
+        )}
+        </div>
       </SheetContent>
     </Sheet>
   );
@@ -259,7 +281,7 @@ function SortableRow({ entity, cfg, item, onEdit, onDelete, onToggle }: {
   );
 }
 
-export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: EntityConfig; initial: Row[] }) {
+export function ContentManager({ entity, cfg, initial, accent }: { entity: string; cfg: EntityConfig; initial: Row[]; accent: string }) {
   const [items, setItems] = useState<Row[]>(initial);
   const [editing, setEditing] = useState<{ item: Row | null } | null>(null);
   const [deleting, setDeleting] = useState<Row | null>(null);
@@ -288,6 +310,7 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
       <div className="flex flex-wrap justify-end gap-2">
         {entity === "tools" && <BulkTools existing={items.map((i) => i.name)} />}
         {entity === "skills" && <BulkSkills existing={items.map((i) => `${i.category}|${i.name}`)} />}
+        {entity === "skills" && <BulkSkillIcons skills={items.map((i) => ({ id: i.id, name: i.name, category: i.category, icon_url: i.icon_url }))} />}
         <Button onClick={() => setEditing({ item: null })}>+ Add {cfg.singular}</Button>
       </div>
       {items.length === 0 && (
@@ -315,7 +338,7 @@ export function ContentManager({ entity, cfg, initial }: { entity: string; cfg: 
       {editing && (
         <ItemSheet
           key={editing.item?.id ?? "new"}
-          entity={entity} cfg={cfg} item={editing.item}
+          entity={entity} cfg={cfg} item={editing.item} siblings={items} accent={accent}
           onClose={() => setEditing(null)}
           onSaved={(row) => {
             setItems((l) => (l.some((x) => x.id === row.id) ? l.map((x) => (x.id === row.id ? row : x)) : [...l, row]));

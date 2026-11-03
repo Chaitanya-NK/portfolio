@@ -12,13 +12,15 @@ async function Loader({ params }: { params: Promise<{ entity: string }> }) {
   if (!cfg) notFound();
   const supabase = await createClient();
   const { data } = await supabase.from(cfg.table).select("*").order("sort_order");
+  const { data: prof } = await supabase.from("profile").select("theme").eq("id", 1).single();
+  const accent = (prof?.theme as { accent?: string } | null)?.accent || "#C6F432";
   return (
     <div>
       <h1 className="mb-1 text-2xl font-semibold">{cfg.title}</h1>
       <p className="mb-6 text-sm text-neutral-600">
         Drag to reorder, toggle to publish or hide, and edit anything. Changes appear on the public site.
       </p>
-      <ContentManager entity={entity} cfg={cfg} initial={data ?? []} />
+      <ContentManager entity={entity} cfg={cfg} initial={data ?? []} accent={accent} />
     </div>
   );
 }

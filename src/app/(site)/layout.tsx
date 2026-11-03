@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Tracker } from "@/components/site/tracker";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { ScrollProgress, BackToTop } from "@/components/site/scroll-ui";
 import { AnnouncementBar } from "@/components/site/announcement-bar";
 import { Maintenance } from "@/components/site/maintenance";
 import { AskWidget } from "@/components/site/ask-widget";
@@ -43,9 +44,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <div className={wrap} style={{ ["--accent" as string]: accent }}>
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+      <ScrollProgress />
       <AnnouncementBar a={p.theme?.announcement ?? null} />
       {children}
       <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-50 flex flex-col items-end gap-3 print:hidden">
+        <BackToTop />
         {ask && <AskWidget name={p.full_name} photo={p.avatar_url} />}
         <ThemeToggle />
       </div>

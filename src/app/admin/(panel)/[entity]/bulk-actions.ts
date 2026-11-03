@@ -75,3 +75,20 @@ export async function bulkCreateSkills(rows: SkillIn[]): Promise<R> {
   updateTag("site");
   return { ok: true, created: toInsert.length, skipped };
 }
+
+/** Attach uploaded icons to skills that already exist, matched by name (the admin decides each match). */
+export async function bulkSetSkillIcons(rows: { id: string; icon_url: string }[]): Promise<R & { updated?: number }> {
+  const supabase = await requireAdmin();
+  const clean = rows.filter((r) => /^[0-9a-f-]{36}$/i.test(String(r.id)) && /^https?:\/\//.test(String(r.icon_url)));
+  if (!clean.length) return { ok: false, error: "Nothing to update" };
+  let updated = 0;
+  for (const r of clean) {
+    const { error } = await supabase.from("skills").update({ icon_url: r.icon_url }).eq("id", r.id);
+    if (error) return { ok: false, error: error.message, updated };
+    updated++;
+  }
+  revalidatePath("/");
+  revalidatePath("/admin/skills");
+  updateTag("site");
+  return { ok: true, updated };
+}

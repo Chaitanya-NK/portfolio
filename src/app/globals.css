@@ -197,7 +197,7 @@ body{min-height:100dvh;padding-left:env(safe-area-inset-left);padding-right:env(
 
 /* ---- public site theme ---- */
 .site{--bg:#0A0A0F;--surface:#12121A;--surface2:#1B1B26;--line:#23232F;--line2:#3a3a4d;--fg:#F2F2F5;--fg2:#C9C9D6;--muted:#9A9AAE;--faint:#6b6b80;--on-accent:#0A0A0F;--accent-ink:var(--accent);background:var(--bg);color:var(--fg);color-scheme:dark}
-html[data-theme="light"] .site{--bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F0F0EB;--line:#E2E2DA;--line2:#C9C9BF;--fg:#14141A;--fg2:#3A3A46;--muted:#5C5C6B;--faint:#8A8A98;--accent-ink:color-mix(in srgb,var(--accent) 48%,#000);color-scheme:light}
+html[data-theme="light"] .site,.site[data-theme="light"]{--bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F0F0EB;--line:#E2E2DA;--line2:#C9C9BF;--fg:#14141A;--fg2:#3A3A46;--muted:#5C5C6B;--faint:#8A8A98;--accent-ink:color-mix(in srgb,var(--accent) 48%,#000);color-scheme:light}
 @media print{html{font-size:16px!important}}
 
 /* ---- code blocks and diagrams in posts ---- */
@@ -246,7 +246,7 @@ html[data-theme="light"] .site{--bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F0F0EB
 
 /* ---- public site: refined theme (overrides the earlier palette) ---- */
 .site{--bg:#0B0C0F;--surface:#111318;--surface2:#171A20;--line:#22252C;--line2:#343843;--fg:#ECEDEF;--fg2:#C4C7CE;--muted:#9096A2;--faint:#7C828E;--on-accent:#0B0C0F;font-family:var(--font-display),system-ui,sans-serif;font-size:.9375rem;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-html[data-theme="light"] .site{--bg:#FAFAF8;--surface:#FFFFFF;--surface2:#F3F3F0;--line:#E4E4E0;--line2:#CFCFC9;--fg:#15171C;--fg2:#3A3E47;--muted:#5E6470;--faint:#6F7480}
+html[data-theme="light"] .site,.site[data-theme="light"]{--bg:#FAFAF8;--surface:#FFFFFF;--surface2:#F3F3F0;--line:#E4E4E0;--line2:#CFCFC9;--fg:#15171C;--fg2:#3A3E47;--muted:#5E6470;--faint:#6F7480}
 section[id]{scroll-margin-top:4.5rem}
 .rich{font-size:.96875rem;line-height:1.7}
 .rich h1{font-size:1.75rem;margin-top:1.4em}
