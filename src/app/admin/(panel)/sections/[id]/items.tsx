@@ -28,7 +28,7 @@ function Editor({ sid, item, onClose, onSaved }: { sid: string; item: Item | nul
   const L = ({ t, children }: { t: string; children: React.ReactNode }) => <label className="flex flex-col gap-1 text-sm font-medium">{t}{children}</label>;
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent {...guardUpload} className="w-full overflow-y-auto sm:max-w-lg">
+      <SheetContent {...guardUpload} className="overflow-y-auto data-[side=right]:w-full data-[side=right]:sm:max-w-lg">
         <SheetHeader><SheetTitle>{item ? "Edit item" : "New item"}</SheetTitle></SheetHeader>
         <form className="flex flex-col gap-4 p-4" onSubmit={async (e) => {
           e.preventDefault(); setBusy(true);
