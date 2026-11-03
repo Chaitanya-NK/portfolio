@@ -41,7 +41,7 @@ export function SkillsTabs({ groups, usage }: { groups: { cat: string; list: Ski
   const use = openSkill ? usage[openSkill.id] : null;
 
   return (
-    <div>
+    <div className="@container">
       <div role="tablist" aria-label="Skill categories" className={`-mx-1 mb-5 flex gap-1 overflow-x-auto border-b ${ln} px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}>
         {groups.map((g, k) => (
           <button key={g.cat} role="tab" type="button" aria-selected={k === i} onClick={() => { setI(k); setOpen(null); }}
@@ -51,7 +51,7 @@ export function SkillsTabs({ groups, usage }: { groups: { cat: string; list: Ski
         ))}
       </div>
 
-      <ul role="tabpanel" className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul role="tabpanel" className="grid gap-2.5 @lg:grid-cols-2 @3xl:grid-cols-3">
         {cur.list.map((s) => {
           const u = usage[s.id];
           const n = u ? u.projects.length + u.roles.length : 0;
