@@ -38,12 +38,14 @@ export function Shell({ s, n, children }: { s: Row; n: string; children: React.R
   return (
     <section id={s.key} className={WRAP}>
       <div className={`border-t ${ln} py-12 sm:py-16`}>
-        <header className="mb-8 max-w-2xl sm:mb-10">
-          <p className={`${cap} text-[color:var(--accent-ink)]`}>{n}</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-[1.75rem]">{s.title}</h2>
-          {s.subtitle && <p className={`mt-2 text-[0.9375rem] leading-relaxed ${muted}`}>{s.subtitle}</p>}
-        </header>
-        <Reveal>{children}</Reveal>
+        <Reveal>
+          <header className="mb-8 max-w-2xl sm:mb-10">
+            <p className={`${cap} text-[color:var(--accent-ink)]`}>{n}</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-[1.75rem]">{s.title}</h2>
+            {s.subtitle && <p className={`mt-2 text-[0.9375rem] leading-relaxed ${muted}`}>{s.subtitle}</p>}
+          </header>
+          {children}
+        </Reveal>
       </div>
     </section>
   );
@@ -137,9 +139,9 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
 
 export function Tools({ items }: { items: Row[] }) {
   return (
-    <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="stagger grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
       {items.map((t) => (
-        <li key={t.id} title={t.category ?? undefined} className={`flex items-center gap-2.5 rounded-md border ${ln} px-3 py-2`}>
+        <li key={t.id} title={t.category ?? undefined} className={`flex items-center gap-2.5 rounded-md border ${ln} px-3 py-2 transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-0.5`}>
           <span className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded border border-black/5 bg-white">
             {t.icon_url ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -304,11 +306,11 @@ export function buildJourney(d: SiteData): JourneyEvent[] {
 
 export function Projects({ items }: { items: Row[] }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((p) => {
         const case_ = Boolean(p.problem || p.approach || p.result || p.gallery?.length);
         return (
-          <article key={p.id} className={`group relative flex flex-col overflow-hidden ${panel} transition-colors hover:border-[color:var(--line2)] ${p.featured ? "lg:col-span-2" : ""}`}>
+          <article key={p.id} className={`group relative flex flex-col overflow-hidden ${panel} transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10 ${p.featured ? "lg:col-span-2" : ""}`}>
             {p.cover_url && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={p.cover_url} alt={p.title} loading="lazy" className={`w-full border-b ${ln} object-cover ${p.featured ? "aspect-[3/1]" : "aspect-[2/1]"} max-h-44`} />
@@ -345,11 +347,11 @@ export function Projects({ items }: { items: Row[] }) {
 export function Services({ items, d }: { items: Row[]; d: SiteData }) {
   const hasContact = d.sections.some((x) => x.type === "contact");
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="stagger grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {items.map((s) => {
         const href = s.cta_url || (hasContact ? "#contact" : d.profile.email ? `mailto:${d.profile.email}` : "#");
         return (
-          <div key={s.id} className={`${panel} relative flex flex-col gap-3 overflow-hidden p-5 ${s.featured ? "border-[var(--accent)] bg-[var(--accent)]/[0.06] shadow-[0_0_0_1px_var(--accent),0_8px_30px_-12px_var(--accent)]" : ""}`}>
+          <div key={s.id} className={`${panel} relative flex flex-col gap-3 overflow-hidden p-5 transition duration-200 motion-safe:hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10 ${s.featured ? "border-[var(--accent)] bg-[var(--accent)]/[0.06] shadow-[0_0_0_1px_var(--accent),0_8px_30px_-12px_var(--accent)]" : ""}`}>
             {s.featured && (
               <>
                 <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-[var(--accent)]" />
@@ -390,9 +392,9 @@ export function Services({ items, d }: { items: Row[]; d: SiteData }) {
 
 export function Testimonials({ items }: { items: Row[] }) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="stagger grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {items.map((t) => (
-        <figure key={t.id} className={`${panel} flex flex-col justify-between gap-4 p-5`}>
+        <figure key={t.id} className={`${panel} flex flex-col justify-between gap-4 p-5 transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10`}>
           <blockquote className={`text-sm leading-relaxed ${body2}`}>“{t.quote}”</blockquote>
           <figcaption className="flex items-center gap-3">
             {t.avatar_url ? (
@@ -455,7 +457,7 @@ export function Blog({ posts }: { posts: Row[] }) {
 export function Custom({ items }: { items: Row[] }) {
   if (!items.length) return null;
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="stagger grid gap-4 md:grid-cols-2">
       {items.map((it) => {
         const d = it.data ?? {};
         return (
