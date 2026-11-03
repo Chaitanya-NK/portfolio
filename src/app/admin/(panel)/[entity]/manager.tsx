@@ -209,7 +209,7 @@ function ItemSheet({ entity, cfg, item, siblings, accent, onClose, onSaved }: {
   const showPreview = canPreview && preview;
   return (
     <Sheet open onOpenChange={(o) => !o && onClose()}>
-      <SheetContent {...guardUpload} className={`w-full overflow-y-auto sm:max-w-lg ${showPreview ? "lg:max-w-[min(1240px,96vw)]" : ""}`}>
+      <SheetContent {...guardUpload} className={`overflow-y-auto data-[side=right]:w-full data-[side=right]:sm:max-w-lg ${showPreview ? "data-[side=right]:lg:max-w-[min(1240px,96vw)]" : ""}`}>
         <SheetHeader>
           <div className="flex items-center justify-between gap-3 pr-8">
             <SheetTitle>{item ? `Edit ${cfg.singular}` : `New ${cfg.singular}`}</SheetTitle>
