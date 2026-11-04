@@ -20,7 +20,7 @@ const chip = `inline-flex items-center rounded border ${ln} px-2 py-0.5 text-xs 
 const panel = `rounded-lg border ${ln} bg-[color:var(--surface)]`;
 const title = "text-[0.9375rem] font-semibold tracking-tight";
 const row = `grid gap-1.5 border-b ${ln} py-5 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-6`;
-const WRAP = "mx-auto w-[min(92%,64rem)]";
+const WRAP = "mx-auto w-[min(92%,var(--site-w,64rem))]";
 
 const fmt = (s?: string | null) => (s ? format(new Date(s + "T00:00:00"), "MMM yyyy") : "");
 const rangeOf = (r: Row) =>
@@ -140,7 +140,7 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
 
 export function Tools({ items }: { items: Row[] }) {
   return (
-    <ul className="stagger grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="stagger grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
       {items.map((t) => (
         <li key={t.id} title={t.category ?? undefined} className={`flex items-center gap-2.5 rounded-md border ${ln} px-3 py-2 transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-0.5`}>
           <span className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded border border-black/5 bg-white">
