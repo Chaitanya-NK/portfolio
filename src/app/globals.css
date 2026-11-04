@@ -281,3 +281,8 @@ section[id]{scroll-margin-top:4.5rem}
 .stagger>*:nth-child(11){animation-delay:700ms}
 .stagger>*:nth-child(12){animation-delay:770ms}
 @media (prefers-reduced-motion:reduce){.reveal:not(.in) .stagger>*{opacity:1}.reveal.in .stagger>*{animation:none}}
+
+/* Public site width: 64rem on laptops, growing on big monitors so the page doesn't float in empty space. */
+.site { --site-w: 64rem; }
+@media (min-width: 1536px) { .site { --site-w: 74rem; } }
+@media (min-width: 1920px) { .site { --site-w: 84rem; } }

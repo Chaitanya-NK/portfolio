@@ -29,7 +29,7 @@ export function SiteNav({ name, links, cta }: { name: string; links: L[]; cta?: 
 
   return (
     <header className="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color-mix(in_srgb,var(--bg)_85%,transparent)] backdrop-blur">
-      <div className="mx-auto flex h-14 w-[min(92%,64rem)] items-center justify-between gap-6">
+      <div className="mx-auto flex h-14 w-[min(92%,var(--site-w,64rem))] items-center justify-between gap-6">
         <a href="#" className="min-w-0 truncate text-sm font-semibold tracking-tight">{name}</a>
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Sections">
           {links.map((l) => (
@@ -50,7 +50,7 @@ export function SiteNav({ name, links, cta }: { name: string; links: L[]; cta?: 
       </div>
       {open && (
         <nav className="border-t border-[color:var(--line)] bg-[color:var(--bg)] lg:hidden" aria-label="Sections">
-          <div className="mx-auto flex max-h-[70dvh] w-[min(92%,64rem)] flex-col overflow-y-auto py-2">
+          <div className="mx-auto flex max-h-[70dvh] w-[min(92%,var(--site-w,64rem))] flex-col overflow-y-auto py-2">
             {links.map((l) => (
               <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="flex min-h-11 items-center rounded-md px-2 text-sm text-[color:var(--fg2)] hover:bg-[color:var(--surface2)]">{l.label}</a>
             ))}

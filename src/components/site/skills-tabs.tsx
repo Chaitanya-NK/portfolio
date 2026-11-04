@@ -51,7 +51,7 @@ export function SkillsTabs({ groups, usage }: { groups: { cat: string; list: Ski
         ))}
       </div>
 
-      <ul role="tabpanel" className="grid gap-2.5 @lg:grid-cols-2 @3xl:grid-cols-3">
+      <ul role="tabpanel" className="grid gap-2.5 @lg:grid-cols-2 @3xl:grid-cols-3 @6xl:grid-cols-4">
         {cur.list.map((s) => {
           const u = usage[s.id];
           const n = u ? u.projects.length + u.roles.length : 0;
