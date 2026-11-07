@@ -140,9 +140,9 @@ export function Hero({ p, hasProjects, hasContact }: { p: Row; hasProjects: bool
 
 export function Tools({ items }: { items: Row[] }) {
   return (
-    <ul className="stagger grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-      {items.map((t) => (
-        <li key={t.id} title={t.category ?? undefined} className={`flex items-center gap-2.5 rounded-md border ${ln} px-3 py-2 transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-0.5`}>
+    <ul className="fall grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+      {items.map((t, i) => (
+        <li key={t.id} style={{ "--i": i } as React.CSSProperties} title={t.category ?? undefined} className={`flex items-center gap-2.5 rounded-md border ${ln} px-3 py-2 transition duration-200 hover:border-[color:var(--line2)] motion-safe:hover:-translate-y-0.5`}>
           <span className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded border border-black/5 bg-white">
             {t.icon_url ? (
               // eslint-disable-next-line @next/next/no-img-element

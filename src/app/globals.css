@@ -286,3 +286,9 @@ section[id]{scroll-margin-top:4.5rem}
 .site { --site-w: 64rem; }
 @media (min-width: 1536px) { .site { --site-w: 74rem; } }
 @media (min-width: 1920px) { .site { --site-w: 84rem; } }
+
+/* tools & skills: tiles drop in from above, top to bottom, with a light fade */
+@keyframes dropIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+.reveal:not(.in) .fall>*{opacity:0}
+.reveal.in .fall>*{animation:dropIn .55s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(min(var(--i,0),30)*45ms)}
+@media (prefers-reduced-motion:reduce){.reveal:not(.in) .fall>*{opacity:1}.reveal.in .fall>*{animation:none}}
