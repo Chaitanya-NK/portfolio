@@ -8,6 +8,7 @@ import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
 import { Journey, type JourneyEvent } from "./journey";
 import { SkillsTabs } from "./skills-tabs";
+import { PostCard } from "./post-card";
 import { skillUsage } from "@/lib/site/skills";
 
 const M = "font-[family-name:var(--font-mono)]";
@@ -440,19 +441,15 @@ export function Notes({ items }: { items: Row[] }) {
 
 export function Blog({ posts }: { posts: Row[] }) {
   if (!posts.length) return <p className={muted}>No posts published yet.</p>;
+  // Latest post gets the big card when there are at least three; otherwise equal cards.
+  const lead = posts.length >= 3 || posts.length === 1 ? posts[0] : null;
+  const rest = (lead ? posts.slice(1) : posts).slice(0, 3);
+  const cols = rest.length >= 3 ? "lg:grid-cols-3" : "";
   return (
-    <ul className="flex flex-col">
-      {posts.map((p) => (
-        <li key={p.id} className={`${row} relative`}>
-          <span className={cap}>{p.published_at ? format(new Date(p.published_at), "d MMM yyyy") : ""}</span>
-          <div className="min-w-0">
-            <h3 className={title}><a href={`/blog/${p.slug}`} className="after:absolute after:inset-0 hover:underline hover:underline-offset-4">{p.title}</a></h3>
-            {p.excerpt && <p className={`mt-1 line-clamp-2 text-sm ${muted}`}>{p.excerpt}</p>}
-            <p className={`mt-1.5 text-xs ${muted}`}>{p.reading_minutes} min read</p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div className={`stagger grid gap-4 md:grid-cols-2 ${cols}`}>
+      {lead && <PostCard p={lead} featured />}
+      {rest.map((p) => <PostCard key={p.id} p={p} />)}
+    </div>
   );
 }
 
@@ -537,7 +534,7 @@ export function renderSection(s: Row, d: SiteData, n: string, journey = false) {
         return (
           <>
             <Blog posts={d.posts} />
-            {d.posts.length > 0 && <a href="/blog" className={`mt-5 inline-flex min-h-11 items-center text-sm font-medium ${accent}`}>View all posts →</a>}
+            {d.posts.length > 0 && <a href="/blog" className={`mt-6 inline-flex min-h-11 items-center rounded-md border ${ln} px-4 text-sm font-medium ${accent} transition hover:border-[color:var(--accent-ink)]`}>View all posts →</a>}
           </>
         );
       case "contact": return <Contact p={d.profile} />;

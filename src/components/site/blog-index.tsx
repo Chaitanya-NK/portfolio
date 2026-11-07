@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
-import { format } from "date-fns";
 import type { Row } from "@/lib/site/data";
+import { PostCard } from "./post-card";
 
 export function BlogIndex({ posts }: { posts: Row[] }) {
   const [q, setQ] = useState("");
@@ -27,20 +27,7 @@ export function BlogIndex({ posts }: { posts: Row[] }) {
       )}
       {list.length === 0 && <p className="text-[color:var(--muted)]">No posts found.</p>}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {list.map((p) => (
-          <a key={p.id} href={`/blog/${p.slug}`}
-            className="group flex flex-col overflow-hidden rounded-lg border border-[color:var(--line)] bg-[color:var(--surface)] transition-colors hover:border-[color:var(--accent-ink)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {p.cover_url && <img src={p.cover_url} alt="" loading="lazy" className="h-44 w-full object-cover" />}
-            <div className="flex flex-1 flex-col gap-2 p-5">
-              <span suppressHydrationWarning className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-[color:var(--accent-ink)]">
-                {p.published_at ? format(new Date(p.published_at), "dd MMM yyyy") : ""} · {p.reading_minutes} min
-              </span>
-              <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">{p.title}</h2>
-              {p.excerpt && <p className="line-clamp-3 text-sm text-[color:var(--muted)]">{p.excerpt}</p>}
-            </div>
-          </a>
-        ))}
+        {list.map((p) => <PostCard key={p.id} p={p} />)}
       </div>
     </div>
   );
