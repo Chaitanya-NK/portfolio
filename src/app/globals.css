@@ -294,6 +294,6 @@ section[id]{scroll-margin-top:4.5rem}
   90%{opacity:calc(var(--fall-o,.2)*var(--k,1))}
   100%{transform:translate3d(14px,110vh,0);opacity:0}
 }
-.fall-item{position:absolute;top:0;font-family:var(--font-mono),ui-monospace,monospace;font-weight:600;letter-spacing:.02em;white-space:nowrap;color:var(--accent);opacity:0;animation:fall-down linear infinite;will-change:transform,opacity}
-html[data-theme="light"] .fall-layer{--fall-o:.28}
+.fall-item{position:absolute;top:0;font-family:var(--font-mono),ui-monospace,monospace;font-weight:600;letter-spacing:.02em;white-space:nowrap;color:var(--accent-ink);opacity:0;animation:fall-down linear infinite;will-change:transform,opacity}
+html[data-theme="light"] .fall-layer,.site[data-theme="light"] .fall-layer{--fall-o:.32}
 @media (prefers-reduced-motion:reduce){.fall-layer{display:none}}
