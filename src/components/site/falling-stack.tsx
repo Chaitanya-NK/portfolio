@@ -1,35 +1,30 @@
 type Item = { id: string; name: string; icon_url?: string | null };
 
-/** Decorative: the skills and tools from the admin panel drift down the whole page, lightly faded. */
+/** Decorative: names of your skills and tools (from the admin panel) drift down the whole page, very faint. */
 export function FallingStack({ items }: { items: Item[] }) {
   const seen = new Set<string>();
   const pool = items
     .filter((x) => x.name && !seen.has(x.name.toLowerCase()) && seen.add(x.name.toLowerCase()))
-    .sort((a, b) => Number(Boolean(b.icon_url)) - Number(Boolean(a.icon_url)))
-    .slice(0, 22);
+    .slice(0, 30);
   if (pool.length < 3) return null;
   const n = pool.length;
 
   return (
-    <div aria-hidden className="fall-layer pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden">
+    <div aria-hidden className="fall-layer pointer-events-none fixed inset-0 z-0 overflow-hidden select-none print:hidden">
       {pool.map((x, i) => {
         // deterministic spread (same on server and client)
-        const left = ((i * 100) / n + ((i * 37) % 7)) % 96;
-        const dur = 24 + ((i * 13) % 17);
+        const left = ((i * 100) / n + ((i * 37) % 9)) % 94;
+        const dur = 22 + ((i * 13) % 19);
         const delay = -((i * 7919) % (dur * 100)) / 100;
-        const size = 34 + ((i * 11) % 3) * 6;
+        const size = [0.7, 1.35, 0.9, 1.1, 0.8, 1.5][i % 6]; // rem, mixed sizes
+        const o = [0.55, 1, 0.75, 0.9][i % 4]; // mixed strength
         return (
           <span
             key={x.id}
-            className={`fall-item ${i >= 9 ? "max-md:hidden" : ""}`}
-            style={{ left: `${left}%`, width: size, height: size, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
+            className={`fall-item ${i >= 12 ? "max-md:hidden" : ""}`}
+            style={{ left: `${left}%`, fontSize: `${size}rem`, ["--k" as string]: o, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
           >
-            {x.icon_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={x.icon_url} alt="" className="h-full w-full object-contain p-1.5" />
-            ) : (
-              <span className="text-xs font-semibold text-neutral-500">{x.name.slice(0, 1)}</span>
-            )}
+            {x.name}
           </span>
         );
       })}
