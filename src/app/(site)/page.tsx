@@ -45,14 +45,18 @@ export default async function Home() {
 
   return (
     <div className="relative z-[1]">
-      <FallingStack items={[...data.tools, ...data.skills] as any[]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <SiteNav name={p.theme?.site_name || p.full_name || "Portfolio"} links={navLinks} cta={cta} />
       <main>
         {shown.map((s, i) => {
           const n = String(i + 1).padStart(2, "0");
-          if (s.type === "hero") return <Hero key={s.id} p={p} hasProjects={shown.some((x) => x.type === "projects")} hasContact={hasContact} />;
-          return renderSection(s, data, n, host?.id === s.id);
+          const el = s.type === "hero"
+            ? <Hero key={s.id} p={p} hasProjects={shown.some((x) => x.type === "projects")} hasContact={hasContact} />
+            : renderSection(s, data, n, host?.id === s.id);
+          // the faint falling skills/tools sit behind the first two sections only
+          if (i === 0) return <div key={s.id} className="relative isolate"><FallingStack items={[...data.tools, ...data.skills] as any[]} />{el}{shown[1] ? renderSection(shown[1], data, "02", host?.id === shown[1].id) : null}</div>;
+          if (i === 1) return null;
+          return el;
         })}
       </main>
       <Footer p={p} year={data.year} />

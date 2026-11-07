@@ -1,6 +1,6 @@
 type Item = { id: string; name: string; icon_url?: string | null };
 
-/** Decorative: names of your skills and tools (from the admin panel) drift down the whole page, very faint. */
+/** Decorative: names of your skills and tools (from the admin panel) drift down the top of the page (hero and first section), very faint. */
 export function FallingStack({ items }: { items: Item[] }) {
   const seen = new Set<string>();
   const pool = items
@@ -10,7 +10,7 @@ export function FallingStack({ items }: { items: Item[] }) {
   const n = pool.length;
 
   return (
-    <div aria-hidden className="fall-layer pointer-events-none fixed inset-0 z-0 overflow-hidden select-none print:hidden">
+    <div aria-hidden className="fall-layer pointer-events-none absolute inset-0 -z-10 overflow-hidden select-none print:hidden">
       {pool.map((x, i) => {
         // deterministic spread (same on server and client)
         const left = ((i * 100) / n + ((i * 37) % 9)) % 94;
