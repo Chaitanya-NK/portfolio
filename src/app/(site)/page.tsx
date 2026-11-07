@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSiteData } from "@/lib/site/data";
+import { FallingStack } from "@/components/site/falling-stack";
 import { SiteNav } from "@/components/site/site-nav";
 import { Hero, Footer, renderSection } from "@/components/site/sections";
 
@@ -43,7 +44,8 @@ export default async function Home() {
   const cta = hasContact ? { label: "Contact", href: "#contact" } : p.email ? { label: "Contact", href: `mailto:${p.email}` } : undefined;
 
   return (
-    <div>
+    <div className="relative z-[1]">
+      <FallingStack items={[...data.tools, ...data.skills] as any[]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <SiteNav name={p.theme?.site_name || p.full_name || "Portfolio"} links={navLinks} cta={cta} />
       <main>

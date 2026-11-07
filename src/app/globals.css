@@ -286,3 +286,14 @@ section[id]{scroll-margin-top:4.5rem}
 .site { --site-w: 64rem; }
 @media (min-width: 1536px) { .site { --site-w: 74rem; } }
 @media (min-width: 1920px) { .site { --site-w: 84rem; } }
+
+/* falling skills & tools backdrop */
+@keyframes fall-down{
+  0%{transform:translate3d(0,-12vh,0) rotate(-8deg);opacity:0}
+  12%{opacity:var(--fall-o,.14)}
+  88%{opacity:var(--fall-o,.14)}
+  100%{transform:translate3d(18px,112vh,0) rotate(8deg);opacity:0}
+}
+.fall-item{position:absolute;top:0;display:flex;align-items:center;justify-content:center;border-radius:.6rem;background:#fff;border:1px solid rgba(0,0,0,.06);opacity:0;animation:fall-down linear infinite;will-change:transform,opacity}
+html[data-theme="light"] .fall-layer{--fall-o:.2}
+@media (prefers-reduced-motion:reduce){.fall-layer{display:none}}
