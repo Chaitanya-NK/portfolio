@@ -8,7 +8,7 @@ import { IntroVideo } from "./intro-video";
 import { PronounceButton } from "./pronounce-button";
 import { Journey, type JourneyEvent } from "./journey";
 import { SkillsTabs } from "./skills-tabs";
-import { PostCard } from "./post-card";
+import { BlogLog } from "./blog-log";
 import { skillUsage } from "@/lib/site/skills";
 
 const M = "font-[family-name:var(--font-mono)]";
@@ -439,18 +439,9 @@ export function Notes({ items }: { items: Row[] }) {
   );
 }
 
-export function Blog({ posts }: { posts: Row[] }) {
+export function Blog({ posts, name }: { posts: Row[]; name?: string | null }) {
   if (!posts.length) return <p className={muted}>No posts published yet.</p>;
-  // Latest post gets the big card when there are at least three; otherwise equal cards.
-  const lead = posts.length >= 3 || posts.length === 1 ? posts[0] : null;
-  const rest = (lead ? posts.slice(1) : posts).slice(0, 3);
-  const cols = rest.length >= 3 ? "lg:grid-cols-3" : "";
-  return (
-    <div className={`stagger grid gap-4 md:grid-cols-2 ${cols}`}>
-      {lead && <PostCard p={lead} featured />}
-      {rest.map((p) => <PostCard key={p.id} p={p} />)}
-    </div>
-  );
+  return <BlogLog posts={posts} name={name} />;
 }
 
 export function Custom({ items }: { items: Row[] }) {
@@ -531,12 +522,7 @@ export function renderSection(s: Row, d: SiteData, n: string, journey = false) {
           </>
         ) : null;
       case "blog":
-        return (
-          <>
-            <Blog posts={d.posts} />
-            {d.posts.length > 0 && <a href="/blog" className={`mt-6 inline-flex min-h-11 items-center rounded-md border ${ln} px-4 text-sm font-medium ${accent} transition hover:border-[color:var(--accent-ink)]`}>View all posts →</a>}
-          </>
-        );
+        return <Blog posts={d.posts} name={d.profile.full_name} />;
       case "contact": return <Contact p={d.profile} />;
       case "custom": return d.itemsBySection[s.id]?.length ? <Custom items={d.itemsBySection[s.id]} /> : null;
       default: return null;
